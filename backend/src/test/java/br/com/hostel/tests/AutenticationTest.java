@@ -36,11 +36,9 @@ public class AutenticationTest {
 	
 	@Test
 	public void shouldAutenticateAndReturnStatusOK() throws JsonProcessingException, Exception {
-		//setting login variables to autenticate
 		login.setEmail("aluno@email.com");
 		login.setPassword("123456");
 
-		//posting on /auth to get token
 		MvcResult resultAuth = mockMvc
 				.perform(post("/auth")
 				.content(objectMapper.writeValueAsString(login))
@@ -57,11 +55,9 @@ public class AutenticationTest {
 	
 	@Test
 	public void shouldNotAutenticateAndReturnStatusBadRequest() throws JsonProcessingException, Exception {
-		//setting login variables to autenticate
 		login.setEmail("aluno@email.com");
 		login.setPassword("11111");
 		
-		//posting on /auth to get token
 		mockMvc
 			.perform(post("/auth")
 					.content(objectMapper.writeValueAsString(login))
