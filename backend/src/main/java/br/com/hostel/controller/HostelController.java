@@ -27,6 +27,7 @@ import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.CustomerForm;
 import br.com.hostel.controller.form.ReservationForm;
+import br.com.hostel.controller.form.ReservationUpdateForm;
 import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.controller.form.RoomUpdateForm;
 import br.com.hostel.service.CustomerService;
@@ -90,6 +91,14 @@ public class HostelController {
 	public ResponseEntity<ReservationDto> listOneReservation(@PathVariable Long id) {
 
 		return this.reservationService.listOneReservation(id);
+	}
+	
+	@PutMapping("/reservations/{id}")
+	@Transactional
+	public ResponseEntity<ReservationDto> updateRoom(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form,
+			UriComponentsBuilder uriBuilder) {
+		
+		return this.reservationService.updateReservation(id, form, uriBuilder);
 	}
 
 	@DeleteMapping("/reservations/{id}")

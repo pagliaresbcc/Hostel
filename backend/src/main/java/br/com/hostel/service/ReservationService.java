@@ -10,18 +10,23 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.ReservationForm;
-import br.com.hostel.model.Room;
+import br.com.hostel.controller.form.ReservationUpdateForm;
 import br.com.hostel.model.CheckinCheckoutDates;
 import br.com.hostel.model.Customer;
 import br.com.hostel.model.Reservation;
+import br.com.hostel.model.Room;
 import br.com.hostel.repository.CheckInCheckOutDateRepository;
 import br.com.hostel.repository.CustomerRepository;
 import br.com.hostel.repository.PaymentsRepository;
@@ -113,6 +118,24 @@ public class ReservationService {
 			return ResponseEntity.ok(new ReservationDto(reservation.get()));
 		else
 			return ResponseEntity.notFound().build();
+	}
+	
+	public ResponseEntity<ReservationDto> updateReservation(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form,
+			UriComponentsBuilder uriBuilder) {
+		
+		Optional<Reservation> reservationOp = reservationRepository.findById(id);
+		
+		if (reservationOp.isPresent()) {
+			Reservation reservation = form.updateReservationForm(id, reservationOp.get());
+			for (Room room : reservation.getRooms()) {
+				
+				roomRepository.save(room);
+			}
+			paymentsRepository.save(reservation.getPayment());
+			
+			return ResponseEntity.ok(new ReservationDto(reservation));
+		}
+		return ResponseEntity.notFound().build();
 	}
 
 	public ResponseEntity<?> deleteReservation(Long id) {

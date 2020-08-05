@@ -1,72 +1,95 @@
 package br.com.hostel.controller.form;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
-import br.com.hostel.model.DailyRate;
+import br.com.hostel.model.Payments;
+import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
-import br.com.hostel.repository.RoomRepository;
 
 public class ReservationUpdateForm {
 	
-	private String description;
-	private int number;
-	private double dimension;
-	private DailyRate dailyRate;
+	private int numberOfGuests;
+	private LocalDate reservationDate;
+	private LocalDate checkinDate;
+	private LocalDate checkoutDate;
 	
-	public String getDescription() {
-		return description;
+	private Set<Room> rooms = new HashSet<>();
+	
+	private Payments payment;
+	
+	public int getNumberOfGuests() {
+		return numberOfGuests;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setNumberOfGuests(int numberOfGuests) {
+		this.numberOfGuests = numberOfGuests;
 	}
 
-	public int getNumber() {
-		return number;
+	public LocalDate getReservationDate() {
+		return reservationDate;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
+	public void setReservationDate(LocalDate reservationDate) {
+		this.reservationDate = reservationDate;
 	}
 
-	public double getDimension() {
-		return dimension;
+	public LocalDate getCheckinDate() {
+		return checkinDate;
 	}
 
-	public void setDimension(double dimension) {
-		this.dimension = dimension;
+	public void setCheckinDate(LocalDate checkinDate) {
+		this.checkinDate = checkinDate;
 	}
 
-	public DailyRate getDailyRate() {
-		return dailyRate;
+	public LocalDate getCheckoutDate() {
+		return checkoutDate;
 	}
 
-	public void setDailyRate(DailyRate dailyRate) {
-		this.dailyRate = dailyRate;
+	public void setCheckoutDate(LocalDate checkoutDate) {
+		this.checkoutDate = checkoutDate;
+	}
+
+	public Set<Room> getRooms() {
+		return rooms;
+	}
+
+	public void setRooms(Set<Room> rooms) {
+		this.rooms = rooms;
+	}
+
+	public Payments getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payments payment) {
+		this.payment = payment;
+	}
+
+	public Reservation updateReservationForm(Long id, Reservation reservation) {
+		verifyIfParamIsNotNull(reservation);
+		return reservation;
 	}
 	
-	public Room updateRoomForm(Long id, Room room, RoomRepository roomRepository) {
-		verifyIfParamIsNotNull(room, roomRepository);
-		return room;
-	}
-	
-	private void verifyIfParamIsNotNull(Room room, RoomRepository roomRepository) {
+	private void verifyIfParamIsNotNull(Reservation reservation) {
 		
-		if (description != null)
-			room.setDescription(description);
-
-		if (number != 0) {
-			Optional<Room> roomOp = roomRepository.findByNumber(number);
-
-			if (!roomOp.isPresent()) {
-				room.setNumber(number);
-			}
-		}
-
-		if (dimension != 0)
-			room.setDimension(dimension);
+		if (numberOfGuests != 0)
+			reservation.setNumberOfGuests(numberOfGuests);
 		
-		if (dailyRate != null)
-			room.setDailyRate(dailyRate);
+		if (reservationDate != null)
+			reservation.setReservationDate(reservationDate);
+		
+		if (checkinDate != null)
+			reservation.setCheckinDate(checkinDate);
+		
+		if (checkoutDate != null)
+			reservation.setCheckoutDate(checkoutDate);
+
+		if (rooms != null)
+			reservation.setRooms(rooms);
+		
+		if (payment != null)
+			reservation.setPayment(payment);
 	}
 }
