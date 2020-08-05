@@ -9,6 +9,10 @@ import br.com.hostel.repository.DailyRateRepository;
 public class RoomForm {
 
 	@NotNull
+	private
+	String description;
+	
+	@NotNull
 	int number;
 	
 	@NotNull
@@ -41,8 +45,16 @@ public class RoomForm {
 		this.dailyRate = dailyRate;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	public Room returnRoom(DailyRateRepository dailyRateRepository) {
 		dailyRateRepository.save(dailyRate);
-		return new Room(number, dimension, dailyRate);
+		return new Room(description, number, dimension, dailyRate);
 	}
 }

@@ -62,11 +62,11 @@ public class ReservationDto {
 	
 	public static List<ReservationDto> converter(List<Reservation> reservationsList) {
 	
-		List<ReservationDto> listCustomersDto = new ArrayList<>();
+		List<ReservationDto> reservationDtoList = new ArrayList<>();
 		for(Reservation r : reservationsList) {
-			listCustomersDto.add(new ReservationDto(r));
+			reservationDtoList.add(new ReservationDto(r));
 		}
 		
-		return listCustomersDto;
+		return reservationDtoList;
 	}
 }

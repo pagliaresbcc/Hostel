@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,7 @@ import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.CustomerForm;
 import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.controller.form.RoomForm;
+import br.com.hostel.controller.form.RoomUpdateForm;
 import br.com.hostel.service.CustomerService;
 import br.com.hostel.service.ReservationService;
 import br.com.hostel.service.RoomService;
@@ -42,84 +44,92 @@ public class HostelController {
 	@Autowired
 	private RoomService roomService;
 
-	@PostMapping("/customers") 
+	@PostMapping("/customers")
 	public ResponseEntity<CustomerDto> registerCustomer(@RequestBody @Valid CustomerForm form,
 			UriComponentsBuilder uriBuilder) {
-		
+
 		return this.customerService.registerCustomer(form, uriBuilder);
 	}
 
-	@GetMapping("/customers") 
+	@GetMapping("/customers")
 	public ResponseEntity<List<CustomerDto>> listAllCustomers(@RequestParam(required = false) String name,
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pagination)
 			throws URISyntaxException {
-		
+
 		return this.customerService.listAllCustomers(name, pagination);
 	}
 
 	@GetMapping("/customers/{id}")
 	public ResponseEntity<CustomerDto> listOneCustomer(@PathVariable Long id) {
-		
+
 		return this.customerService.listOneCustomer(id);
 	}
 
 	@DeleteMapping("/customers/{id}")
 	@Transactional
 	public ResponseEntity<?> deleteCustomer(@PathVariable Long id) {
-		
+
 		return this.customerService.deleteCustomer(id);
 	}
 
-	@PostMapping("/reservations") 
+	@PostMapping("/reservations")
 	public ResponseEntity<ReservationDto> registerReservation(@RequestBody @Valid ReservationForm form,
 			UriComponentsBuilder uriBuilder) {
-		
+
 		return this.reservationService.registerReservation(form, uriBuilder);
 	}
 
-	@GetMapping("/reservations") 
+	@GetMapping("/reservations")
 	public ResponseEntity<List<ReservationDto>> listAllReservations(@RequestParam(required = false) String name,
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pagination) {
-		
+
 		return this.reservationService.listAllReservations(name, pagination);
 	}
 
 	@GetMapping("/reservations/{id}")
 	public ResponseEntity<ReservationDto> listOneReservation(@PathVariable Long id) {
-		
+
 		return this.reservationService.listOneReservation(id);
 	}
 
 	@DeleteMapping("/reservations/{id}")
 	@Transactional
 	public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
-		
+
 		return this.reservationService.deleteReservation(id);
 	}
 
-	@PostMapping("/rooms") 
+	@PostMapping("/rooms")
 	public ResponseEntity<RoomDto> registerRoom(@RequestBody @Valid RoomForm form, UriComponentsBuilder uriBuilder) {
-		
+
 		return this.roomService.registerRoom(form, uriBuilder);
 	}
 
-	@GetMapping("/rooms") 
-	public ResponseEntity<List<RoomDto>> listAllRooms(@RequestParam(required = false) Integer number,
+	@GetMapping("/rooms")
+	public ResponseEntity<List<RoomDto>> listAllRooms(
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pagination) {
 
-		return this.roomService.listAllRooms(number, pagination);
+		return this.roomService.listAllRooms(pagination);
 	}
 
 	@GetMapping("/rooms/{id}")
 	public ResponseEntity<RoomDto> listOneRoom(@PathVariable Long id) {
-		
+
 		return this.roomService.listOneRoom(id);
+	}
+	
+	@PutMapping("/rooms/{id}")
+	@Transactional
+	public ResponseEntity<RoomDto> updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
+			UriComponentsBuilder uriBuilder) {
+		
+		return this.roomService.updateRoom(id, form, uriBuilder);
 	}
 
 	@DeleteMapping("/rooms/{id}")
 	@Transactional
 	public ResponseEntity<?> deleteRoom(@PathVariable Long id) {
-		
+
 		return this.roomService.deleteRoom(id);
 	}
 }

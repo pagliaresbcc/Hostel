@@ -5,14 +5,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class Reservation {
@@ -21,22 +21,21 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull
+	@Column(nullable=false)
 	private Long customer_ID;
-	@NotNull
+	@Column(nullable=false)
 	private int numberOfGuests;
-	@NotNull
+	@Column(nullable=false)
 	private LocalDate reservationDate;
-	@NotNull
+	@Column(nullable=false)
 	private LocalDate checkinDate;
-	@NotNull
+	@Column(nullable=false)
 	private LocalDate checkoutDate;
 	
-	@NotNull
-	@OneToMany
+	@ManyToMany
+	@Column(nullable=false)
 	private Set<Room> rooms = new HashSet<>();
 	
-	@NotNull
 	@OneToOne(cascade=CascadeType.REMOVE)
 	@JoinColumn(name = "payment_ID", nullable = false)
 	private Payments payment;
@@ -52,7 +51,6 @@ public class Reservation {
 	}
 
 	public Reservation() {
-		this.reservationDate = LocalDate.now();
 	}
 	
 	public Long getId() {

@@ -5,14 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.RoomForm;
+import br.com.hostel.controller.form.RoomUpdateForm;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
 import br.com.hostel.repository.RoomRepository;
@@ -28,20 +33,24 @@ public class RoomService {
 
 	public ResponseEntity<RoomDto> registerRoom(RoomForm form, UriComponentsBuilder uriBuilder) {
 		Room room = form.returnRoom(dailyRateRepository);
-		roomRepository.save(room);
 
-		URI uri = uriBuilder.path("/rooms/{id}").buildAndExpand(room.getId()).toUri();
-		return ResponseEntity.created(uri).body(new RoomDto(room));
+		Optional<Room> roomOp = roomRepository.findByNumber(room.getNumber());
+
+		if (roomOp.isPresent() || room.getNumber() == 0) {
+			return ResponseEntity.badRequest().build();
+		} else {
+			roomRepository.save(room);
+
+			URI uri = uriBuilder.path("/rooms/{id}").buildAndExpand(room.getId()).toUri();
+			return ResponseEntity.created(uri).body(new RoomDto(room));
+		}
 	}
 
-	public ResponseEntity<List<RoomDto>> listAllRooms(Integer number, Pageable pagination) {
+	public ResponseEntity<List<RoomDto>> listAllRooms(Pageable pagination) {
 
 		List<RoomDto> response = new ArrayList<>();
 
-		if (!(number instanceof Integer))
-			response = RoomDto.convert(roomRepository.findAll());
-		else
-			response = RoomDto.convert(roomRepository.findByNumber(number));
+		response = RoomDto.convert(roomRepository.findAll());
 
 		if (response.isEmpty() || response == null)
 			return ResponseEntity.notFound().build();
@@ -56,6 +65,20 @@ public class RoomService {
 		else
 			return ResponseEntity.notFound().build();
 	}
+	
+	public ResponseEntity<RoomDto> updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
+			UriComponentsBuilder uriBuilder) {
+		
+		Optional<Room> roomOp = roomRepository.findById(id);
+		
+		if (roomOp.isPresent()) {
+			Room room = form.updateRoomForm(id, roomOp.get(), roomRepository);
+			dailyRateRepository.save(room.getDailyRate());
+			roomRepository.save(room);
+			return ResponseEntity.ok(new RoomDto(room));
+		}
+		return ResponseEntity.notFound().build();
+	}
 
 	public ResponseEntity<?> deleteRoom(Long id) {
 		Optional<Room> room = roomRepository.findById(id);
@@ -65,6 +88,5 @@ public class RoomService {
 		} else
 			return ResponseEntity.notFound().build();
 	}
-	
-	
+
 }

@@ -1,13 +1,17 @@
 package br.com.hostel.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class Room {
@@ -16,19 +20,34 @@ public class Room {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull
+	@Column(nullable=false)
+	private String description;
+	@Column(nullable=false)
 	private int number;
-	@NotNull
+	@Column(nullable=false)
 	private double dimension;
 	@OneToOne(cascade=CascadeType.REMOVE)
 	@JoinColumn(name = "dailyRate_ID", nullable = false)
 	private DailyRate dailyRate;
 	
+	@ManyToMany
+	private
+	Set<CheckinCheckoutDates> checkinCheckoutList = new HashSet<>();
+	
 	public Room() {
 		
 	}
 	
-	public Room(int number, double dimension, DailyRate dailyRate) {
+	public Room(String description, int number, double dimension, DailyRate dailyRate, Set<CheckinCheckoutDates> checkinCheckoutList) {
+		this.description = description;
+		this.number = number;
+		this.dimension = dimension;
+		this.dailyRate = dailyRate;
+		this.checkinCheckoutList = checkinCheckoutList;
+	}
+	
+	public Room(String description, int number, double dimension, DailyRate dailyRate) {
+		this.description = description;
 		this.number = number;
 		this.dimension = dimension;
 		this.dailyRate = dailyRate;
@@ -67,10 +86,25 @@ public class Room {
 		this.dailyRate = dailyRate;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public Set<CheckinCheckoutDates> getCheckinCheckoutList() {
+		return checkinCheckoutList;
+	}
+
+	public void addCheckinCheckoutDate(CheckinCheckoutDates checkinCheckoutList) {
+		this.checkinCheckoutList.add(checkinCheckoutList);
+	}
+
 	public String toString( ) {
 		String resultado = "Room number...: " + this.number + "\n" +
 	                                    "Room dimension (m2)...: " + this.dimension + "\n";
 		return resultado;
 	}
-
 }

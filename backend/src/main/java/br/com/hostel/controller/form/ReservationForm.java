@@ -19,7 +19,7 @@ public class ReservationForm {
 	@NotNull
 	private Long customer_ID;
 	@NotNull
-	private int numberOfGuests;
+    int numberOfGuests;
 	@NotNull
 	LocalDate reservationDate;
 	@NotNull
@@ -86,6 +86,7 @@ public class ReservationForm {
 	public void setPayment(Payments payment) {
 		this.payment = payment;
 	}
+	
 
 	public Reservation returnReservation(PaymentsRepository paymentsRepository, RoomRepository roomRepository) {
 		paymentsRepository.save(payment);
