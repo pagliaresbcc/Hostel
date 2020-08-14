@@ -1,9 +1,13 @@
 package br.com.hostel.service;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -18,8 +22,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.controller.form.RoomUpdateForm;
+import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
+import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
 
 @Service
@@ -30,6 +36,9 @@ public class RoomService {
 
 	@Autowired
 	private DailyRateRepository dailyRateRepository;
+
+	@Autowired
+	private ReservationRepository reservationRepository;
 
 	public ResponseEntity<RoomDto> registerRoom(RoomForm form, UriComponentsBuilder uriBuilder) {
 		Room room = form.returnRoom(dailyRateRepository);
@@ -46,11 +55,45 @@ public class RoomService {
 		}
 	}
 
-	public ResponseEntity<List<RoomDto>> listAllRooms(Pageable pagination) {
+	public ResponseEntity<List<RoomDto>> listAllRooms(String checkinDateString, String checkoutDateString,
+			Pageable pagination) {
+
+		// convert String to LocalDate
+		LocalDate checkinDate = LocalDate.parse(checkinDateString);
+		LocalDate checkoutDate = LocalDate.parse(checkoutDateString);
 
 		List<RoomDto> response = new ArrayList<>();
+		List<Room> invalidRooms = new ArrayList<>();
+		List<Room> validRooms = roomRepository.findAll();
 
-		response = RoomDto.convert(roomRepository.findAll());
+		if (checkinDate == null && checkoutDate == null)
+			response = RoomDto.convert(roomRepository.findAll());
+		else {
+			List<Reservation> reservationsList = reservationRepository.findAll();
+
+			reservationsList.forEach(reservation -> {
+
+				long numOfDays = ChronoUnit.DAYS.between(reservation.getCheckinDate(), reservation.getCheckoutDate());
+
+				List<LocalDate> dates = Stream.iterate(reservation.getCheckinDate(), date -> date.plusDays(1))
+						.limit(numOfDays).collect(Collectors.toList());
+				System.out.println(dates);
+				System.out.println(dates.contains(checkinDate));
+				System.out.println(dates.contains(checkoutDate));
+				System.out.println(checkinDate.isBefore(reservation.getCheckinDate()));
+				System.out.println(checkoutDate.isAfter(reservation.getCheckoutDate()));
+				System.out.println(reservation.getCheckoutDate());
+				if ((dates.contains(checkinDate) || dates.contains(checkoutDate))
+						|| (checkinDate.isBefore(reservation.getCheckinDate()) && checkoutDate.isAfter(reservation.getCheckoutDate())
+								|| checkoutDate.isEqual(reservation.getCheckoutDate()))) {
+
+					reservation.getRooms().forEach(room -> invalidRooms.add(room));
+				}
+
+				invalidRooms.forEach(room -> validRooms.remove(room));
+			});
+		}
+		response = RoomDto.convert(validRooms);
 
 		if (response.isEmpty() || response == null)
 			return ResponseEntity.notFound().build();
@@ -60,21 +103,25 @@ public class RoomService {
 
 	public ResponseEntity<RoomDto> listOneRoom(Long id) {
 		Optional<Room> room = roomRepository.findById(id);
+
 		if (room.isPresent())
 			return ResponseEntity.ok(new RoomDto(room.get()));
 		else
 			return ResponseEntity.notFound().build();
 	}
-	
+
 	public ResponseEntity<RoomDto> updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
 			UriComponentsBuilder uriBuilder) {
-		
+
 		Optional<Room> roomOp = roomRepository.findById(id);
-		
+
 		if (roomOp.isPresent()) {
 			Room room = form.updateRoomForm(id, roomOp.get(), roomRepository);
+			
 			dailyRateRepository.save(room.getDailyRate());
+			
 			roomRepository.save(room);
+			
 			return ResponseEntity.ok(new RoomDto(room));
 		}
 		return ResponseEntity.notFound().build();
@@ -82,8 +129,10 @@ public class RoomService {
 
 	public ResponseEntity<?> deleteRoom(Long id) {
 		Optional<Room> room = roomRepository.findById(id);
+
 		if (room.isPresent()) {
 			roomRepository.deleteById(id);
+			
 			return ResponseEntity.ok().build();
 		} else
 			return ResponseEntity.notFound().build();

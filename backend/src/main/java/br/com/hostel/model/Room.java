@@ -1,8 +1,5 @@
 package br.com.hostel.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -30,20 +26,8 @@ public class Room {
 	@JoinColumn(name = "dailyRate_ID", nullable = false)
 	private DailyRate dailyRate;
 	
-	@ManyToMany
-	private
-	Set<CheckinCheckoutDates> checkinCheckoutList = new HashSet<>();
-	
 	public Room() {
 		
-	}
-	
-	public Room(String description, int number, double dimension, DailyRate dailyRate, Set<CheckinCheckoutDates> checkinCheckoutList) {
-		this.description = description;
-		this.number = number;
-		this.dimension = dimension;
-		this.dailyRate = dailyRate;
-		this.checkinCheckoutList = checkinCheckoutList;
 	}
 	
 	public Room(String description, int number, double dimension, DailyRate dailyRate) {
@@ -94,14 +78,6 @@ public class Room {
 		this.description = description;
 	}
 	
-	public Set<CheckinCheckoutDates> getCheckinCheckoutList() {
-		return checkinCheckoutList;
-	}
-
-	public void addCheckinCheckoutDate(CheckinCheckoutDates checkinCheckoutList) {
-		this.checkinCheckoutList.add(checkinCheckoutList);
-	}
-
 	public String toString( ) {
 		String resultado = "Room number...: " + this.number + "\n" +
 	                                    "Room dimension (m2)...: " + this.dimension + "\n";

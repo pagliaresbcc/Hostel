@@ -47,6 +47,7 @@ public class RoomUpdateForm {
 	
 	public Room updateRoomForm(Long id, Room room, RoomRepository roomRepository) {
 		verifyIfParamIsNotNull(room, roomRepository);
+		
 		return room;
 	}
 	

@@ -92,12 +92,12 @@ public class HostelController {
 
 		return this.reservationService.listOneReservation(id);
 	}
-	
+
 	@PutMapping("/reservations/{id}")
 	@Transactional
-	public ResponseEntity<ReservationDto> updateRoom(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form,
-			UriComponentsBuilder uriBuilder) {
-		
+	public ResponseEntity<ReservationDto> updateRoom(@PathVariable Long id,
+			@RequestBody @Valid ReservationUpdateForm form, UriComponentsBuilder uriBuilder) {
+
 		return this.reservationService.updateReservation(id, form, uriBuilder);
 	}
 
@@ -115,10 +115,11 @@ public class HostelController {
 	}
 
 	@GetMapping("/rooms")
-	public ResponseEntity<List<RoomDto>> listAllRooms(
+	public ResponseEntity<List<RoomDto>> listAllRooms(@RequestParam(required = false) String checkinDate,
+			@RequestParam(required = false) String checkoutDate,
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pagination) {
 
-		return this.roomService.listAllRooms(pagination);
+		return this.roomService.listAllRooms(checkinDate, checkoutDate, pagination);
 	}
 
 	@GetMapping("/rooms/{id}")
@@ -126,12 +127,12 @@ public class HostelController {
 
 		return this.roomService.listOneRoom(id);
 	}
-	
+
 	@PutMapping("/rooms/{id}")
 	@Transactional
 	public ResponseEntity<RoomDto> updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
 			UriComponentsBuilder uriBuilder) {
-		
+
 		return this.roomService.updateRoom(id, form, uriBuilder);
 	}
 

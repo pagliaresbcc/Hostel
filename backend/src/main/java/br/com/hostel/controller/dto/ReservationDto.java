@@ -63,9 +63,8 @@ public class ReservationDto {
 	public static List<ReservationDto> converter(List<Reservation> reservationsList) {
 	
 		List<ReservationDto> reservationDtoList = new ArrayList<>();
-		for(Reservation r : reservationsList) {
-			reservationDtoList.add(new ReservationDto(r));
-		}
+		
+		reservationsList.forEach(reservation -> reservationDtoList.add(new ReservationDto(reservation)));
 		
 		return reservationDtoList;
 	}

@@ -74,9 +74,8 @@ public class CustomerDto {
 	public static List<CustomerDto> converter(List<Customer> customersList) {
 
 		List<CustomerDto> customersDtoList = new ArrayList<>();
-		for(Customer c : customersList) {
-			customersDtoList.add(new CustomerDto(c));
-		}
+		
+		customersList.forEach(customer -> customersDtoList.add(new CustomerDto(customer)));
 		
 		return customersDtoList;
 	}

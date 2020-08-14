@@ -55,6 +55,7 @@ public class RoomForm {
 	
 	public Room returnRoom(DailyRateRepository dailyRateRepository) {
 		dailyRateRepository.save(dailyRate);
+		
 		return new Room(description, number, dimension, dailyRate);
 	}
 }

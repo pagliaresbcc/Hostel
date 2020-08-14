@@ -2,9 +2,7 @@ package br.com.hostel.controller.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import br.com.hostel.model.CheckinCheckoutDates;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
 
@@ -15,7 +13,6 @@ public class RoomDto {
 	int number;
 	double dimension;
 	private DailyRate dailyRate;
-	private Set<CheckinCheckoutDates> checkinCheckoutList;
 
 	public RoomDto() {}
 
@@ -25,7 +22,6 @@ public class RoomDto {
 		this.number = room.getNumber();
 		this.dimension = room.getDimension();
 		this.dailyRate = room.getDailyRate();
-		this.checkinCheckoutList = room.getCheckinCheckoutList();
 	}
 
 	public Long getId() {
@@ -48,10 +44,6 @@ public class RoomDto {
 		return dailyRate;
 	}
 	
-	public Set<CheckinCheckoutDates> getCheckinCheckoutList() {
-		return checkinCheckoutList;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -59,9 +51,8 @@ public class RoomDto {
 	public static List<RoomDto> convert(List<Room> roomsList) {
 	
 		List<RoomDto> roomsDtoList = new ArrayList<>();
-		for(Room r : roomsList) {
-			roomsDtoList.add(new RoomDto(r));
-		}
+		
+		roomsList.forEach(room -> roomsDtoList.add(new RoomDto(room)));
 		
 		return roomsDtoList;
 	}

@@ -1,14 +1,10 @@
 package br.com.hostel.service;
 
 import java.net.URI;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -23,11 +19,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.controller.form.ReservationUpdateForm;
-import br.com.hostel.model.CheckinCheckoutDates;
 import br.com.hostel.model.Customer;
 import br.com.hostel.model.Reservation;
-import br.com.hostel.model.Room;
-import br.com.hostel.repository.CheckInCheckOutDateRepository;
 import br.com.hostel.repository.CustomerRepository;
 import br.com.hostel.repository.PaymentsRepository;
 import br.com.hostel.repository.ReservationRepository;
@@ -48,40 +41,18 @@ public class ReservationService {
 	@Autowired
 	private CustomerRepository customerRepository;
 	
-	@Autowired
-	private CheckInCheckOutDateRepository checkInCheckOutDateRepository;
-
 	public ResponseEntity<ReservationDto> registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) {
 		Reservation reservation = form.returnReservation(paymentsRepository, roomRepository);
 		Optional<Customer> customerOp = customerRepository.findById(reservation.getCustomer_ID());
 		
 		if (customerOp.isPresent()) {
-			Set<Room> rooms = reservation.getRooms();
-
-			for (Room room : rooms) {
-				for (CheckinCheckoutDates c : room.getCheckinCheckoutList()) {
-					List<LocalDate> dates = Stream.iterate(c.getCheckIn(), date -> date.plusDays(1))
-							.limit(ChronoUnit.DAYS.between(c.getCheckIn(), c.getCheckOut()))
-							.collect(Collectors.toList());
-					if (dates.contains(reservation.getCheckinDate()) || dates.contains(reservation.getCheckoutDate())) {
-						return ResponseEntity.badRequest().build();
-					}
-				}
-			}
-			CheckinCheckoutDates dateOK = new CheckinCheckoutDates(reservation.getCheckinDate(), reservation.getCheckoutDate());
-			checkInCheckOutDateRepository.save(dateOK);
-
-			for (Room room : rooms) { 
-				room.addCheckinCheckoutDate(dateOK);
-				roomRepository.save(room);
-			}
 			
-			reservation.setRooms(rooms);
 			Customer customer = customerOp.get();
 		
 			reservationRepository.save(reservation);
 			customer.addReservation(reservation);
 			customerRepository.save(customer);
+			
 			URI uri = uriBuilder.path("/reservations/{id}").buildAndExpand(customer.getId()).toUri();
 			
 			return ResponseEntity.created(uri).body(new ReservationDto(reservation));
@@ -105,7 +76,7 @@ public class ReservationService {
 			}
 		}
 
-		if (response.isEmpty())
+		if (response.isEmpty() || response == null)
 			return ResponseEntity.notFound().build();
 		else
 			return ResponseEntity.ok(response);
@@ -127,10 +98,9 @@ public class ReservationService {
 		
 		if (reservationOp.isPresent()) {
 			Reservation reservation = form.updateReservationForm(id, reservationOp.get());
-			for (Room room : reservation.getRooms()) {
-				
-				roomRepository.save(room);
-			}
+			
+			reservation.getRooms().forEach(room -> roomRepository.save(room));
+			
 			paymentsRepository.save(reservation.getPayment());
 			
 			return ResponseEntity.ok(new ReservationDto(reservation));
