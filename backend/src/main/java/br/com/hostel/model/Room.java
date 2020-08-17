@@ -11,33 +11,36 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Room {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String description;
-	@Column(nullable=false)
-	private int number;
-	@Column(nullable=false)
-	private double dimension;
-	@OneToOne(cascade=CascadeType.REMOVE)
+	@Column(nullable = false)
+	private Integer number;
+	@Column(nullable = false)
+	private Double dimension;
+	@Column(nullable = false)
+	private Integer maxNumberOfGuests;
+
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "dailyRate_ID", nullable = false)
 	private DailyRate dailyRate;
-	
+
 	public Room() {
-		
+
 	}
-	
-	public Room(String description, int number, double dimension, DailyRate dailyRate) {
+
+	public Room(String description, Integer number, Double dimension, Integer maxNumberOfGuests, DailyRate dailyRate) {
 		this.description = description;
 		this.number = number;
 		this.dimension = dimension;
+		this.maxNumberOfGuests = maxNumberOfGuests;
 		this.dailyRate = dailyRate;
 	}
-	
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -46,21 +49,21 @@ public class Room {
 		this.id = id;
 	}
 
-	public int getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
-	
-	public void setNumber(int number) {
+
+	public void setNumber(Integer number) {
 		this.number = number;
 	}
-	
-	public double getDimension() {
+
+	public Double getDimension() {
 		return dimension;
 	}
-	
-	public void setDimension(double dimension) {
+
+	public void setDimension(Double dimension) {
 		this.dimension = dimension;
-	} 
+	}
 
 	public DailyRate getDailyRate() {
 		return dailyRate;
@@ -77,10 +80,18 @@ public class Room {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	public String toString( ) {
-		String resultado = "Room number...: " + this.number + "\n" +
-	                                    "Room dimension (m2)...: " + this.dimension + "\n";
+
+	public Integer getMaxNumberOfGuests() {
+		return maxNumberOfGuests;
+	}
+
+	public void setMaxNumberOfGuests(Integer maxNumberOfGuests) {
+		this.maxNumberOfGuests = maxNumberOfGuests;
+	}
+
+	public String toString() {
+		String resultado = "Room number...: " + this.number + "\n" + "Room dimension (m2)...: " + this.dimension + "\n";
 		return resultado;
 	}
+
 }

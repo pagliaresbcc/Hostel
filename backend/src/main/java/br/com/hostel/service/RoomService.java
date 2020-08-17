@@ -56,20 +56,32 @@ public class RoomService {
 	}
 
 	public ResponseEntity<List<RoomDto>> listAllRooms(String checkinDateString, String checkoutDateString,
-			Pageable pagination) {
-
-		// convert String to LocalDate
-		LocalDate checkinDate = LocalDate.parse(checkinDateString);
-		LocalDate checkoutDate = LocalDate.parse(checkoutDateString);
+			Integer numberOfGuests, Pageable pagination) {
 
 		List<RoomDto> response = new ArrayList<>();
 		List<Room> invalidRooms = new ArrayList<>();
 		List<Room> validRooms = roomRepository.findAll();
+		
+		
 
-		if (checkinDate == null && checkoutDate == null)
+		if (checkinDateString == null || checkoutDateString == null)
 			response = RoomDto.convert(roomRepository.findAll());
 		else {
+			// convert String to LocalDate
+			LocalDate checkinDate = LocalDate.parse(checkinDateString);
+			LocalDate checkoutDate = LocalDate.parse(checkoutDateString);
+
 			List<Reservation> reservationsList = reservationRepository.findAll();
+
+			if (numberOfGuests != null) {
+				validRooms.forEach(room -> {
+					if (room.getMaxNumberOfGuests() < numberOfGuests) {
+						invalidRooms.add(room);
+					}
+				});
+			}
+
+			System.out.println("alooo");
 
 			reservationsList.forEach(reservation -> {
 
@@ -77,28 +89,26 @@ public class RoomService {
 
 				List<LocalDate> dates = Stream.iterate(reservation.getCheckinDate(), date -> date.plusDays(1))
 						.limit(numOfDays).collect(Collectors.toList());
-				System.out.println(dates);
-				System.out.println(dates.contains(checkinDate));
-				System.out.println(dates.contains(checkoutDate));
-				System.out.println(checkinDate.isBefore(reservation.getCheckinDate()));
-				System.out.println(checkoutDate.isAfter(reservation.getCheckoutDate()));
-				System.out.println(reservation.getCheckoutDate());
+
 				if ((dates.contains(checkinDate) || dates.contains(checkoutDate))
-						|| (checkinDate.isBefore(reservation.getCheckinDate()) && checkoutDate.isAfter(reservation.getCheckoutDate())
+						|| (checkinDate.isBefore(reservation.getCheckinDate())
+								&& checkoutDate.isAfter(reservation.getCheckoutDate())
 								|| checkoutDate.isEqual(reservation.getCheckoutDate()))) {
 
-					reservation.getRooms().forEach(room -> invalidRooms.add(room));
+					reservation.getRooms().forEach(room -> {
+						if (!invalidRooms.contains(room)) {
+							invalidRooms.add(room);
+						}
+					});
 				}
 
-				invalidRooms.forEach(room -> validRooms.remove(room));
 			});
+
+			invalidRooms.forEach(room -> validRooms.remove(room));
 		}
 		response = RoomDto.convert(validRooms);
 
-		if (response.isEmpty() || response == null)
-			return ResponseEntity.notFound().build();
-		else
-			return ResponseEntity.ok(response);
+		return ResponseEntity.ok(response);
 	}
 
 	public ResponseEntity<RoomDto> listOneRoom(Long id) {
@@ -117,11 +127,11 @@ public class RoomService {
 
 		if (roomOp.isPresent()) {
 			Room room = form.updateRoomForm(id, roomOp.get(), roomRepository);
-			
+
 			dailyRateRepository.save(room.getDailyRate());
-			
+
 			roomRepository.save(room);
-			
+
 			return ResponseEntity.ok(new RoomDto(room));
 		}
 		return ResponseEntity.notFound().build();
@@ -132,7 +142,7 @@ public class RoomService {
 
 		if (room.isPresent()) {
 			roomRepository.deleteById(id);
-			
+
 			return ResponseEntity.ok().build();
 		} else
 			return ResponseEntity.notFound().build();

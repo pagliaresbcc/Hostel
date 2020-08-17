@@ -21,8 +21,6 @@ public class ReservationForm {
 	@NotNull
     int numberOfGuests;
 	@NotNull
-	LocalDate reservationDate;
-	@NotNull
 	LocalDate checkinDate;
 	@NotNull
 	LocalDate checkoutDate;
@@ -45,14 +43,6 @@ public class ReservationForm {
 
 	public void setNumberOfGuests(int numberOfGuests) {
 		this.numberOfGuests = numberOfGuests;
-	}
-
-	public LocalDate getReservationDate() {
-		return reservationDate;
-	}
-
-	public void setReservationDate(LocalDate reservationDate) {
-		this.reservationDate = reservationDate;
 	}
 
 	public LocalDate getCheckinDate() {
@@ -94,7 +84,7 @@ public class ReservationForm {
 
 		rooms_ID.forEach(id -> roomsList.add(roomRepository.findById(id).get()));
 
-		return new Reservation(customer_ID, numberOfGuests, reservationDate, checkinDate, checkoutDate, 
+		return new Reservation(customer_ID, numberOfGuests, LocalDate.now(), checkinDate, checkoutDate, 
 				roomsList, payment);
 	}
 

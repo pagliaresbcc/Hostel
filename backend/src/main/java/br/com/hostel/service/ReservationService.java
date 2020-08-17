@@ -1,6 +1,7 @@
 package br.com.hostel.service;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,22 +41,24 @@ public class ReservationService {
 
 	@Autowired
 	private CustomerRepository customerRepository;
-	
+
 	public ResponseEntity<ReservationDto> registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) {
 		Reservation reservation = form.returnReservation(paymentsRepository, roomRepository);
 		Optional<Customer> customerOp = customerRepository.findById(reservation.getCustomer_ID());
-		
+
 		if (customerOp.isPresent()) {
-			
-			Customer customer = customerOp.get();
-		
-			reservationRepository.save(reservation);
-			customer.addReservation(reservation);
-			customerRepository.save(customer);
-			
-			URI uri = uriBuilder.path("/reservations/{id}").buildAndExpand(customer.getId()).toUri();
-			
-			return ResponseEntity.created(uri).body(new ReservationDto(reservation));
+			if (reservation.getCheckinDate().isAfter(LocalDate.now())
+					&& reservation.getCheckoutDate().isAfter(reservation.getCheckinDate())) {
+				Customer customer = customerOp.get();
+
+				reservationRepository.save(reservation);
+				customer.addReservation(reservation);
+				customerRepository.save(customer);
+
+				URI uri = uriBuilder.path("/reservations/{id}").buildAndExpand(customer.getId()).toUri();
+
+				return ResponseEntity.created(uri).body(new ReservationDto(reservation));
+			}
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -76,10 +79,7 @@ public class ReservationService {
 			}
 		}
 
-		if (response.isEmpty() || response == null)
-			return ResponseEntity.notFound().build();
-		else
-			return ResponseEntity.ok(response);
+		return ResponseEntity.ok(response);
 	}
 
 	public ResponseEntity<ReservationDto> listOneReservation(Long id) {
@@ -90,19 +90,19 @@ public class ReservationService {
 		else
 			return ResponseEntity.notFound().build();
 	}
-	
-	public ResponseEntity<ReservationDto> updateReservation(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form,
-			UriComponentsBuilder uriBuilder) {
-		
+
+	public ResponseEntity<ReservationDto> updateReservation(@PathVariable Long id,
+			@RequestBody @Valid ReservationUpdateForm form, UriComponentsBuilder uriBuilder) {
+
 		Optional<Reservation> reservationOp = reservationRepository.findById(id);
-		
+
 		if (reservationOp.isPresent()) {
 			Reservation reservation = form.updateReservationForm(id, reservationOp.get());
-			
+
 			reservation.getRooms().forEach(room -> roomRepository.save(room));
-			
+
 			paymentsRepository.save(reservation.getPayment());
-			
+
 			return ResponseEntity.ok(new ReservationDto(reservation));
 		}
 		return ResponseEntity.notFound().build();

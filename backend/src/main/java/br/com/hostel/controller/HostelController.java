@@ -117,9 +117,10 @@ public class HostelController {
 	@GetMapping("/rooms")
 	public ResponseEntity<List<RoomDto>> listAllRooms(@RequestParam(required = false) String checkinDate,
 			@RequestParam(required = false) String checkoutDate,
+			@RequestParam(required = false) Integer numberOfGuests,
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pagination) {
-
-		return this.roomService.listAllRooms(checkinDate, checkoutDate, pagination);
+		
+		return this.roomService.listAllRooms(checkinDate, checkoutDate, numberOfGuests, pagination);
 	}
 
 	@GetMapping("/rooms/{id}")

@@ -9,31 +9,33 @@ import br.com.hostel.repository.DailyRateRepository;
 public class RoomForm {
 
 	@NotNull
-	private
-	String description;
+	private String description;
 	
 	@NotNull
-	int number;
+	private Integer number;
 	
 	@NotNull
-	double dimension;
+	private Double dimension;
+	
+	@NotNull
+	private Integer maxNumberOfGuests;
 	
 	@NotNull
 	private	DailyRate dailyRate;
 
-	public int getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
+	public void setNumber(Integer number) {
 		this.number = number;
 	}
 
-	public double getDimension() {
+	public Double getDimension() {
 		return dimension;
 	}
 
-	public void setDimension(double dimension) {
+	public void setDimension(Double dimension) {
 		this.dimension = dimension;
 	}
 	
@@ -53,9 +55,18 @@ public class RoomForm {
 		this.description = description;
 	}
 	
+	public Integer getMaxNumberOfGuests() {
+		return maxNumberOfGuests;
+	}
+	
+	public void setMaxNumberOfGuests(Integer maxNumberOfGuests) {
+		this.maxNumberOfGuests = maxNumberOfGuests;
+	}
+	
 	public Room returnRoom(DailyRateRepository dailyRateRepository) {
 		dailyRateRepository.save(dailyRate);
 		
-		return new Room(description, number, dimension, dailyRate);
+		return new Room(description, number, dimension, maxNumberOfGuests, dailyRate);
 	}
+
 }
