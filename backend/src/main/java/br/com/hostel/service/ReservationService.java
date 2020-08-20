@@ -58,7 +58,8 @@ public class ReservationService {
 				URI uri = uriBuilder.path("/reservations/{id}").buildAndExpand(customer.getId()).toUri();
 
 				return ResponseEntity.created(uri).body(new ReservationDto(reservation));
-			}
+			} else
+				return ResponseEntity.badRequest().build();
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -76,6 +77,8 @@ public class ReservationService {
 						.collect(Collectors.toList());
 
 				response = ReservationDto.converter(reservations);
+			} else {
+				return ResponseEntity.notFound().build();
 			}
 		}
 

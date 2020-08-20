@@ -30,6 +30,7 @@ import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.controller.form.ReservationUpdateForm;
 import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.controller.form.RoomUpdateForm;
+import br.com.hostel.controller.helper.RoomFilter;
 import br.com.hostel.service.CustomerService;
 import br.com.hostel.service.ReservationService;
 import br.com.hostel.service.RoomService;
@@ -115,12 +116,10 @@ public class HostelController {
 	}
 
 	@GetMapping("/rooms")
-	public ResponseEntity<List<RoomDto>> listAllRooms(@RequestParam(required = false) String checkinDate,
-			@RequestParam(required = false) String checkoutDate,
-			@RequestParam(required = false) Integer numberOfGuests,
+	public ResponseEntity<List<RoomDto>> listAllRooms(@RequestBody @Valid RoomFilter roomFilter,
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pagination) {
 		
-		return this.roomService.listAllRooms(checkinDate, checkoutDate, numberOfGuests, pagination);
+		return this.roomService.listAllRooms(roomFilter, pagination);
 	}
 
 	@GetMapping("/rooms/{id}")

@@ -1,15 +1,18 @@
 package br.com.hostel.tests.post;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
 
+import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,8 +26,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.dto.LoginDto;
+import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.LoginForm;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
@@ -35,6 +38,7 @@ import br.com.hostel.repository.RoomRepository;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @TestPropertySource(locations="classpath:test.properties")
+@FixMethodOrder(MethodSorters.DEFAULT)
 public class RoomPostAndDeleteTests {
 	
 	@Autowired
@@ -51,7 +55,7 @@ public class RoomPostAndDeleteTests {
 	private URI uri;
 	private HttpHeaders headers = new HttpHeaders();
 	private DailyRate dailyRate = new DailyRate(400.0);
-	private Room room = new Room(5, 230.0, dailyRate);
+	private Room room = new Room("quartinho", 5, 230.0, 6, dailyRate);
 	private LoginForm login = new LoginForm();
 
 	@BeforeEach
@@ -80,6 +84,8 @@ public class RoomPostAndDeleteTests {
 
 	@Test
 	public void shouldAutenticateAndDeleteOneRoomWithId2() throws Exception {
+		room.setNumber(99);
+		
 		dailyRateRepository.save(dailyRate);
 		roomRepository.save(room);
 		

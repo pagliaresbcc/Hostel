@@ -57,7 +57,7 @@ public class ReservationGetTests {
 	private URI uri;
 	private Reservation reservation = new Reservation();
 	private CashPayment cash = new CashPayment();
-	private Room room = new Room(13, 230.0, new DailyRate(400.0));
+	private Room room = new Room("quarto confortavel", 13, 230.0, 4, new DailyRate(400.0));
 	private List<Reservation> reservationsList = new ArrayList<>();
 	
 	private Customer customer = Mockito.mock(Customer.class);

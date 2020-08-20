@@ -8,8 +8,6 @@ import br.com.hostel.model.Room;
 
 public interface RoomRepository extends JpaRepository<Room, Long>{
 
-	Optional<Room> findByNumber(int number);
-	
+	Optional<Room> findByNumber(Integer number);
 
 }
-

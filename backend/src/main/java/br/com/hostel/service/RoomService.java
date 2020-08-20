@@ -22,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.controller.form.RoomUpdateForm;
+import br.com.hostel.controller.helper.RoomFilter;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
@@ -55,56 +56,33 @@ public class RoomService {
 		}
 	}
 
-	public ResponseEntity<List<RoomDto>> listAllRooms(String checkinDateString, String checkoutDateString,
-			Integer numberOfGuests, Pageable pagination) {
+	public ResponseEntity<List<RoomDto>> listAllRooms(RoomFilter roomFilter, Pageable pagination) {
 
 		List<RoomDto> response = new ArrayList<>();
 		List<Room> invalidRooms = new ArrayList<>();
 		List<Room> validRooms = roomRepository.findAll();
-		
-		
 
-		if (checkinDateString == null || checkoutDateString == null)
+		if (roomFilter == null)
 			response = RoomDto.convert(roomRepository.findAll());
 		else {
+
+			verifyValidRooms(roomFilter, invalidRooms, validRooms);
+
 			// convert String to LocalDate
-			LocalDate checkinDate = LocalDate.parse(checkinDateString);
-			LocalDate checkoutDate = LocalDate.parse(checkoutDateString);
+			if (roomFilter.getCheckinDate() != null && roomFilter.getCheckoutDate() != null) {
+				LocalDate checkinDate = LocalDate.parse(roomFilter.getCheckinDate());
+				LocalDate checkoutDate = LocalDate.parse(roomFilter.getCheckoutDate());
+				
+				List<Reservation> reservationsList = reservationRepository.findAll();
 
-			List<Reservation> reservationsList = reservationRepository.findAll();
+				reservationsList.forEach(reservation -> {
 
-			if (numberOfGuests != null) {
-				validRooms.forEach(room -> {
-					if (room.getMaxNumberOfGuests() < numberOfGuests) {
-						invalidRooms.add(room);
-					}
+					verifyValidRoomsWithinAPeriod(invalidRooms, checkinDate, checkoutDate, reservation);
+
 				});
+
+				invalidRooms.forEach(room -> validRooms.remove(room));
 			}
-
-			System.out.println("alooo");
-
-			reservationsList.forEach(reservation -> {
-
-				long numOfDays = ChronoUnit.DAYS.between(reservation.getCheckinDate(), reservation.getCheckoutDate());
-
-				List<LocalDate> dates = Stream.iterate(reservation.getCheckinDate(), date -> date.plusDays(1))
-						.limit(numOfDays).collect(Collectors.toList());
-
-				if ((dates.contains(checkinDate) || dates.contains(checkoutDate))
-						|| (checkinDate.isBefore(reservation.getCheckinDate())
-								&& checkoutDate.isAfter(reservation.getCheckoutDate())
-								|| checkoutDate.isEqual(reservation.getCheckoutDate()))) {
-
-					reservation.getRooms().forEach(room -> {
-						if (!invalidRooms.contains(room)) {
-							invalidRooms.add(room);
-						}
-					});
-				}
-
-			});
-
-			invalidRooms.forEach(room -> validRooms.remove(room));
 		}
 		response = RoomDto.convert(validRooms);
 
@@ -148,4 +126,56 @@ public class RoomService {
 			return ResponseEntity.notFound().build();
 	}
 
+	private void verifyValidRooms(RoomFilter roomFilter, List<Room> invalidRooms, List<Room> validRooms) {
+
+		if (roomFilter.getMinDailyRate() != null) {
+			validRooms.forEach(room -> {
+				if (room.getDailyRate().getPrice() < roomFilter.getMinDailyRate()) {
+					invalidRooms.add(room);
+				}
+			});
+		}
+
+		invalidRooms.forEach(room -> validRooms.remove(room));
+
+		if (roomFilter.getMaxDailyRate() != null) {
+			validRooms.forEach(room -> {
+				if (room.getDailyRate().getPrice() > roomFilter.getMaxDailyRate()) {
+					invalidRooms.add(room);
+				}
+			});
+		}
+
+		invalidRooms.forEach(room -> validRooms.remove(room));
+
+		if (roomFilter.getNumberOfGuests() != null) {
+			validRooms.forEach(room -> {
+				if (room.getMaxNumberOfGuests() < roomFilter.getNumberOfGuests()) {
+					invalidRooms.add(room);
+				}
+			});
+		}
+
+		invalidRooms.forEach(room -> validRooms.remove(room));
+	}
+
+	private void verifyValidRoomsWithinAPeriod(List<Room> invalidRooms, LocalDate checkinDate, LocalDate checkoutDate,
+			Reservation reservation) {
+		long numOfDays = ChronoUnit.DAYS.between(reservation.getCheckinDate(), reservation.getCheckoutDate());
+
+		List<LocalDate> dates = Stream.iterate(reservation.getCheckinDate(), date -> date.plusDays(1)).limit(numOfDays)
+				.collect(Collectors.toList());
+
+		if ((dates.contains(checkinDate) || dates.contains(checkoutDate))
+				|| (checkinDate.isBefore(reservation.getCheckinDate())
+						&& checkoutDate.isAfter(reservation.getCheckoutDate())
+						|| checkoutDate.isEqual(reservation.getCheckoutDate()))) {
+
+			reservation.getRooms().forEach(room -> {
+				if (!invalidRooms.contains(room)) {
+					invalidRooms.add(room);
+				}
+			});
+		}
+	}
 }

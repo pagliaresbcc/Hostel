@@ -54,14 +54,14 @@ public class RoomGetTests {
 
 		uri = new URI("/api/rooms");
 
-		room = new Room(13, 230.0, new DailyRate(400.0));
+		room = new Room("quarto legal", 13, 230.0, 6, new DailyRate(400.0));
 		
 		roomList.add(room);
 	}
 	
 	@Test
 	public void shouldReturnAllRoomsAndStatusOkWithoutParam() throws Exception {
-		Room room2 = new Room(14, 250.0, new DailyRate(500.0));
+		Room room2 = new Room("quarto bacana", 14, 250.0, 6, new DailyRate(500.0));
 		roomList.add(room2);
 		
 		Mockito.when(roomRepository.findAll()).thenReturn(roomList);
@@ -75,33 +75,11 @@ public class RoomGetTests {
 		String contentAsString = result.getResponse().getContentAsString();
 		
 		RoomDto[] customerObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
-		System.out.println(">>>>>>>>>>>>>>>>"+customerObjResponse[0].getDailyRate().getPrice());
-		System.out.println(">>>>>>>>>>>>>>>>>>"+customerObjResponse[1].getDailyRate().getPrice());
+
 		/// Verify request succeed
 		assertEquals(customerObjResponse.length, 2);
 		assertEquals(customerObjResponse[0].getNumber(), 13);
 		assertEquals(customerObjResponse[1].getDailyRate().getPrice(), 500, 0);
-	}
-	
-	@Test
-	public void shouldReturnOneRoomAndStatusOkByParam() throws Exception {
-		
-		Mockito.when(roomRepository.findByNumber(13)).thenReturn(roomList);
-
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.param("number", "13"))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
-
-		String contentAsString = result.getResponse().getContentAsString();
-
-		RoomDto[] customerObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
-		
-		/// Verify request succeed
-		assertEquals(customerObjResponse[0].getNumber(), 13);
-		assertEquals(customerObjResponse[0].getDimension(), 230, 0);
 	}
 	
 	@Test
@@ -121,17 +99,5 @@ public class RoomGetTests {
 		/// Verify request succeed
 		assertEquals(customerObjResponse.getNumber(), 13);
 		assertEquals(customerObjResponse.getDimension(), 230, 0);
-	}
-	
-	@Test
-	public void shouldReturnNotFoundStatusAndNullBodyByWrongParam() throws Exception {
-		
-		Mockito.when(roomRepository.findByNumber(13)).thenReturn(roomList);
-
-		mockMvc.perform(get(uri)
-				.param("number", "333"))
-				.andDo(print())
-				.andExpect(status().isNotFound())
-				.andReturn();
 	}
 }

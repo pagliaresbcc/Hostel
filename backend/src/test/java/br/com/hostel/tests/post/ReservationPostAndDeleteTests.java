@@ -94,9 +94,8 @@ public class ReservationPostAndDeleteTests {
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
 		
 		//setting reservation object
-		reservationForm.setCheckinDate(LocalDate.of(2019, 04, 01));
-		reservationForm.setCheckoutDate(LocalDate.of(2019, 04, 04));
-		reservationForm.setReservationDate(LocalDate.of(2019, 04, 01));
+		reservationForm.setCheckinDate(LocalDate.of(2021, 04, 01));
+		reservationForm.setCheckoutDate(LocalDate.of(2021, 04, 04));
 		reservationForm.setNumberOfGuests(2);
 		reservationForm.setCustomer_ID(1L);
 	}
@@ -151,7 +150,7 @@ public class ReservationPostAndDeleteTests {
 		
 		CheckPayment checkObjResponse = (CheckPayment) reservationObjResponse.getPayments();
 
-		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2019, 04, 01));
+		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2021, 04, 01));
 		assertEquals(reservationObjResponse.getPayments().getAmount(), 3000);
 		assertEquals(checkObjResponse.getBankName(), "Banco do Brasil");
 	}
@@ -182,7 +181,7 @@ public class ReservationPostAndDeleteTests {
 		
 		CashPayment cashObjResponse = (CashPayment) reservationObjResponse.getPayments();
 
-		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2019, 04, 01));
+		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2021, 04, 01));
 		assertEquals(reservationObjResponse.getPayments().getAmount(), 4000);
 		assertEquals(cashObjResponse.getAmountTendered(), 10000);
 	}
@@ -218,7 +217,7 @@ public class ReservationPostAndDeleteTests {
 		
 		CreditCardPayment creditCardObjResponse = (CreditCardPayment) reservationObjResponse.getPayments();
 		
-		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2019, 04, 01));
+		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2021, 04, 01));
 		assertEquals(reservationObjResponse.getPayments().getAmount(), 5000);
 		assertEquals(creditCardObjResponse.getNameOnCard(), "WASHINGTON A SILVA");
 	}
