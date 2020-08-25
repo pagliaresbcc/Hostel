@@ -111,6 +111,12 @@ public class ReservationService {
 		return ResponseEntity.notFound().build();
 	}
 
+	/*
+	 * cancelar reserva
+	 * estado da reserva (enum) - confirmada (reservada e paga)
+	 * 							- reservada (reservada mas nao paga)
+	 * 							- cancelada (prazo de 48h para cancelar)
+	 */
 	public ResponseEntity<?> deleteReservation(Long id) {
 		Optional<Reservation> reservation = reservationRepository.findById(id);
 
