@@ -43,8 +43,7 @@ public class ReservationService {
 	@Autowired
 	private CustomerRepository customerRepository;
 
-	@SuppressWarnings("rawtypes")
-	public ResponseEntity registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) {
 		Reservation reservation = form.returnReservation(paymentsRepository, roomRepository);
 		Optional<Customer> customerOp = customerRepository.findById(reservation.getCustomer_ID());
 

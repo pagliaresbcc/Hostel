@@ -75,7 +75,7 @@ public class HostelController {
 	}
 
 	@PostMapping("/reservations")
-	public ResponseEntity<ReservationDto> registerReservation(@RequestBody @Valid ReservationForm form,
+	public ResponseEntity<?> registerReservation(@RequestBody @Valid ReservationForm form,
 			UriComponentsBuilder uriBuilder) {
 
 		return this.reservationService.registerReservation(form, uriBuilder);
