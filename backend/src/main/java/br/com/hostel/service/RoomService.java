@@ -63,7 +63,7 @@ public class RoomService {
 		List<Room> validRooms = roomRepository.findAll();
 
 		if (roomFilter == null)
-			response = RoomDto.convert(validRooms);
+			response = RoomDto.convert(roomRepository.findAll());
 		else {
 
 			verifyValidRooms(roomFilter, invalidRooms, validRooms);

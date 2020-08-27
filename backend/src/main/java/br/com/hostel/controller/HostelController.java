@@ -116,10 +116,15 @@ public class HostelController {
 	}
 
 	@GetMapping("/rooms")
-	public ResponseEntity<List<RoomDto>> listAllRooms(@RequestBody @Valid RoomFilter roomFilter,
+	public ResponseEntity<List<RoomDto>> listAllRooms(@RequestParam(required = false) String checkinDate,
+			@RequestParam(required = false) String checkoutDate,
+			@RequestParam(required = false) Integer numberOfGuests,
+			@RequestParam(required = false) Double minDailyRate,
+			@RequestParam(required = false) Double maxDailyRate,
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pagination) {
 		
-		return this.roomService.listAllRooms(roomFilter, pagination);
+		return this.roomService.listAllRooms(new RoomFilter(checkinDate, checkoutDate, numberOfGuests, minDailyRate,
+				maxDailyRate), pagination);
 	}
 
 	@GetMapping("/rooms/{id}")

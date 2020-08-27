@@ -11,6 +11,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +43,8 @@ public class ReservationService {
 	@Autowired
 	private CustomerRepository customerRepository;
 
-	public ResponseEntity<ReservationDto> registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) {
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) {
 		Reservation reservation = form.returnReservation(paymentsRepository, roomRepository);
 		Optional<Customer> customerOp = customerRepository.findById(reservation.getCustomer_ID());
 
@@ -58,10 +60,13 @@ public class ReservationService {
 				URI uri = uriBuilder.path("/reservations/{id}").buildAndExpand(customer.getId()).toUri();
 
 				return ResponseEntity.created(uri).body(new ReservationDto(reservation));
-			} else
-				return ResponseEntity.badRequest().build();
+			} else {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Verify your checkin/checkout date");
+
+			}
+
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer ID didn't found");
 	}
 
 	public ResponseEntity<List<ReservationDto>> listAllReservations(String name, Pageable pagination) {
@@ -112,10 +117,8 @@ public class ReservationService {
 	}
 
 	/*
-	 * cancelar reserva
-	 * estado da reserva (enum) - confirmada (reservada e paga)
-	 * 							- reservada (reservada mas nao paga)
-	 * 							- cancelada (prazo de 48h para cancelar)
+	 * cancelar reserva estado da reserva (enum) - confirmada (reservada e paga) -
+	 * reservada (reservada mas nao paga) - cancelada (prazo de 48h para cancelar)
 	 */
 	public ResponseEntity<?> deleteReservation(Long id) {
 		Optional<Reservation> reservation = reservationRepository.findById(id);
