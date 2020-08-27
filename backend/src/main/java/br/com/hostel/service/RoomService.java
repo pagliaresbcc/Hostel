@@ -62,27 +62,21 @@ public class RoomService {
 		List<Room> invalidRooms = new ArrayList<>();
 		List<Room> validRooms = roomRepository.findAll();
 
-		if (roomFilter == null)
-			response = RoomDto.convert(roomRepository.findAll());
-		else {
+		verifyValidRooms(roomFilter, invalidRooms, validRooms);
 
-			verifyValidRooms(roomFilter, invalidRooms, validRooms);
+		if (roomFilter.getCheckinDate() != null && roomFilter.getCheckoutDate() != null) {
+			LocalDate checkinDate = LocalDate.parse(roomFilter.getCheckinDate());
+			LocalDate checkoutDate = LocalDate.parse(roomFilter.getCheckoutDate());
 
-			// convert String to LocalDate
-			if (roomFilter.getCheckinDate() != null && roomFilter.getCheckoutDate() != null) {
-				LocalDate checkinDate = LocalDate.parse(roomFilter.getCheckinDate());
-				LocalDate checkoutDate = LocalDate.parse(roomFilter.getCheckoutDate());
-				
-				List<Reservation> reservationsList = reservationRepository.findAll();
+			List<Reservation> reservationsList = reservationRepository.findAll();
 
-				reservationsList.forEach(reservation -> {
+			reservationsList.forEach(reservation -> {
 
-					verifyValidRoomsWithinAPeriod(invalidRooms, checkinDate, checkoutDate, reservation);
+				verifyValidRoomsWithinAPeriod(invalidRooms, checkinDate, checkoutDate, reservation);
 
-				});
+			});
 
-				invalidRooms.forEach(room -> validRooms.remove(room));
-			}
+			invalidRooms.forEach(room -> validRooms.remove(room));
 		}
 		response = RoomDto.convert(validRooms);
 

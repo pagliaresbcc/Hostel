@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.hostel.controller.dto.CustomerDto;
 import br.com.hostel.controller.dto.LoginDto;
+import br.com.hostel.controller.form.CustomerUpdateForm;
 import br.com.hostel.controller.form.LoginForm;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Customer;
@@ -94,12 +95,21 @@ public class CustomerPostAndDeleteTests {
 		customer.setLastName("Ferrolho");
 		customer.setTitle("MRS.");
 		customer.setPassword("1234567");
-	}
-	
-	@Test
-	public void shouldAutenticateAndDeleteOneCustomerWithId2() throws Exception {
+		
 		addressRepository.save(address);
 		customerRespository.save(customer);
+	}
+//	
+//	@Test
+//	public void testUpdateCustomerAttribute() {
+//		CustomerUpdateForm customerUpdate = new CustomerUpdateForm();
+//		
+//		customerUpdate.setName("Vitor");
+//		customerUpdate.setLastName("Muniz");
+//	}
+//	
+	@Test
+	public void shouldAutenticateAndDeleteOneCustomerWithId2() throws Exception {
 
 		mockMvc
 			.perform(delete(uri + "2")

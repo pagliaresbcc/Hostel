@@ -98,21 +98,62 @@ public class ReservationPostAndDeleteTests {
 		reservationForm.setCheckoutDate(LocalDate.of(2021, 04, 04));
 		reservationForm.setNumberOfGuests(2);
 		reservationForm.setCustomer_ID(1L);
-	}
-	
-	@Test
-	public void shouldAutenticateAndDeleteOneReservationWithId1() throws Exception {
-		checkPayment.setAmount(5000);
-		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2020, 01, 25), LocalTime.of(21, 30)));
+		
+		checkPayment.setAmount(3000);
+		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2020, 01, 25), LocalTime.of(21, 31)));
 		checkPayment.setBankId("01");
 		checkPayment.setBankName("Banco do Brasil");
 		checkPayment.setBranchNumber("1234-5");
 		
-		paymentsRepository.save(checkPayment);
 		reservationForm.setPayment(checkPayment);
 		
-		rooms_ID.add(1L);
+		rooms_ID.add(2L);
 		reservationForm.setRooms_ID(rooms_ID);
+	}
+	
+	@Test
+	public void shouldReturnNotFoundStatusWithNonExistentCustomerID() throws Exception {
+		
+		reservationForm.setCustomer_ID(33L);
+		
+		mockMvc.perform(post(uri)
+				.headers(headers)
+				.content(objectMapper.writeValueAsString(reservationForm)))
+				.andDo(print())
+				.andExpect(status().isNotFound())
+				.andReturn();
+	}
+	
+	@Test
+	public void shouldReturnBadRequestStatusWithReservationCheckinDateOlderActualDate() throws Exception {
+		
+		reservationForm.setCheckinDate(LocalDate.of(2019, 04, 01));
+		
+		mockMvc.perform(post(uri)
+				.headers(headers)
+				.content(objectMapper.writeValueAsString(reservationForm)))
+				.andDo(print())
+				.andExpect(status().isBadRequest())
+				.andReturn();
+	}
+	
+	@Test
+	public void shouldReturnBadRequestStatusWithReservationCheckoutDateOlderThanCheckinDate() throws Exception {
+		
+		reservationForm.setCheckinDate(LocalDate.of(2021, 04, 01));
+		reservationForm.setCheckoutDate(LocalDate.of(2021, 03, 01));
+		
+		mockMvc.perform(post(uri)
+				.headers(headers)
+				.content(objectMapper.writeValueAsString(reservationForm)))
+				.andDo(print())
+				.andExpect(status().isBadRequest())
+				.andReturn();
+	}
+	
+	@Test
+	public void shouldAutenticateAndDeleteOneReservationWithId1() throws Exception {
+
 		reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
 
 		mockMvc
@@ -125,16 +166,6 @@ public class ReservationPostAndDeleteTests {
 	
 	@Test
 	public void shouldAutenticateAndCreateOneReservationByCheckPaymentAndReturnStatusCreated() throws Exception {
-		checkPayment.setAmount(3000);
-		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2020, 01, 25), LocalTime.of(21, 31)));
-		checkPayment.setBankId("01");
-		checkPayment.setBankName("Banco do Brasil");
-		checkPayment.setBranchNumber("1234-5");
-		
-		reservationForm.setPayment(checkPayment);
-		
-		rooms_ID.add(2L);
-		reservationForm.setRooms_ID(rooms_ID);
 
 		MvcResult result = 
 				mockMvc
