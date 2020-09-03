@@ -42,6 +42,11 @@ import br.com.hostel.model.Room;
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:test.properties")
 public class RoomGetTests {
+	
+	/*
+	 * checkin/checkout colocar um nome mais coerente (para evitar confusão) ~~ sugestão: arrival/departure ~~
+
+	 * */
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -110,7 +115,7 @@ public class RoomGetTests {
 	}
 			
 	@Test
-	public void shouldShowOnlyValidRoomsWithReservationCheckinAndCheckoutDateBefore() throws Exception {
+	public void shouldShowOnlyAvailableRoomsWithReservationCheckinAndCheckoutDateBefore() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
 						.param("checkinDate","2021-04-01")
@@ -128,7 +133,7 @@ public class RoomGetTests {
 	}
 	
 	@Test
-	public void shouldShowOnlyValidRoomsWithReservationCheckinAndCheckoutDateAfter() throws Exception {
+	public void shouldShowOnlyAvailableRoomsWithReservationCheckinAndCheckoutDateAfter() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
 						.param("checkinDate","2021-04-18")
@@ -146,7 +151,7 @@ public class RoomGetTests {
 	}
 	
 	@Test
-	public void shouldShowOnlyValidRoomsWithReservationCheckinDateBeforeAndCheckoutDateBetween() throws Exception {
+	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateBeforeAndCheckoutDateBetween() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
 						.param("checkinDate","2021-04-05")
@@ -164,7 +169,7 @@ public class RoomGetTests {
 	}
 	
 	@Test
-	public void shouldShowOnlyValidRoomsWithReservationCheckinDateBetweenAndCheckoutDateAfter() throws Exception {
+	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateBetweenAndCheckoutDateAfter() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
 						.param("checkinDate","2021-04-15")
@@ -182,7 +187,7 @@ public class RoomGetTests {
 	}
 	
 	@Test
-	public void shouldShowOnlyValidRoomsWithReservationCheckinDateBeforeAndCheckoutDateAfter() throws Exception {
+	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateBeforeAndCheckoutDateAfter() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
 						.param("checkinDate","2021-04-05")
@@ -200,7 +205,7 @@ public class RoomGetTests {
 	}
 	
 	@Test
-	public void shouldShowOnlyValidRoomsWithReservationCheckinDateAndCheckoutDateBetween() throws Exception {
+	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateAndCheckoutDateBetween() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
 						.param("checkinDate","2021-04-13")

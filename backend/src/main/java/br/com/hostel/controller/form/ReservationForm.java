@@ -1,6 +1,7 @@
 package br.com.hostel.controller.form;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -79,6 +80,7 @@ public class ReservationForm {
 	
 
 	public Reservation returnReservation(PaymentsRepository paymentsRepository, RoomRepository roomRepository) {
+		payment.setDate(LocalDateTime.now());
 		paymentsRepository.save(payment);
 		Set<Room> roomsList = new HashSet<>();
 

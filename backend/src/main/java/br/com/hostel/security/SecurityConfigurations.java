@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 import br.com.hostel.repository.CustomerRepository;
 
@@ -49,6 +50,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 				.antMatchers(HttpMethod.GET, "/api/customers").permitAll() // permite publicamente somente o get 
 				.antMatchers(HttpMethod.GET, "/api/customers/*").permitAll() // permite publicamente somente o get 
 				.antMatchers(HttpMethod.GET, "/api/reservations").permitAll() // permite publicamente somente o get 
@@ -56,6 +58,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, "/api/rooms").permitAll() // permite publicamente somente o get 
 				.antMatchers(HttpMethod.GET, "/api/rooms/*").permitAll() // permite publicamente somente o get 
 				.antMatchers(HttpMethod.POST, "/auth").permitAll() // permite publicamente somente o post
+				.antMatchers(HttpMethod.POST, "/api/customers").permitAll() 
 				.anyRequest().authenticated() // qualquer outra requisicao precisara estar autenticado
 ////		.and().formLogin() //formulario de autenticacao nativo do spring (não usado pois ele cria sessão, deixando de ser stateless)
 				.and().csrf().disable()

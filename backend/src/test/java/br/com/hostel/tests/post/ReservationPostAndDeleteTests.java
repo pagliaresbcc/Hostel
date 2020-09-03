@@ -111,6 +111,9 @@ public class ReservationPostAndDeleteTests {
 		reservationForm.setRooms_ID(rooms_ID);
 	}
 	
+	/*
+	 * Teste de sistema
+	 * */
 	@Test
 	public void shouldReturnNotFoundStatusWithNonExistentCustomerID() throws Exception {
 		
@@ -124,6 +127,9 @@ public class ReservationPostAndDeleteTests {
 				.andReturn();
 	}
 	
+	/*
+	 * 
+	 * */
 	@Test
 	public void shouldReturnBadRequestStatusWithReservationCheckinDateOlderActualDate() throws Exception {
 		
@@ -137,6 +143,9 @@ public class ReservationPostAndDeleteTests {
 				.andReturn();
 	}
 	
+	/*
+	 * 
+	 * */
 	@Test
 	public void shouldReturnBadRequestStatusWithReservationCheckoutDateOlderThanCheckinDate() throws Exception {
 		

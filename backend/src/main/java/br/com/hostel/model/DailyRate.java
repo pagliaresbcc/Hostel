@@ -24,7 +24,7 @@ public class DailyRate {
 		return price;
 	}
 
-	public void setValor(double price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}	
 }

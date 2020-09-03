@@ -6,6 +6,7 @@ import './styles.css';
 
 import logoImg from '../../assets/logo.png';
 import api from '../../services/api';
+import Menu from '../../components/Menu/index';
 
 export default function Profile(){
     const [rooms, setRoom] = useState([]);
@@ -37,6 +38,7 @@ export default function Profile(){
 
     return(
         <div className="profile-container">
+           <Menu/>
             <header>
                 <img src={logoImg} alt="Logo" />
                 <span>Bem vindos ao Hostel</span>
@@ -52,14 +54,17 @@ export default function Profile(){
             <ul>
                 {rooms.map(room => (
                     <li key={room.id}>
-                    <strong>QUARTO:</strong>
-                    <p>{room.id}</p>
+                    <strong>QUARTO {room.number}:</strong>
+                    <p>{room.description}</p>
 
                     <strong>DIMENSÃO:</strong>
-                    <p>{room.dimension}</p>
+                    <p>{room.dimension} m²</p>
+
+                    <strong>LIMITE DE HÓSPEDES:</strong>
+                    <p>{room.maxNumberOfGuests} pessoas</p>
 
                     <strong>VALOR:</strong>
-                    <p>120,00</p>
+                    <p>R$ {room.dailyRate.price}</p>
 
                     <button onClick={()=>handleDeleteRoom(room.id)} type="button">
                         <FiTrash2 size={20} color="#a8a8b3"/>

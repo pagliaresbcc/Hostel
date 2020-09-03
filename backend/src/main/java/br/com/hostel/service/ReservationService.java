@@ -61,9 +61,7 @@ public class ReservationService {
 				return ResponseEntity.created(uri).body(new ReservationDto(reservation));
 			} else {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Verify your checkin/checkout date");
-
 			}
-
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer ID didn't found");
 	}

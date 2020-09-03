@@ -59,10 +59,10 @@ public class RoomService {
 	public ResponseEntity<List<RoomDto>> listAllRooms(RoomFilter roomFilter, Pageable pagination) {
 
 		List<RoomDto> response = new ArrayList<>();
-		List<Room> invalidRooms = new ArrayList<>();
-		List<Room> validRooms = roomRepository.findAll();
+		List<Room> unavailableRooms = new ArrayList<>();
+		List<Room> availableRooms = roomRepository.findAll();
 
-		verifyValidRooms(roomFilter, invalidRooms, validRooms);
+		verifyValidRooms(roomFilter, unavailableRooms, availableRooms);
 
 		if (roomFilter.getCheckinDate() != null && roomFilter.getCheckoutDate() != null) {
 			LocalDate checkinDate = LocalDate.parse(roomFilter.getCheckinDate());
@@ -72,13 +72,13 @@ public class RoomService {
 
 			reservationsList.forEach(reservation -> {
 
-				verifyValidRoomsWithinAPeriod(invalidRooms, checkinDate, checkoutDate, reservation);
+				verifyValidRoomsWithinAPeriod(unavailableRooms, checkinDate, checkoutDate, reservation);
 
 			});
 
-			invalidRooms.forEach(room -> validRooms.remove(room));
+			unavailableRooms.forEach(room -> availableRooms.remove(room));
 		}
-		response = RoomDto.convert(validRooms);
+		response = RoomDto.convert(availableRooms);
 
 		return ResponseEntity.ok(response);
 	}
@@ -120,40 +120,40 @@ public class RoomService {
 			return ResponseEntity.notFound().build();
 	}
 
-	private void verifyValidRooms(RoomFilter roomFilter, List<Room> invalidRooms, List<Room> validRooms) {
+	private void verifyValidRooms(RoomFilter roomFilter, List<Room> unavailableRooms, List<Room> availableRooms) {
 
 		if (roomFilter.getMinDailyRate() != null) {
-			validRooms.forEach(room -> {
+			availableRooms.forEach(room -> {
 				if (room.getDailyRate().getPrice() < roomFilter.getMinDailyRate()) {
-					invalidRooms.add(room);
+					unavailableRooms.add(room);
 				}
 			});
 		}
 
-		invalidRooms.forEach(room -> validRooms.remove(room));
+		unavailableRooms.forEach(room -> availableRooms.remove(room));
 
 		if (roomFilter.getMaxDailyRate() != null) {
-			validRooms.forEach(room -> {
+			availableRooms.forEach(room -> {
 				if (room.getDailyRate().getPrice() > roomFilter.getMaxDailyRate()) {
-					invalidRooms.add(room);
+					unavailableRooms.add(room);
 				}
 			});
 		}
 
-		invalidRooms.forEach(room -> validRooms.remove(room));
+		unavailableRooms.forEach(room -> availableRooms.remove(room));
 
 		if (roomFilter.getNumberOfGuests() != null) {
-			validRooms.forEach(room -> {
+			availableRooms.forEach(room -> {
 				if (room.getMaxNumberOfGuests() < roomFilter.getNumberOfGuests()) {
-					invalidRooms.add(room);
+					unavailableRooms.add(room);
 				}
 			});
 		}
 
-		invalidRooms.forEach(room -> validRooms.remove(room));
+		unavailableRooms.forEach(room -> availableRooms.remove(room));
 	}
 
-	private void verifyValidRoomsWithinAPeriod(List<Room> invalidRooms, LocalDate checkinDate, LocalDate checkoutDate,
+	private void verifyValidRoomsWithinAPeriod(List<Room> unavailableRooms, LocalDate checkinDate, LocalDate checkoutDate,
 			Reservation reservation) {
 		long numOfDays = ChronoUnit.DAYS.between(reservation.getCheckinDate(), reservation.getCheckoutDate());
 
@@ -166,8 +166,8 @@ public class RoomService {
 						|| checkoutDate.isEqual(reservation.getCheckoutDate()))) {
 
 			reservation.getRooms().forEach(room -> {
-				if (!invalidRooms.contains(room)) {
-					invalidRooms.add(room);
+				if (!unavailableRooms.contains(room)) {
+					unavailableRooms.add(room);
 				}
 			});
 		}
