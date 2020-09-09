@@ -7,23 +7,24 @@ import './styles.css';
 import logoImg from '../../assets/logo.png';
 import api from '../../services/api';
 
-export default function Profile(){
-    const [rooms, setRoom] = useState([]);
+export default function Reserva(){
+    const [reservas, setReserva] = useState([]);
+
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-        api.get('api/rooms', {
+        api.get('api/reservations', {
             headers: {'Authorization': 'Bearer '+token}
         }).then(response => {
-            setRoom(response.data);
+            setReserva(response.data);
         })
     }, [token]);
 
-    async function handleDeleteRoom( id){
+    async function handleDeleteReservation( id){
 
         try {
             alert('Deletou');
-            api.delete(`api/rooms/${id}`, {
+            api.delete(`api/reservations/${id}`, {
                 headers: {
                     'Authorization': 'Bearer '+token,
                     "Access-Control-Allow-Origin": "*",
@@ -41,30 +42,30 @@ export default function Profile(){
                 <img src={logoImg} alt="Logo" />
                 <span>Bem vindos ao Hostel</span>
 
-                <Link className="button" to="/room/new">Cadastrar novo quarto</Link>
+                <Link className="button" to="/new/reservas">Cadastrar nova reserva</Link>
                 <button type="button">
                     <FiPower size={18} color="#E02041"/>
                 </button>
             </header>
 
-            <h1>Quartos Cadastrados</h1>
+            <h1>Reservas Cadastradas</h1>
 
             <ul>
-                {rooms.map(room => (
-                    <li key={room.id}>
-                    <strong>QUARTO {room.number}:</strong>
-                    <p>{room.description}</p>
+                {reservas.map(({id, rooms, checkinDate, checkoutDate, payments}, i)=> (
+                    <li key={id}>
+                    <strong>QUARTOS RESERVADOS PARA O CUSTOMER {id}:</strong>
+                    {rooms.map((rooms, j) => <p key={j}>{rooms.number}</p>)}
 
-                    <strong>DIMENSÃO:</strong>
-                    <p>{room.dimension} m²</p>
+                    <strong>CHECKIN DATE:</strong>
+                    <p>{checkinDate}</p>
 
-                    <strong>LIMITE DE HÓSPEDES:</strong>
-                    <p>{room.maxNumberOfGuests} pessoas</p>
+                    <strong>CHECKOUT DATE:</strong>
+                    <p>{checkoutDate}</p>
 
-                    <strong>VALOR:</strong>
-                    <p>R$ {room.dailyRate.price}</p>
+                    <strong>VALOR PAGAMENTO:</strong>
+                    <p>R$ {payments.amount}</p>
 
-                    <button onClick={()=>handleDeleteRoom(room.id)} type="button">
+                    <button onClick={()=>handleDeleteReservation(id)} type="button">
                         <FiTrash2 size={20} color="#a8a8b3"/>
                     </button>
                     </li>
@@ -74,3 +75,4 @@ export default function Profile(){
         </div>
     );
 }
+
