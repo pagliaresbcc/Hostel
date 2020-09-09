@@ -14,12 +14,8 @@ export default function NewReservation() {
   const [checkinDate, setCheckinDate] = useState("");
   const [checkoutDate, setCheckoutDate] = useState("");
   const [number, setNumber] = useState("");
-  const [description, setDescription] = useState("");
-  const [dimension, setDimension] = useState("");
-  const [maxNumberOfGuests, setMaxNumberOfGuests] = useState("");
-  const [price, setPrice] = useState("");
 
-  const [payment, setPayment] = useState("");
+  const [type, setType] = useState("");
 
   const [rooms, setRooms] = useState([
     {
@@ -34,41 +30,18 @@ export default function NewReservation() {
 
   const history = useHistory();
 
-  const data = [
-    {
-      value: 1,
-      label: "Dinheiro",
-    },
-    {
-      value: 2,
-      label: "Cheque",
-    },
-    {
-      value: 3,
-      label: "Cartão de Crédito",
-    },
-  ];
-
   async function handleRegister(e) {
     e.preventDefault();
 
-    const dailyRate = {
-      price,
-    };
-
     const room = {
       number,
-      description,
-      dimension,
-      maxNumberOfGuests,
-      dailyRate,
     };
 
     const data = {
-      description,
+      checkinDate,
+      checkoutDate,
+      numberOfGuests,
       number,
-      dimension,
-      maxNumberOfGuests,
       room,
     };
 
@@ -124,7 +97,7 @@ export default function NewReservation() {
   }
 
   function handlePayment(option) {
-    setPayment(option);
+    setType(option);
   }
 
   return (
@@ -148,26 +121,41 @@ export default function NewReservation() {
             value={checkinDate}
             onChange={(e) => setCheckinDate(e.target.value)}
           />
+
           <input
             placeholder="Check-out"
             value={checkoutDate}
             onChange={(e) => setCheckoutDate(e.target.value)}
           />
+
           <div className="input-pagamento">
             <Select
               placeholder="Selecione a forma de pagamento"
-              value={data.find((obj) => obj.value === payment)}
-              options={data}
+              value={type}
               onChange={handlePayment}
+              options={[
+                {
+                  value: 1,
+                  label: "Dinheiro",
+                },
+                {
+                  value: 2,
+                  label: "Cheque",
+                },
+                {
+                  value: 3,
+                  label: "Cartão de Crédito",
+                },
+              ]}
             />
 
-            {payment.value === 1 ? (
+            {type.value === 1 ? (
               <input
                 placeholder="Chec222222222k-in"
                 value={checkinDate}
                 onChange={(e) => setCheckinDate(e.target.value)}
               />
-            ) : payment.value === 2 ? (
+            ) : type.value === 2 ? (
               <div>
                 <input
                   placeholder="sdadsaasddsa-in"
@@ -180,7 +168,7 @@ export default function NewReservation() {
                   onChange={(e) => setCheckinDate(e.target.value)}
                 />
               </div>
-            ) : payment.value === 3 ? (
+            ) : type.value === 3 ? (
               <div>
                 <input
                   placeholder="sdadsaasddsa-in"
@@ -198,9 +186,9 @@ export default function NewReservation() {
                   onChange={(e) => setCheckinDate(e.target.value)}
                 />
               </div>
-            ) : (
+            ) : 
               <h1></h1>
-            )}
+            }
           </div>
           <button className="button" type="submit">
             Cadastrar
