@@ -159,8 +159,48 @@ export default function NewReservation() {
               value={data.find((obj) => obj.value === payment)}
               options={data}
               onChange={handlePayment}
-
             />
+
+            {payment.value === 1 ? (
+              <input
+                placeholder="Chec222222222k-in"
+                value={checkinDate}
+                onChange={(e) => setCheckinDate(e.target.value)}
+              />
+            ) : payment.value === 2 ? (
+              <div>
+                <input
+                  placeholder="sdadsaasddsa-in"
+                  value={checkinDate}
+                  onChange={(e) => setCheckinDate(e.target.value)}
+                />
+                <input
+                  placeholder="sdadsaasddsa-in"
+                  value={checkinDate}
+                  onChange={(e) => setCheckinDate(e.target.value)}
+                />
+              </div>
+            ) : payment.value === 3 ? (
+              <div>
+                <input
+                  placeholder="sdadsaasddsa-in"
+                  value={checkinDate}
+                  onChange={(e) => setCheckinDate(e.target.value)}
+                />
+                <input
+                  placeholder="sdadsaasddsa-in"
+                  value={checkinDate}
+                  onChange={(e) => setCheckinDate(e.target.value)}
+                />
+                <input
+                  placeholder="sdadsaasddsa-in"
+                  value={checkinDate}
+                  onChange={(e) => setCheckinDate(e.target.value)}
+                />
+              </div>
+            ) : (
+              <h1></h1>
+            )}
           </div>
           <button className="button" type="submit">
             Cadastrar
