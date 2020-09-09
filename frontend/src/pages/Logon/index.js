@@ -6,7 +6,7 @@ import './styles.css';
 
 import api from '../../services/api';
 
-import logoImg from '../../assets/logo.png';
+import logoImg from '../../assets/images/logo.png';
 
 export default function Logon(){
     const [email, setEmail] = useState('');

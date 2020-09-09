@@ -4,9 +4,8 @@ import { FiPower, FiTrash2 } from 'react-icons/fi';
 
 import './styles.css';
 
-import logoImg from '../../assets/logo.png';
+import logoImg from '../../assets/images/logo.png';
 import api from '../../services/api';
-import Menu from '../../components/Menu/index';
 
 export default function Profile(){
     const [rooms, setRoom] = useState([]);
@@ -38,7 +37,6 @@ export default function Profile(){
 
     return(
         <div className="profile-container">
-           <Menu/>
             <header>
                 <img src={logoImg} alt="Logo" />
                 <span>Bem vindos ao Hostel</span>
