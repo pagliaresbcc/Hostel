@@ -10,13 +10,27 @@ import "./styles.css";
 import logoImg from "../../assets/images/logo.png";
 
 export default function NewReservation() {
-  const [numberOfGuests, setNumberOfGuests] = useState("");
   const [checkinDate, setCheckinDate] = useState("");
   const [checkoutDate, setCheckoutDate] = useState("");
-  const [number, setNumber] = useState("");
+  const [numberOfGuests, setNumberOfGuests] = useState("");
+  const [minDailyRate, setMinDailyRate] = useState("");
+  const [maxDailyRate, setMaxDailyRate] = useState("");
+  
+  const [amount, setAmount] = useState("");
+  const [amountTendered, setAmountTendered] = useState("");
+  const [bankId, setBankId] = useState("");
+  const [branchName, setBranchName] = useState("");
+  const [branchNumber, setBranchNumber] = useState("");
+  const [issuer, setIssuer] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [nameOnCard, setNameOnCard] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+  const [securityCode, setSecurityCode] = useState("");
 
   const [type, setType] = useState("");
-
+  const [date, setDate] = useState ("");
+  
+  const [number, setNumber] = useState("");
   const [rooms, setRooms] = useState([
     {
       description: "",
@@ -26,9 +40,27 @@ export default function NewReservation() {
     },
   ]);
 
+  const[customerID, setCustomerID] = useState(""); 
+
   const token = localStorage.getItem("token");
 
   const history = useHistory();
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+    }),
+    control: (provided) => ({
+      ...provided,
+      marginTop: "2px",
+      width: "100%",
+      height: "60px",
+      color: "#333",
+      border: "1px solid #dcdce6",
+      padding: "0 20px",
+      font: "400 16px Roboto, sans-serif",
+    })
+  }
 
   async function handleRegister(e) {
     e.preventDefault();
@@ -58,44 +90,6 @@ export default function NewReservation() {
     }
   }
 
-  function showCheckPaymentOptions() {
-    return (
-      <div className="input-pagamento">
-        <input
-          placeholder="Check-in"
-          value={checkinDate}
-          onChange={(e) => setCheckinDate(e.target.value)}
-        />
-        <input
-          placeholder="Check-in"
-          value={checkinDate}
-          onChange={(e) => setCheckinDate(e.target.value)}
-        />
-      </div>
-    );
-  }
-
-  function showCashPaymentOptions() {
-    return (
-      <div className="input-pagamento">
-        <input
-          placeholder="Check-in"
-          value={checkinDate}
-          onChange={(e) => setCheckinDate(e.target.value)}
-        />
-        <input
-          placeholder="Check-in"
-          value={checkinDate}
-          onChange={(e) => setCheckinDate(e.target.value)}
-        />
-      </div>
-    );
-  }
-
-  function showCreditCardPaymentOptions() {
-    return <h1>this.payment</h1>;
-  }
-
   function handlePayment(option) {
     setType(option);
   }
@@ -116,20 +110,45 @@ export default function NewReservation() {
         </section>
 
         <form onSubmit={handleRegister}>
+          <label for="check-out">Check-in</label>
           <input
-            placeholder="Check-in"
-            value={checkinDate}
-            onChange={(e) => setCheckinDate(e.target.value)}
-          />
-
-          <input
+            required="true"
+            id="check-out"
+            type="date"
             placeholder="Check-out"
             value={checkoutDate}
             onChange={(e) => setCheckoutDate(e.target.value)}
           />
-
+          <label for="check-in">Check-out</label>
+          <input
+            required="true"
+            id="check-in"
+            type="date"
+            placeholder="Check-in"
+            value={checkinDate}
+            onChange={(e) => setCheckinDate(e.target.value)}
+          />
+          <label for="numberOfGuests">Número de hóspedes</label>
+          <input
+            required="true"
+            id="numberOfGuests"
+            onChange={(e) => setNumberOfGuests(e.target.value)}
+          />
+          <label for="minDailyRate">Valor mínimo</label>
+          <input
+            id="minDailyRate"
+            onChange={(e) => setMinDailyRate(e.target.value)}
+          />
+          <label for="maxDailyRate">Valor máximo</label>
+          <input
+            id="maxDailyRate"
+            onChange={(e) => setMaxDailyRate(e.target.value)}
+          />
+          <label for="payment">Pagamento</label>
           <div className="input-pagamento">
             <Select
+              id="payment"
+              styles = { customStyles }
               placeholder="Selecione a forma de pagamento"
               value={type}
               onChange={handlePayment}
@@ -148,47 +167,79 @@ export default function NewReservation() {
                 },
               ]}
             />
-
             {type.value === 1 ? (
-              <input
-                placeholder="Chec222222222k-in"
-                value={checkinDate}
-                onChange={(e) => setCheckinDate(e.target.value)}
-              />
+              <div>
+                <input
+                  placeholder="Valor"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+                <input
+                  placeholder="Valor com desconto"
+                  value={amountTendered}
+                  onChange={(e) => setAmountTendered(e.target.value)}
+                />
+              </div>
             ) : type.value === 2 ? (
               <div>
                 <input
-                  placeholder="sdadsaasddsa-in"
-                  value={checkinDate}
-                  onChange={(e) => setCheckinDate(e.target.value)}
+                  placeholder="Valor"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
                 />
                 <input
-                  placeholder="sdadsaasddsa-in"
-                  value={checkinDate}
-                  onChange={(e) => setCheckinDate(e.target.value)}
+                  placeholder="Agência"
+                  value={bankId}
+                  onChange={(e) => setBankId(e.target.value)}
+                />
+                <input
+                  placeholder="Nome do Banco"
+                  value={branchName}
+                  onChange={(e) => setBranchName(e.target.value)}
+                />
+                <input
+                  placeholder="Número da conta (Com o dígito)"
+                  value={branchNumber}
+                  onChange={(e) => setBranchNumber(e.target.value)}
                 />
               </div>
             ) : type.value === 3 ? (
               <div>
                 <input
-                  placeholder="sdadsaasddsa-in"
-                  value={checkinDate}
-                  onChange={(e) => setCheckinDate(e.target.value)}
+                  placeholder="Valor"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
                 />
                 <input
-                  placeholder="sdadsaasddsa-in"
-                  value={checkinDate}
-                  onChange={(e) => setCheckinDate(e.target.value)}
+                  placeholder="Emissor"
+                  value={issuer}
+                  onChange={(e) => setIssuer(e.target.value)}
                 />
                 <input
-                  placeholder="sdadsaasddsa-in"
-                  value={checkinDate}
-                  onChange={(e) => setCheckinDate(e.target.value)}
+                  placeholder="Número do cartão"
+                  value={cardNumber}
+                  onChange={(e) => setCardNumber(e.target.value)}
+                />
+                <input
+                  placeholder="Nome no cartão"
+                  value={nameOnCard}
+                  onChange={(e) => setNameOnCard(e.target.value)}
+                />
+                <input
+                  placeholder="Validade"
+                  value={expirationDate}
+                  onChange={(e) => setExpirationDate(e.target.value)}
+                />
+                <input
+                  placeholder="Código de segurança"
+                  value={securityCode}
+                  onChange={(e) => setSecurityCode(e.target.value)}
                 />
               </div>
             ) : 
               <h1></h1>
             }
+            <label for="rooms-id">Rooms_ID</label>
           </div>
           <button className="button" type="submit">
             Cadastrar
