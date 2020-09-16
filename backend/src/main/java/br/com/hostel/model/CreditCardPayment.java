@@ -16,9 +16,9 @@ public class CreditCardPayment extends Payments {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private double amount;  
+	private double amount;
 	private String issuer;
-	private String number;
+	private String cardNumber;
 	private String nameOnCard;
 	private LocalDate expirationDate;
 	private String securityCode;
@@ -47,12 +47,12 @@ public class CreditCardPayment extends Payments {
 		this.issuer = issuer;
 	}
 	
-	public String getNumber() {
-		return number;
+	public String getCardNumber() {
+		return cardNumber;
 	}
 	
-	public void setNumber(String number) {
-		this.number = number;
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
 	}
 	
 	public String getNameOnCard() {
@@ -88,7 +88,7 @@ public class CreditCardPayment extends Payments {
 		String result = "Payment with credit card...: " +  "\n" +  
 								super.toString() + "\n" +
 								"Issuer...: "+ this.issuer + "\n" +
-				                 "Credit card number...: " + this.number + "\n" +
+				                 "Credit card number...: " + this.cardNumber + "\n" +
 				                 "Name on card...: " + this.nameOnCard + "\n" +
 				                 "Expiration date...: " + this.expirationDate + "\n" +
 				                 "Security code...: " + this.securityCode;

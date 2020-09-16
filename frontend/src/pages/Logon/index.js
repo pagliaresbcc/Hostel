@@ -25,6 +25,7 @@ export default function Logon(){
         try {
             const response = await api.post('auth', data);
 
+            localStorage.setItem('customer_ID', response.data.customer_ID);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('type', response.data.type);
             alert(`Seu token de acesso: ${response.data.token}`);
