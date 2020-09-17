@@ -58,6 +58,8 @@ export default function NewReservation() {
           headers: { Authorization: "Bearer " + token },
         })
         .then((response) => {
+          total = total + response.data.dailyRate.price
+          setAmount(total)
           setRooms(response.data);
         });
     });
@@ -116,10 +118,7 @@ export default function NewReservation() {
 
   function handlePayment(option) {
     setType(option);
-    var count = 0;
-    Object.keys(rooms).forEach(room => count += room.dailyRate.price);
-    setAmount(count);
-    console.log(count);
+    console.log(amount);
   }
 
   return (
@@ -163,9 +162,9 @@ export default function NewReservation() {
             {type.value === 1 ? (
               <div>
                 <strong>Valor: </strong>
-                <p>{total}</p>
+                <p>{amount}</p>
                 <strong>Valor com desconto: </strong>
-                <p>{total * 0.9}</p>
+                <p>{amount * 0.9}</p>
               </div>
             ) : type.value === 2 ? (
               <div>
@@ -190,7 +189,7 @@ export default function NewReservation() {
             ) : type.value === 3 ? (
               <div>
                 <strong>Valor: </strong>
-                <p>{total}</p>
+                <p>{amount}</p>
                 <input
                   placeholder="Emissor"
                   value={issuer}

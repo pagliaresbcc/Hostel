@@ -52,7 +52,7 @@ export default function Profile(){
                 <span>Bem vindos ao Hostel</span>
 
                 <Link className="button" to="/pagamento">
-                    Selecionar a forma de pagamento
+                    Selecionar forma de pagamento
                 </Link>
             </header>
 
