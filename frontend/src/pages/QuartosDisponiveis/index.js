@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BsPlusSquare } from 'react-icons/bs';
 
 import './styles.css';
@@ -17,8 +17,6 @@ export default function Profile(){
     const maxDailyRate = localStorage.getItem('maxDailyRate');
 
     const [selectedItems, setSelectedItems] = useState([]);
-
-    const history = useHistory();
 
     useEffect(() => {
         api.get("api/rooms", {
@@ -45,8 +43,6 @@ export default function Profile(){
         } else {
           setSelectedItems([...selectedItems, id]);
         }
-
-        localStorage.setItem('rooms_ID', JSON.stringify(selectedItems));
     }
 
     return(
@@ -56,7 +52,7 @@ export default function Profile(){
                 <span>Bem vindos ao Hostel</span>
 
                 <Link className="button" to="/pagamento">
-                    Continuar
+                    Selecionar a forma de pagamento
                 </Link>
             </header>
 
@@ -65,27 +61,24 @@ export default function Profile(){
             <ul>
                 {rooms.map(room => (
                     <li key={room.id}>
-                    <strong>QUARTO {room.number}:</strong>
-                    <p>{room.description}</p>
+                        <strong>QUARTO {room.number}:</strong>
+                        <p>{room.description}</p>
 
-                    <strong>DIMENSÃO:</strong>
-                    <p>{room.dimension} m²</p>
+                        <strong>DIMENSÃO:</strong>
+                        <p>{room.dimension} m²</p>
 
-                    <strong>LIMITE DE HÓSPEDES:</strong>
-                    <p>{room.maxNumberOfGuests} pessoas</p>
+                        <strong>LIMITE DE HÓSPEDES:</strong>
+                        <p>{room.maxNumberOfGuests} pessoas</p>
 
-                    <strong>VALOR:</strong>
-                    <p>R$ {room.dailyRate.price}</p>
+                        <strong>VALOR:</strong>
+                        <p>R$ {room.dailyRate.price}</p>
 
-                    <button onClick={()=>handleSelectRoom(room.id)} className={selectedItems.includes(room.id) ? "selected" : ""} type="button">
-                        <BsPlusSquare size={20} color="#a8a8b3"></BsPlusSquare>
-                    </button>
-                    {console.log(selectedItems)}
+                        <button onClick={()=>handleSelectRoom(room.id)} className={selectedItems.includes(room.id) ? "selected" : ""} type="button">
+                            <BsPlusSquare size={20} color="#a8a8b3"></BsPlusSquare>
+                        </button>
                     </li>
-
-                    
                 ))}
-                
+                {localStorage.setItem('rooms_ID', JSON.stringify(selectedItems))}
             </ul>
         </div>
     );

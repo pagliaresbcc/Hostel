@@ -62,7 +62,7 @@ export default function NewReservation() {
         </section>
 
         <form onSubmit={handleRegister}>
-          <label for="check-in">Check-in</label>
+          <label> Check-in</label>
           <input
             required="true"
             id="check-in"
@@ -71,7 +71,7 @@ export default function NewReservation() {
             value={checkinDate}
             onChange={(e) => setCheckinDate(e.target.value)}
           />
-          <label for="check-out">Check-out</label>
+          <label>Check-out</label>
           <input
             required="true"
             id="check-out"
@@ -80,18 +80,18 @@ export default function NewReservation() {
             value={checkoutDate}
             onChange={(e) => setCheckoutDate(e.target.value)}
           />
-          <label for="numberOfGuests">Número de hóspedes</label>
+          <label>Número de hóspedes</label>
           <input
             required="true"
             id="numberOfGuests"
             onChange={(e) => setNumberOfGuests(e.target.value)}
           />
-          <label for="minDailyRate">Valor mínimo</label>
+          <label>Valor mínimo</label>
           <input
             id="minDailyRate"
             onChange={(e) => setMinDailyRate(e.target.value)}
           />
-          <label for="maxDailyRate">Valor máximo</label>
+          <label>Valor máximo</label>
           <input
             id="maxDailyRate"
             onChange={(e) => setMaxDailyRate(e.target.value)}

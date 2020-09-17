@@ -48,7 +48,9 @@ public class ReservationService {
 		Optional<Customer> customerOp = customerRepository.findById(reservation.getCustomer_ID());
 
 		if (customerOp.isPresent()) {
-			if (reservation.getCheckinDate().isAfter(LocalDate.now())
+			if (reservation.getRooms().isEmpty()) 
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rooms list cannot be empty");
+			else if (reservation.getCheckinDate().isAfter(LocalDate.now())
 					&& reservation.getCheckoutDate().isAfter(reservation.getCheckinDate())) {
 				Customer customer = customerOp.get();
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
@@ -10,7 +10,8 @@ import "./styles.css";
 import logoImg from "../../assets/images/logo.png";
 
 export default function NewReservation() {
-  
+  var total = 0;
+  const [rooms, setRooms] = useState([]);
   const [amount, setAmount] = useState("");
   const [amountTendered, setAmountTendered] = useState("");
   const [bankId, setBankId] = useState("");
@@ -28,6 +29,12 @@ export default function NewReservation() {
 
   const history = useHistory();
 
+  const customer_ID = localStorage.getItem("customer_ID");
+  const checkinDate = localStorage.getItem("checkinDate");
+  const checkoutDate = localStorage.getItem("checkoutDate");
+  const numberOfGuests = localStorage.getItem("numberOfGuests");
+  const rooms_ID = JSON.parse(localStorage.getItem("rooms_ID"));
+
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
@@ -41,32 +48,31 @@ export default function NewReservation() {
       border: "1px solid #dcdce6",
       padding: "0 20px",
       font: "400 16px Roboto, sans-serif",
+    }),
+  };
+
+  useEffect(() => {
+    rooms_ID.map((room_ID) => {
+        api.get(`api/rooms/${room_ID}`, {
+          headers: {'Authorization': 'Bearer '+ token}
+        }).then(response => {
+          setRooms(response.data);
+        })
     })
-  }
+}, [token]);
 
   async function handleRegister(e) {
     e.preventDefault();
 
     try {
+      var payment = {};
 
-      
-      const customer_ID = localStorage.getItem('customer_ID');
-      const checkinDate = localStorage.getItem('checkinDate');
-      const checkoutDate = localStorage.getItem('checkoutDate');
-      const numberOfGuests = localStorage.getItem('numberOfGuests');
-      const rooms_ID = JSON.parse(localStorage.getItem('rooms_ID'));
-
-      
-      var payment = {
-
-      };
-
-      if(type.value === 1) {
+      if (type.value === 1) {
         payment = {
-            type: "cash",
-            amount,
-            amountTendered,
-        }
+          type: "cash",
+          amount,
+          amountTendered,
+        };
       } else if (type.value === 2) {
         payment = {
           type: "check",
@@ -74,7 +80,7 @@ export default function NewReservation() {
           bankId,
           bankName,
           branchNumber,
-        }
+        };
       } else if (type.value === 3) {
         payment = {
           type: "creditCard",
@@ -84,9 +90,8 @@ export default function NewReservation() {
           nameOnCard,
           expirationDate,
           securityCode,
-        }
+        };
       }
-
 
       const data = {
         customer_ID,
@@ -95,8 +100,7 @@ export default function NewReservation() {
         numberOfGuests,
         payment,
         rooms_ID,
-      }
-
+      };
 
       await api.post("api/reservations", data, {
         headers: { Authorization: "Bearer " + token },
@@ -111,6 +115,8 @@ export default function NewReservation() {
   function handlePayment(option) {
     setType(option);
   }
+
+  
 
   return (
     <div className="nova-reserva-container">
@@ -131,7 +137,7 @@ export default function NewReservation() {
           <div className="input-pagamento">
             <Select
               id="payment"
-              styles = { customStyles }
+              styles={customStyles}
               placeholder="Selecione a forma de pagamento"
               value={type}
               onChange={handlePayment}
@@ -150,26 +156,22 @@ export default function NewReservation() {
                 },
               ]}
             />
+            {
+            rooms.map((room) => {
+              total += room.dailyRate.price;
+            })
+            }
             {type.value === 1 ? (
               <div>
-                <input
-                  placeholder="Valor"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />
-                <input
-                  placeholder="Valor com desconto"
-                  value={amountTendered}
-                  onChange={(e) => setAmountTendered(e.target.value)}
-                />
+                <strong>Valor: </strong>
+                <p>{total}</p>
+                <strong>Valor com desconto: </strong>
+                <p>{total * 0.9}</p>
               </div>
             ) : type.value === 2 ? (
               <div>
-                <input
-                  placeholder="Valor"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />
+                <strong>Valor: </strong>
+                <p>{total}</p>
                 <input
                   placeholder="Agência"
                   value={bankId}
@@ -188,11 +190,8 @@ export default function NewReservation() {
               </div>
             ) : type.value === 3 ? (
               <div>
-                <input
-                  placeholder="Valor"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />
+                <strong>Valor: </strong>
+                <p>{total}</p>
                 <input
                   placeholder="Emissor"
                   value={issuer}
@@ -219,9 +218,9 @@ export default function NewReservation() {
                   onChange={(e) => setSecurityCode(e.target.value)}
                 />
               </div>
-            ) : 
+            ) : (
               <h1></h1>
-            }
+            )}
           </div>
           <button className="button" type="submit">
             Cadastrar
