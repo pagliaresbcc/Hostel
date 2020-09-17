@@ -232,7 +232,7 @@ public class ReservationPostAndDeleteTests {
 		creditCardPayment.setDate(LocalDateTime.of(LocalDate.of(2020,01,25), LocalTime.of(21, 33)));
 		creditCardPayment.setIssuer("VISA");
 		creditCardPayment.setNameOnCard("WASHINGTON A SILVA");
-		creditCardPayment.setNumber("1234 5678 9101 1121");
+		creditCardPayment.setCardNumber("1234 5678 9101 1121");
 		creditCardPayment.setExpirationDate(LocalDate.of(2020, 05, 01));
 		creditCardPayment.setSecurityCode("123");
 		

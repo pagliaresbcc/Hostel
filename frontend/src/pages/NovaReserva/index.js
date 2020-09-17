@@ -97,7 +97,7 @@ export default function NewReservation() {
             onChange={(e) => setMaxDailyRate(e.target.value)}
           />
           <button className="button" type="submit">
-            Selecionar quarto disponível
+            Selecionar quarto(s)
           </button>
         </form>
       </div>

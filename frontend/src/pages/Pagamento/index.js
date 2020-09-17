@@ -52,14 +52,16 @@ export default function NewReservation() {
   };
 
   useEffect(() => {
-    rooms_ID.map((room_ID) => {
-        api.get(`api/rooms/${room_ID}`, {
-          headers: {'Authorization': 'Bearer '+ token}
-        }).then(response => {
-          setRooms(response.data);
+    rooms_ID.map((roomId) => {
+      api
+        .get(`api/rooms/${roomId}`, {
+          headers: { Authorization: "Bearer " + token },
         })
-    })
-}, [token]);
+        .then((response) => {
+          setRooms(response.data);
+        });
+    });
+  }, [token]);
 
   async function handleRegister(e) {
     e.preventDefault();
@@ -114,9 +116,11 @@ export default function NewReservation() {
 
   function handlePayment(option) {
     setType(option);
+    var count = 0;
+    Object.keys(rooms).forEach(room => count += room.dailyRate.price);
+    setAmount(count);
+    console.log(count);
   }
-
-  
 
   return (
     <div className="nova-reserva-container">
@@ -133,7 +137,7 @@ export default function NewReservation() {
           </Link>
         </section>
         <form onSubmit={handleRegister}>
-          <label for="payment">Pagamento</label>
+          <label>Pagamento</label>
           <div className="input-pagamento">
             <Select
               id="payment"
@@ -156,11 +160,6 @@ export default function NewReservation() {
                 },
               ]}
             />
-            {
-            rooms.map((room) => {
-              total += room.dailyRate.price;
-            })
-            }
             {type.value === 1 ? (
               <div>
                 <strong>Valor: </strong>
