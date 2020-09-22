@@ -28,9 +28,8 @@ export default function Logon(){
             localStorage.setItem('customer_ID', response.data.customer_ID);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('type', response.data.type);
-            alert(`Seu token de acesso: ${response.data.token}`);
 
-            history.push('/profile');
+            history.push('/reservation');
         } catch (err) {
             alert('Falha no Login, tente novamente');
         }

@@ -40,29 +40,29 @@ export default function Reserva(){
         <div className="profile-container">
             <header>
                 <img src={logoImg} alt="Logo" />
-                <span>Bem vindos ao Hostel</span>
+                <span>Bem vindo ao Hostel</span>
 
-                <Link className="button" to="/new/reservas">Cadastrar nova reserva</Link>
+                <Link className="button" to="/reservation/newReservation">Cadastrar nova reserva</Link>
                 <button type="button">
                     <FiPower size={18} color="#E02041"/>
                 </button>
             </header>
 
-            <h1>Reservas Cadastradas</h1>
+            <h1>Suas reservas cadastradas</h1>
 
             <ul>
                 {reservas.map(({id, rooms, checkinDate, checkoutDate, payments}, i)=> (
                     <li key={id}>
-                    <strong>QUARTOS RESERVADOS PARA O CUSTOMER {id}:</strong>
+                    <strong>QUARTOS RESERVADOS:</strong>
                     {rooms.map((rooms, j) => <p key={j}>{rooms.number}</p>)}
 
-                    <strong>CHECKIN DATE:</strong>
+                    <strong>CHECKIN:</strong>
                     <p>{checkinDate}</p>
 
-                    <strong>CHECKOUT DATE:</strong>
+                    <strong>CHECKOUT:</strong>
                     <p>{checkoutDate}</p>
 
-                    <strong>VALOR PAGAMENTO:</strong>
+                    <strong>VALOR:</strong>
                     <p>R$ {payments.amount}</p>
 
                     <button onClick={()=>handleDeleteReservation(id)} type="button">

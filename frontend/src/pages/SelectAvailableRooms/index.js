@@ -31,7 +31,7 @@ export default function Profile(){
           }).then(response => {
             setRoom(response.data);
         })
-    }, [token]);
+    });
 
 
     function handleSelectRoom( id){
@@ -44,14 +44,14 @@ export default function Profile(){
           setSelectedItems([...selectedItems, id]);
         }
     }
-
+ 
     return(
         <div className="profile-container">
             <header>
                 <img src={logoImg} alt="Logo" />
                 <span>Bem vindos ao Hostel</span>
 
-                <Link className="button" to="/pagamento">
+                <Link className="button" to="/payment/selectPayment">
                     Selecionar forma de pagamento
                 </Link>
             </header>

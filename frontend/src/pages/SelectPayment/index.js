@@ -11,7 +11,6 @@ import logoImg from "../../assets/images/logo.png";
 
 export default function NewReservation() {
   var total = 0;
-  const [rooms, setRooms] = useState([]);
   const [amount, setAmount] = useState("");
   const [amountTendered, setAmountTendered] = useState("");
   const [bankId, setBankId] = useState("");
@@ -35,6 +34,8 @@ export default function NewReservation() {
   const numberOfGuests = localStorage.getItem("numberOfGuests");
   const rooms_ID = JSON.parse(localStorage.getItem("rooms_ID"));
 
+  var data = {};
+
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
@@ -52,17 +53,19 @@ export default function NewReservation() {
   };
 
   useEffect(() => {
-    rooms_ID.map((roomId) => {
-      api
-        .get(`api/rooms/${roomId}`, {
-          headers: { Authorization: "Bearer " + token },
-        })
-        .then((response) => {
-          total = total + response.data.dailyRate.price
-          setAmount(total)
-          setRooms(response.data);
-        });
-    });
+    if (token != null){
+      rooms_ID.forEach((roomId) => {
+        api
+          .get(`api/rooms/${roomId}`, {
+            headers: { Authorization: "Bearer " + token },
+          })
+          .then((response) => {
+            total = total + response.data.dailyRate.price
+            setAmount(total);
+          });
+          setAmountTendered(total*0.9);
+      });
+    }
   }, [token]);
 
   async function handleRegister(e) {
@@ -97,7 +100,7 @@ export default function NewReservation() {
         };
       }
 
-      const data = {
+      data = {
         customer_ID,
         checkinDate,
         checkoutDate,
@@ -110,29 +113,31 @@ export default function NewReservation() {
         headers: { Authorization: "Bearer " + token },
       });
 
-      history.push("/reservas");
+      history.push("/reservation");
     } catch (err) {
+      console.log(data);
       alert("Erro nas informações, tente novamente");
     }
   }
 
   function handlePayment(option) {
     setType(option);
-    console.log(amount);
   }
 
   return (
     <div className="nova-reserva-container">
+      {token === null
+      ? history.push("/")
+      : (
       <div className="content">
         <section>
           <img src={logoImg} alt="Logo" />
 
-          <h1>Cadastrar nova reserva</h1>
-          <p>Agende sua nova reserva para a data mais próxima</p>
+          <h1>Selecione a forma de pagamento</h1>
 
-          <Link className="back-link" to="/">
+          <Link className="back-link" to="/room/selectAvailableRooms">
             <FiArrowLeft size={16} color="#E02041" />
-            Não tenho cadastro
+            Voltar para quartos disponíveis
           </Link>
         </section>
         <form onSubmit={handleRegister}>
@@ -169,7 +174,7 @@ export default function NewReservation() {
             ) : type.value === 2 ? (
               <div>
                 <strong>Valor: </strong>
-                <p>{total}</p>
+                <p>{amount}</p>
                 <input
                   placeholder="Agência"
                   value={bankId}
@@ -220,11 +225,13 @@ export default function NewReservation() {
               <h1></h1>
             )}
           </div>
+          
           <button className="button" type="submit">
             Cadastrar
           </button>
         </form>
       </div>
+      )}
     </div>
   );
 }

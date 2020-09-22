@@ -3,25 +3,25 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Logon from './pages/Logon';
 import Register from './pages/Register';
-import Profile from './pages/Profile';
-import Reserva from './pages/Reserva';
-import NovaReserva from './pages/NovaReserva';
-import QuartosDisponiveis from './pages/QuartosDisponiveis';
-import NovoQuarto from './pages/NovoQuarto';
-import Pagamento from './pages/Pagamento';
+import Reservation from './pages/Reservation';
+import NewReservation from './pages/NewReservation';
+import Room from './pages/Room';
+import NewRoom from './pages/NewRoom';
+import SelectAvailableRooms from './pages/SelectAvailableRooms';
+import SelectPayment from './pages/SelectPayment';
 
 export default function Routes(){
     return(
         <BrowserRouter>
             <Switch>
                 <Route path="/" exact component={Logon}/>
-                <Route path="/register" component={Register}/>
-                <Route path="/profile" component={Profile}/>
-                <Route path="/reservas" component={Reserva}/>
-                <Route path="/selecionaQuarto" component={QuartosDisponiveis}/>
-                <Route path="/new/reservas" component={NovaReserva}/>
-                <Route path="/pagamento" component={Pagamento}/>
-                <Route path="/room/new" component={NovoQuarto}/>
+                <Route path="/register" exact component={Register}/>
+                <Route path="/reservation" exact component={Reservation}/>
+                <Route path="/reservation/newReservation" component={NewReservation}/>
+                <Route path="/room" exact component={Room}/>
+                <Route path="/room/newRoom" component={NewRoom}/>
+                <Route path="/room/selectAvailableRooms" component={SelectAvailableRooms}/>
+                <Route path="/payment/selectPayment" component={SelectPayment}/>
             </Switch>
         </BrowserRouter>
     );

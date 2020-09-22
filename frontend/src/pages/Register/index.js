@@ -95,11 +95,15 @@ export default function Register(){
 
                     </div>
 
-                    <input 
-                        placeholder="Data de Nascimento"
+                    <label>Data de nascimento</label>
+                    <input
+                        required="true"
+                        id="birthday"
+                        type="date"
+                        placeholder="Data de nascimento"
                         value={birthday}
-                        onChange={e => setBirthday(e.target.value)} 
-                     />
+                        onChange={(e) => setBirthday(e.target.value)}
+                    />
 
                     <div className="input-endereco">
 

@@ -51,12 +51,6 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-				.antMatchers(HttpMethod.GET, "/api/customers").permitAll() // permite publicamente somente o get 
-				.antMatchers(HttpMethod.GET, "/api/customers/*").permitAll() // permite publicamente somente o get 
-				.antMatchers(HttpMethod.GET, "/api/reservations").permitAll() // permite publicamente somente o get 
-				.antMatchers(HttpMethod.GET, "/api/reservations/*").permitAll() // permite publicamente somente o get 
-				.antMatchers(HttpMethod.GET, "/api/rooms").permitAll() // permite publicamente somente o get 
-				.antMatchers(HttpMethod.GET, "/api/rooms/*").permitAll() // permite publicamente somente o get 
 				.antMatchers(HttpMethod.POST, "/auth").permitAll() // permite publicamente somente o post
 				.antMatchers(HttpMethod.POST, "/api/customers").permitAll() 
 				.anyRequest().authenticated() // qualquer outra requisicao precisara estar autenticado

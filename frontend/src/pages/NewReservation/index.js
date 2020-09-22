@@ -40,7 +40,7 @@ export default function NewReservation() {
       });
 
 
-      history.push("/selecionaQuarto");
+      history.push("/room/selectAvailableRooms");
     } catch (err) {
       alert("Erro nas informações, tente novamente");
     }
