@@ -65,7 +65,7 @@ public class ReservationService {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Verify your checkin/checkout date");
 			}
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer ID didn't found");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Customer ID didn't found");
 	}
 
 	public ResponseEntity<List<ReservationDto>> listAllReservations(String name, Pageable pagination) {
@@ -76,35 +76,31 @@ public class ReservationService {
 			response = ReservationDto.converter(reservationRepository.findAll());
 		else {
 			List<Customer> customerList = customerRepository.findByName(name);
-			if (!customerList.isEmpty()) {
-				List<Reservation> reservations = customerList.get(0).getReservations().stream()
+			
+			List<Reservation> reservations = customerList.get(0).getReservations().stream()
 						.collect(Collectors.toList());
 
-				response = ReservationDto.converter(reservations);
-			} else {
-				return ResponseEntity.notFound().build();
-			}
+			response = ReservationDto.converter(reservations);
 		}
 
 		return ResponseEntity.ok(response);
 	}
 	
 	public ResponseEntity<List<ReservationDto>> listCustomerReservations(Long customer_ID) {
+		
 		Optional<Customer> customer = customerRepository.findById(customer_ID);
-		if (customer.isPresent() ) {
-			List<ReservationDto> response = new ArrayList<>();
-			
-			List<Reservation> reservations = customer.get().getReservations().stream()
-					.collect(Collectors.toList());
+		
+		List<ReservationDto> response = new ArrayList<>();
+		
+		List<Reservation> reservations = customer.get().getReservations().stream()
+				.collect(Collectors.toList());
 
-			response = ReservationDto.converter(reservations);
-			return ResponseEntity.ok(response);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		response = ReservationDto.converter(reservations);
+		
+		return ResponseEntity.ok(response);
 	}
 
-	public ResponseEntity<ReservationDto> updateReservation(@PathVariable Long id,
+	public ResponseEntity<?> updateReservation(@PathVariable Long id,
 			@RequestBody @Valid ReservationUpdateForm form, UriComponentsBuilder uriBuilder) {
 
 		Optional<Reservation> reservationOp = reservationRepository.findById(id);
@@ -118,14 +114,11 @@ public class ReservationService {
 
 			return ResponseEntity.ok(new ReservationDto(reservation));
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reservation didn't found");
 	}
 
-	/*
-	 * cancelar reserva estado da reserva (enum) - confirmada (reservada e paga) -
-	 * reservada (reservada mas nao paga) - cancelada (prazo de 48h para cancelar)
-	 */
 	public ResponseEntity<?> deleteReservation(Long id) {
+		
 		Optional<Reservation> reservation = reservationRepository.findById(id);
 
 		if (reservation.isPresent()) {
@@ -133,7 +126,7 @@ public class ReservationService {
 
 			return ResponseEntity.ok().build();
 		} else
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reservation didn't found");
 	}
 
 }
