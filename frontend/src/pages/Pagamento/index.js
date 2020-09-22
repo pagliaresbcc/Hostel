@@ -169,7 +169,7 @@ export default function NewReservation() {
             ) : type.value === 2 ? (
               <div>
                 <strong>Valor: </strong>
-                <p>{total}</p>
+                <p>{amount}</p>
                 <input
                   placeholder="Agência"
                   value={bankId}
