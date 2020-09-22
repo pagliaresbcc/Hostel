@@ -28,8 +28,10 @@
 .profile-container header button {
     height: 60px;
     width: 60px;
+    background: #dcdce6;
     border-radius: 4px;
     border: 1px solid #dcdce6;
+    margin-top: 15px;
     margin-left: 16px;
     transition: border-color 0.2s;
 }

@@ -1,51 +1,19 @@
-.nova-reserva-container {
-    width: 100%;
-    max-width: 1120px;
-    height: 100vh;
-    margin: 0 auto;
+.content section h1 {
+    text-align: initial;
+}
 
+.content section img {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-bottom: -80px;
 }
 
-.nova-reserva-container .content {
-    width: 100%;
-    padding: 96px;
-    background: #F0F0F5;
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.content form .input-pagamento label {
+    padding: 0 1px;
+    margin-top: 15px;
 }
-
-.nova-reserva-container .content section {
-    width: 100%;
-    max-width: 380px;
-}
-
-.nova-reserva-container .content section h1 {
-    margin: 64px 0 32px;
-    font-size: 32px;
-}
-
-.nova-reserva-container .content section p {
-    font-size: 18px;
-    color: #737380;
-    line-height: 32px;
-}
-
-.nova-reserva-container .content form {
-    width: 100%;
-}
-
-.nova-reserva-container .content form input {
+.content form .input-pagamento p {
+    padding: 0 1px;
     margin-top: 5px;
-}
-
-
-.nova-reserva-container .content form .input-pagamento {
-    position: relative;
+    margin-bottom: 10px;
+    font: 400 16px Roboto, sans-serif;
 }

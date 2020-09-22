@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FiPower, FiTrash2 } from "react-icons/fi";
 
 import "./styles.css";
@@ -10,8 +10,6 @@ import api from "../../services/api";
 export default function Profile() {
   const [rooms, setRoom] = useState([]);
   const token = localStorage.getItem("token");
-
-  const history = useHistory();
 
   useEffect(() => {
     if(token != null) {
@@ -42,9 +40,7 @@ export default function Profile() {
 
   return (
     <div className="profile-container">
-      {token === null
-        ? history.push("/")
-        : (<header>
+        <header>
             <img src={logoImg} alt="Logo" />
             <span>Bem vindos ao Hostel</span>
 
@@ -54,7 +50,7 @@ export default function Profile() {
             <button type="button">
               <FiPower size={18} color="#E02041" />
             </button>
-          </header>)(<h1>Quartos Cadastrados</h1>)(
+          </header><h1>Quartos Cadastrados</h1>
             <ul>
               {rooms.map((room) => (
                 <li key={room.id}>
@@ -79,7 +75,6 @@ export default function Profile() {
                 </li>
               ))}
             </ul>
-          )}
     </div>
   );
 }

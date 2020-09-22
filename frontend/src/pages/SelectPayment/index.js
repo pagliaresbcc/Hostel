@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
@@ -10,7 +10,6 @@ import "./styles.css";
 import logoImg from "../../assets/images/logo.png";
 
 export default function NewReservation() {
-  var total = 0;
   const [amount, setAmount] = useState("");
   const [amountTendered, setAmountTendered] = useState("");
   const [bankId, setBankId] = useState("");
@@ -42,32 +41,15 @@ export default function NewReservation() {
     }),
     control: (provided) => ({
       ...provided,
-      marginTop: "2px",
+      marginBottom: "20px",
       width: "100%",
       height: "60px",
       color: "#333",
       border: "1px solid #dcdce6",
-      padding: "0 20px",
       font: "400 16px Roboto, sans-serif",
     }),
   };
-
-  useEffect(() => {
-    if (token != null){
-      rooms_ID.forEach((roomId) => {
-        api
-          .get(`api/rooms/${roomId}`, {
-            headers: { Authorization: "Bearer " + token },
-          })
-          .then((response) => {
-            total = total + response.data.dailyRate.price
-            setAmount(total);
-          });
-          setAmountTendered(total*0.9);
-      });
-    }
-  }, [token]);
-
+  
   async function handleRegister(e) {
     e.preventDefault();
 
@@ -113,7 +95,7 @@ export default function NewReservation() {
         headers: { Authorization: "Bearer " + token },
       });
 
-      history.push("/reservation");
+      history.push("/profile");
     } catch (err) {
       console.log(data);
       alert("Erro nas informações, tente novamente");
@@ -121,7 +103,20 @@ export default function NewReservation() {
   }
 
   function handlePayment(option) {
+    var total = 0;
+
     setType(option);
+    rooms_ID.forEach((roomId) => {
+      api
+        .get(`api/rooms/${roomId}`, {
+          headers: { Authorization: "Bearer " + token },
+        })
+        .then((response) => {
+          total = total + response.data.dailyRate.price
+          setAmount(total);
+        });
+        setAmountTendered(total*0.9);
+    });
   }
 
   return (
@@ -141,7 +136,6 @@ export default function NewReservation() {
           </Link>
         </section>
         <form onSubmit={handleRegister}>
-          <label>Pagamento</label>
           <div className="input-pagamento">
             <Select
               id="payment"
@@ -165,16 +159,14 @@ export default function NewReservation() {
               ]}
             />
             {type.value === 1 ? (
-              <div>
-                <strong>Valor: </strong>
-                <p>{amount}</p>
-                <strong>Valor com desconto: </strong>
-                <p>{amount * 0.9}</p>
+              <div className="input-valor">
+                <label>Valor à vista com desconto de 10%: </label>
+                <p>R$ {amount * 0.9},00</p>
               </div>
             ) : type.value === 2 ? (
               <div>
-                <strong>Valor: </strong>
-                <p>{amount}</p>
+                <label id="label-valor">Valor: </label>
+                <p>R$ {amount},00</p>
                 <input
                   placeholder="Agência"
                   value={bankId}
@@ -193,8 +185,8 @@ export default function NewReservation() {
               </div>
             ) : type.value === 3 ? (
               <div>
-                <strong>Valor: </strong>
-                <p>{amount}</p>
+                <label id="label-valor">Valor: </label>
+                <p>R$ {amount},00</p>
                 <input
                   placeholder="Emissor"
                   value={issuer}
@@ -222,12 +214,12 @@ export default function NewReservation() {
                 />
               </div>
             ) : (
-              <h1></h1>
+              <div></div>
             )}
           </div>
           
           <button className="button" type="submit">
-            Cadastrar
+            Cadastrar reserva
           </button>
         </form>
       </div>

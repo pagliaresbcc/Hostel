@@ -11,12 +11,12 @@
 }
 
 .profile-container header span {
-    font-size: 20px;
+    font-size: 28px;
     margin-left: 24px;
 }
 
 .profile-container header img {
-    height: 128px;
+    height: 200px;
 }
 
 .profile-container header a {
@@ -25,13 +25,9 @@
     margin-top: 0;
 }
 
-.profile-container header button {
-    height: 60px;
-    width: 60px;
-    border-radius: 4px;
-    border: 1px solid #dcdce6;
-    margin-left: 16px;
-    transition: border-color 0.2s;
+.profile-container header .button {
+    width: 300px;
+    margin-top: 16px;
 }
 
 .profile-container header button:hover {
@@ -51,6 +47,7 @@
 }
 
 .profile-container ul li {
+    width: 95%;
     background: #FFF;
     padding: 24px;
     border-radius: 8px;

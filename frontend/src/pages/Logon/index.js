@@ -29,7 +29,7 @@ export default function Logon(){
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('type', response.data.type);
 
-            history.push('/reservation');
+            history.push('/profile');
         } catch (err) {
             alert('Falha no Login, tente novamente');
         }
