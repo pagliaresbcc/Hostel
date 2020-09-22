@@ -87,12 +87,13 @@ public class HostelController {
 
 		return this.reservationService.listAllReservations(name, pagination);
 	}
-
+	
 	@GetMapping("/reservations/{id}")
-	public ResponseEntity<ReservationDto> listOneReservation(@PathVariable Long id) {
+	public ResponseEntity<List<ReservationDto>> listCustomerReservations(@PathVariable Long id) {
 
-		return this.reservationService.listOneReservation(id);
+		return this.reservationService.listCustomerReservations(id);
 	}
+	
 
 	@PutMapping("/reservations/{id}")
 	@Transactional

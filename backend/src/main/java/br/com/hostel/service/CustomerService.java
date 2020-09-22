@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -27,11 +28,19 @@ public class CustomerService {
 	private AddressRepository addressRepository;
 
 	public ResponseEntity<CustomerDto> registerCustomer(CustomerForm form, UriComponentsBuilder uriBuilder) {
-		Customer customer = form.returnCustomer(addressRepository);
-		customerRepository.save(customer);
+		Optional<Customer> customerEmail = customerRepository.findByEmail(form.getEmail());
+		
+		if(!customerEmail.isPresent()) {
+			Customer customer = form.returnCustomer(addressRepository);
+			customerRepository.save(customer);
 
-		URI uri = uriBuilder.path("/customers/{id}").buildAndExpand(customer.getId()).toUri();
-		return ResponseEntity.created(uri).body(new CustomerDto(customer));
+			URI uri = uriBuilder.path("/customers/{id}").buildAndExpand(customer.getId()).toUri();
+			return ResponseEntity.created(uri).body(new CustomerDto(customer));
+		} else {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+		
+		
 	}
 
 	public ResponseEntity<List<CustomerDto>> listAllCustomers(String name, Pageable pagination) {

@@ -88,14 +88,20 @@ public class ReservationService {
 
 		return ResponseEntity.ok(response);
 	}
+	
+	public ResponseEntity<List<ReservationDto>> listCustomerReservations(Long customer_ID) {
+		Optional<Customer> customer = customerRepository.findById(customer_ID);
+		if (customer.isPresent() ) {
+			List<ReservationDto> response = new ArrayList<>();
+			
+			List<Reservation> reservations = customer.get().getReservations().stream()
+					.collect(Collectors.toList());
 
-	public ResponseEntity<ReservationDto> listOneReservation(Long id) {
-		Optional<Reservation> reservation = reservationRepository.findById(id);
-
-		if (reservation.isPresent())
-			return ResponseEntity.ok(new ReservationDto(reservation.get()));
-		else
+			response = ReservationDto.converter(reservations);
+			return ResponseEntity.ok(response);
+		} else {
 			return ResponseEntity.notFound().build();
+		}
 	}
 
 	public ResponseEntity<ReservationDto> updateReservation(@PathVariable Long id,
