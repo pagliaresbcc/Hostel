@@ -114,7 +114,7 @@ public class ReservationService {
 
 			return ResponseEntity.ok(new ReservationDto(reservation));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reservation didn't found");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There isn't a reservation with that ID");
 	}
 
 	public ResponseEntity<?> deleteReservation(Long id) {
@@ -126,7 +126,7 @@ public class ReservationService {
 
 			return ResponseEntity.ok().build();
 		} else
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reservation didn't found");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There isn't a reservation with that ID");
 	}
 
 }
