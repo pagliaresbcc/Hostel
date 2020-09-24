@@ -87,7 +87,7 @@ export default function Profile() {
             type="button" 
             onClick={() => { handleSelectRoom(room.id, j) 
               }}>
-              {count[j] ? <AiFillCheckSquare size="28px" color="#41414d" /> : <AiFillPlusSquare size="28px" color="#41414d" /> }
+              {count[j] ? <AiFillCheckSquare size="28px" color="#999" /> : <AiFillPlusSquare size="28px" color="#999" /> }
             </button>
 
           </li>
