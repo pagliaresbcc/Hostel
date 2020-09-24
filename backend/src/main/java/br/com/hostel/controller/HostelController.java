@@ -47,7 +47,7 @@ public class HostelController {
 	private RoomService roomService;
 
 	@PostMapping("/customers")
-	public ResponseEntity<CustomerDto> registerCustomer(@RequestBody @Valid CustomerForm form,
+	public ResponseEntity<?> registerCustomer(@RequestBody @Valid CustomerForm form,
 			UriComponentsBuilder uriBuilder) {
 
 		return this.customerService.registerCustomer(form, uriBuilder);
@@ -97,7 +97,7 @@ public class HostelController {
 
 	@PutMapping("/reservations/{id}")
 	@Transactional
-	public ResponseEntity<ReservationDto> updateRoom(@PathVariable Long id,
+	public ResponseEntity<?> updateRoom(@PathVariable Long id,
 			@RequestBody @Valid ReservationUpdateForm form, UriComponentsBuilder uriBuilder) {
 
 		return this.reservationService.updateReservation(id, form, uriBuilder);
@@ -111,7 +111,7 @@ public class HostelController {
 	}
 
 	@PostMapping("/rooms")
-	public ResponseEntity<RoomDto> registerRoom(@RequestBody @Valid RoomForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> registerRoom(@RequestBody @Valid RoomForm form, UriComponentsBuilder uriBuilder) {
 
 		return this.roomService.registerRoom(form, uriBuilder);
 	}
