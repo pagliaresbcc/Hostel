@@ -30,7 +30,7 @@ export default function UpdateReservation() {
       console.log(checkoutDate)
       console.log(numberOfGuests)
 
-      if (checkinDate != null && checkoutDate != "") {
+      if (checkinDate !== null && checkoutDate !== "") {
         await api.get("api/rooms", {
           headers: { Authorization: "Bearer " + token },
           params: {

@@ -160,7 +160,7 @@ export default function NewReservation() {
             />
             {type.value === 1 ? (
               <div className="input-valor">
-                <label>Valor à vista com desconto de 10%: </label>
+                <label>Valor à vista com 10% de desconto: </label>
                 <p>R$ {amount * 0.9},00</p>
               </div>
             ) : type.value === 2 ? (

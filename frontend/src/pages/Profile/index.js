@@ -52,7 +52,7 @@ export default function Reserva() {
       </header>
 
       {reservas.length === 0 ? (
-        <h1>Você não tem nenhuma reserva cadastrada!</h1>
+        <h1>Você ainda não cadastrou nenhuma reserva!</h1>
       ) : (
         <div>
           <h1>Suas reservas cadastradas</h1>
@@ -61,7 +61,7 @@ export default function Reserva() {
             {reservas.map(
               ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
                 <li key={id}>
-                  <strong>QUARTOS RESERVADOS:</strong>
+                  <strong>QUARTO(S) RESERVADO(S):</strong>
                   {rooms.map((rooms, j) => (
                     <p key={j}>{rooms.number}</p>
                   ))}
