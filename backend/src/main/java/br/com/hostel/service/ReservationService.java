@@ -23,6 +23,7 @@ import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.controller.form.ReservationUpdateForm;
 import br.com.hostel.model.Customer;
 import br.com.hostel.model.Reservation;
+import br.com.hostel.model.Room;
 import br.com.hostel.repository.CustomerRepository;
 import br.com.hostel.repository.PaymentsRepository;
 import br.com.hostel.repository.ReservationRepository;
@@ -48,7 +49,7 @@ public class ReservationService {
 		Optional<Customer> customerOp = customerRepository.findById(reservation.getCustomer_ID());
 
 		if (customerOp.isPresent()) {
-			if (reservation.getRooms().isEmpty()) 
+			if (reservation.getRooms().isEmpty())
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rooms list cannot be empty");
 			else if (reservation.getCheckinDate().isAfter(LocalDate.now())
 					&& reservation.getCheckoutDate().isAfter(reservation.getCheckinDate())) {
@@ -76,29 +77,54 @@ public class ReservationService {
 			response = ReservationDto.converter(reservationRepository.findAll());
 		else {
 			List<Customer> customerList = customerRepository.findByName(name);
-			
+
 			List<Reservation> reservations = customerList.get(0).getReservations().stream()
-						.collect(Collectors.toList());
+					.collect(Collectors.toList());
 
 			response = ReservationDto.converter(reservations);
 		}
 
 		return ResponseEntity.ok(response);
 	}
-	
+
 	public ResponseEntity<List<ReservationDto>> listCustomerReservations(Long customer_ID) {
-		
+
 		Optional<Customer> customer = customerRepository.findById(customer_ID);
-		
+
 		List<ReservationDto> response = new ArrayList<>();
-		
-		List<Reservation> reservations = customer.get().getReservations().stream()
-				.collect(Collectors.toList());
+
+		List<Reservation> reservations = customer.get().getReservations().stream().collect(Collectors.toList());
 
 		response = ReservationDto.converter(reservations);
-		
+
 		return ResponseEntity.ok(response);
 	}
+	
+	public ResponseEntity<?> updateFieldReservation(@PathVariable Long id,
+			@RequestBody @Valid ReservationUpdateForm form, UriComponentsBuilder uriBuilder) {
+
+		Optional<Reservation> reservationOp = reservationRepository.findById(id);
+
+		if (reservationOp.isPresent()) {
+			
+			Reservation reservation = form.updateReservationForm(id, reservationOp.get());
+
+			for (Room room : reservation.getRooms()) {
+			
+				if (room.getMaxNumberOfGuests() < reservation.getNumberOfGuests()) 
+				return ResponseEntity.status(HttpStatus.CONFLICT).body("Room dont support number of guests");
+			
+			}
+			reservation.getRooms().forEach(room -> roomRepository.save(room));
+
+			paymentsRepository.save(reservation.getPayment());
+
+			return ResponseEntity.ok(new ReservationDto(reservation));
+		}
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There isn't a reservation with that ID");
+	}
+	
 
 	public ResponseEntity<?> updateReservation(@PathVariable Long id,
 			@RequestBody @Valid ReservationUpdateForm form, UriComponentsBuilder uriBuilder) {
@@ -106,19 +132,27 @@ public class ReservationService {
 		Optional<Reservation> reservationOp = reservationRepository.findById(id);
 
 		if (reservationOp.isPresent()) {
+			
 			Reservation reservation = form.updateReservationForm(id, reservationOp.get());
-
+			
+			for (Room room : reservation.getRooms()) {
+			
+				if (room.getMaxNumberOfGuests() < reservation.getNumberOfGuests()) 
+				return ResponseEntity.status(HttpStatus.CONFLICT).body("Room dont support number of guests");
+			
+			}
 			reservation.getRooms().forEach(room -> roomRepository.save(room));
 
 			paymentsRepository.save(reservation.getPayment());
 
 			return ResponseEntity.ok(new ReservationDto(reservation));
 		}
+		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There isn't a reservation with that ID");
 	}
 
 	public ResponseEntity<?> deleteReservation(Long id) {
-		
+
 		Optional<Reservation> reservation = reservationRepository.findById(id);
 
 		if (reservation.isPresent()) {
