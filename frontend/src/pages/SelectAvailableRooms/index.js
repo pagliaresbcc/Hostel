@@ -75,7 +75,6 @@ export default function SelectAvailableRooms() {
             <p>R$ {room.dailyRate.price},00</p>
 
             <button
-              className={selectedItems.includes(room.id) ? "selected" : ""}
               type="button"
               onClick={() => {
                 handleSelectRoom(room.id);
