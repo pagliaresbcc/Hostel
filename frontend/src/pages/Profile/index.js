@@ -24,7 +24,6 @@ export default function Reserva() {
 
   async function handleDeleteReservation(id) {
     try {
-      alert("Deletou");
       api.delete(`api/reservations/${id}`, {
         headers: {
           Authorization: "Bearer " + token,
@@ -32,6 +31,7 @@ export default function Reserva() {
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
         },
       });
+      alert("Reserva deletada com sucesso!");
     } catch (err) {
       alert("Erro ao deletar caso, tente novamente.");
     }
@@ -62,18 +62,22 @@ export default function Reserva() {
               ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
                 <li key={id}>
                   <strong>QUARTO(S) RESERVADO(S):</strong>
-                  {rooms.map((rooms, j) => (
-                    <p key={j}>{rooms.number}</p>
+                  {rooms.map((room, j) => (
+                    <div>
+                      <p>Número do quarto: {room.number}</p>
+                      <p>Descrição: {room.description}</p>
+                      <p>Diária: R$ {room.dailyRate.price},00</p><br/>
+                    </div>
                   ))}
-
+                  <br/>
                   <strong>CHECKIN:</strong>
                   <p>{checkinDate}</p>
 
                   <strong>CHECKOUT:</strong>
                   <p>{checkoutDate}</p>
 
-                  <strong>VALOR:</strong>
-                  <p>R$ {payments.amount},00</p>
+                  <strong>VALOR TOTAL:</strong>
+                  <p>R$ {payments.type === "cash" ? payments.amountTendered : payments.amount},00</p>
 
                   <button
                     onClick={() => handleDeleteReservation(id)}

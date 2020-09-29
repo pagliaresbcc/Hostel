@@ -105,18 +105,24 @@ export default function NewReservation() {
   function handlePayment(option) {
     var total = 0;
 
+    var date1 = new Date(checkinDate)
+    var date2 = new Date(checkoutDate)
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
     setType(option);
+
     rooms_ID.forEach((roomId) => {
-      api
+       api
         .get(`api/rooms/${roomId}`, {
           headers: { Authorization: "Bearer " + token },
         })
         .then((response) => {
-          total = total + response.data.dailyRate.price
-          setAmount(total);
+          total += response.data.dailyRate.price * diffDays;
+          setAmount(total); 
+          setAmountTendered(total*0.9);
         });
-        setAmountTendered(total*0.9);
-    });
+      });
   }
 
   return (
@@ -161,7 +167,7 @@ export default function NewReservation() {
             {type.value === 1 ? (
               <div className="input-valor">
                 <label>Valor à vista com 10% de desconto: </label>
-                <p>R$ {amount * 0.9},00</p>
+                <p>R$ {amountTendered},00</p>
               </div>
             ) : type.value === 2 ? (
               <div>

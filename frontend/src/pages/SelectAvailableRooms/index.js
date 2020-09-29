@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AiFillPlusSquare, AiFillCheckSquare } from "react-icons/ai";
 
@@ -8,7 +8,6 @@ import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 
 export default function SelectAvailableRooms() {
-
   const [rooms, setRoom] = useState([]);
   const token = localStorage.getItem("token");
   const checkinDate = localStorage.getItem("checkinDate");
@@ -36,13 +35,8 @@ export default function SelectAvailableRooms() {
       });
   });
 
-  var [count, setCount] = useState(Array(rooms.length).fill(false));
-
-  function handleSelectRoom(id, index) {
+  function handleSelectRoom(id) {
     const alreadySelected = selectedItems.findIndex((rooms) => rooms === id);
-
-    count.splice(index, 1, !count[index]);
-    setCount(count);
 
     if (alreadySelected >= 0) {
       const filteredItems = selectedItems.filter((rooms) => rooms !== id);
@@ -53,7 +47,6 @@ export default function SelectAvailableRooms() {
   }
 
   return (
-    
     <div className="profile-container">
       <header>
         <img src={logoImg} alt="Logo" />
@@ -78,18 +71,22 @@ export default function SelectAvailableRooms() {
             <strong>LIMITE DE HÓSPEDES:</strong>
             <p>{room.maxNumberOfGuests} pessoas</p>
 
-            <strong>VALOR:</strong>
+            <strong>VALOR DA DIÁRIA:</strong>
             <p>R$ {room.dailyRate.price},00</p>
 
-            
-            <button 
-            className={selectedItems.includes(room.id) ? "selected" : ""}
-            type="button" 
-            onClick={() => { handleSelectRoom(room.id, j) 
-              }}>
-              {count[j] ? <AiFillCheckSquare size="28px" color="#999" /> : <AiFillPlusSquare size="28px" color="#999" /> }
+            <button
+              className={selectedItems.includes(room.id) ? "selected" : ""}
+              type="button"
+              onClick={() => {
+                handleSelectRoom(room.id);
+              }}
+            >
+              {selectedItems.includes(room.id) ? (
+                <AiFillCheckSquare size="28px" color="#999" />
+              ) : (
+                <AiFillPlusSquare size="28px" color="#999" />
+              )}
             </button>
-
           </li>
         ))}
         {localStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}
