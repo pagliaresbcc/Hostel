@@ -25,7 +25,6 @@ export default function NewReservation() {
     checkoutDate: Yup.date()
       .min(new Date(), "A data do check-out deve ser maior que a data de hoje!"),
     numberOfGuests: Yup.number()
-      .positive()
       .min(1, "O número de hóspedes deve ser maior que 0"),
   });
 
