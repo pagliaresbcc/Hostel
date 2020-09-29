@@ -7,7 +7,7 @@ import "./styles.css";
 import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 
-export default function Profile() {
+export default function SelectAvailableRooms() {
 
   const [rooms, setRoom] = useState([]);
   const token = localStorage.getItem("token");
