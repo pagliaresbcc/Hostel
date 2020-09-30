@@ -1,12 +1,17 @@
 package br.com.hostel.controller.form;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import br.com.hostel.model.Payments;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
+import br.com.hostel.repository.PaymentsRepository;
+import br.com.hostel.repository.RoomRepository;
 
 public class ReservationUpdateForm {
 	
@@ -15,7 +20,7 @@ public class ReservationUpdateForm {
 	private LocalDate checkinDate;
 	private LocalDate checkoutDate;
 	
-	private Set<Room> rooms = new HashSet<>();
+	private List<Long> rooms_ID = new ArrayList<>();	
 	
 	private Payments payment;
 	
@@ -51,12 +56,12 @@ public class ReservationUpdateForm {
 		this.checkoutDate = checkoutDate;
 	}
 
-	public Set<Room> getRooms() {
-		return rooms;
+	public List<Long> getRooms_ID() {
+		return rooms_ID;
 	}
 
-	public void setRooms(Set<Room> rooms) {
-		this.rooms = rooms;
+	public void setRooms_ID(List<Long> rooms_ID) {
+		this.rooms_ID = rooms_ID;
 	}
 
 	public Payments getPayment() {
@@ -67,13 +72,14 @@ public class ReservationUpdateForm {
 		this.payment = payment;
 	}
 
-	public Reservation updateReservationForm(Long id, Reservation reservation) {
-		verifyIfParamIsNotNull(reservation);
+	public Reservation updateReservationForm(Long id, Reservation reservation, 
+			PaymentsRepository paymentsRepository, RoomRepository roomRepository) {
+		verifyIfParamIsNotNull(reservation, roomRepository);
 		
 		return reservation;
 	}
 	
-	private void verifyIfParamIsNotNull(Reservation reservation) {
+	private void verifyIfParamIsNotNull(Reservation reservation, RoomRepository roomRepository) {
 		
 		if (numberOfGuests != 0)
 			reservation.setNumberOfGuests(numberOfGuests);
@@ -87,10 +93,18 @@ public class ReservationUpdateForm {
 		if (checkoutDate != null)
 			reservation.setCheckoutDate(checkoutDate);
 
-		if (rooms != null)
-			reservation.setRooms(rooms);
+		if (rooms_ID != null) {
+			Set<Room> roomsList = new HashSet<>();
+
+			rooms_ID.forEach(id -> roomsList.add(roomRepository.findById(id).get()));
+
+			reservation.setRooms(roomsList);
+		}
+			
 		
-		if (payment != null)
+		if (payment != null) {
+			payment.setDate(LocalDateTime.now());
 			reservation.setPayment(payment);
+		}
 	}
 }

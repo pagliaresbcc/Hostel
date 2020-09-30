@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FiPower, FiTrash2 } from "react-icons/fi";
+import { Link, useHistory } from "react-router-dom";
+import { FiPower, FiTrash2, FiEdit3 } from "react-icons/fi";
 
 import "./styles.css";
 
@@ -8,7 +8,9 @@ import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 
 export default function Reserva() {
-  const [reservas, setReservas] = useState([]);
+  const [reservations, setReservations] = useState([]);
+
+  const history = useHistory();
 
   const token = localStorage.getItem("token");
 
@@ -18,22 +20,33 @@ export default function Reserva() {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
-        setReservas(response.data);
+        setReservations(response.data);
       });
   }, [token]);
 
+  async function handleUpdateReservation(id) {
+
+    console.log(id);
+    localStorage.setItem("reservation_id", id);
+
+    history.push("/reservation/updateReservation");
+  }
+
   async function handleDeleteReservation(id) {
-    try {
-      api.delete(`api/reservations/${id}`, {
-        headers: {
-          Authorization: "Bearer " + token,
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-        },
-      });
-      alert("Reserva deletada com sucesso!");
-    } catch (err) {
-      alert("Erro ao deletar caso, tente novamente.");
+
+    if (window.confirm('Tem certeza de que quer deletar a reserva?')) {
+      try {
+        api.delete(`api/reservations/${id}`, {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        });
+        history.go(0);
+      } catch (err) {
+        alert("Erro ao deletar caso, tente novamente.");
+      }
     }
   }
 
@@ -51,14 +64,14 @@ export default function Reserva() {
         </button>
       </header>
 
-      {reservas.length === 0 ? (
+      {reservations.length === 0 ? (
         <h1>Você ainda não cadastrou nenhuma reserva!</h1>
       ) : (
         <div>
           <h1>Suas reservas cadastradas</h1>
 
           <ul>
-            {reservas.map(
+            {reservations.map(
               ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
                 <li key={id}>
                   <strong>QUARTO(S) RESERVADO(S):</strong>
@@ -66,10 +79,11 @@ export default function Reserva() {
                     <div>
                       <p>Número do quarto: {room.number}</p>
                       <p>Descrição: {room.description}</p>
-                      <p>Diária: R$ {room.dailyRate.price},00</p><br/>
+                      <p>Diária: R$ {room.dailyRate.price},00</p>
+                      <br />
                     </div>
                   ))}
-                  <br/>
+                  <br />
                   <strong>CHECKIN:</strong>
                   <p>{checkinDate}</p>
 
@@ -77,13 +91,28 @@ export default function Reserva() {
                   <p>{checkoutDate}</p>
 
                   <strong>VALOR TOTAL:</strong>
-                  <p>R$ {payments.type === "cash" ? payments.amountTendered : payments.amount},00</p>
+                  <p>
+                    R${" "}
+                    {payments.type === "cash"
+                      ? payments.amountTendered
+                      : payments.amount}
+                    ,00
+                  </p>
 
                   <button
+                    className="deleteButton"
                     onClick={() => handleDeleteReservation(id)}
                     type="button"
                   >
                     <FiTrash2 size={20} color="#a8a8b3" />
+                  </button>
+
+                  <button
+                    className="editButton"
+                    onClick={() => handleUpdateReservation(id)}
+                    type="button"
+                  >
+                    <FiEdit3 size={20} color="#a8a8b3" />
                   </button>
                 </li>
               )

@@ -58,10 +58,18 @@
     position: relative;
 }
 
-.profile-container ul li button {
+.profile-container ul li .deleteButton{
     position: absolute;
     background: transparent;
     right: 24px;
+    top: 24px;
+    border: 0;
+}
+
+.profile-container ul li .editButton {
+    position: absolute;
+    background: transparent;
+    right: 64px;
     top: 24px;
     border: 0;
 }

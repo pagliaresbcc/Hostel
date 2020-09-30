@@ -119,7 +119,7 @@ public class RoomService {
 		} else
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There isn't a room with that ID");
 	}
-
+	
 	private void verifyValidRooms(RoomFilter roomFilter, List<Room> unavailableRooms, List<Room> availableRooms) {
 
 		if (roomFilter.getMinDailyRate() != null) {

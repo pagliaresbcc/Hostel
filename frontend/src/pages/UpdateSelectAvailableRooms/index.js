@@ -2,22 +2,30 @@ import React, { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { AiFillPlusSquare, AiFillCheckSquare } from "react-icons/ai";
 
-import "./styles.css";
-
 import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 
-export default function UpdateAvailableRooms() {
+export default function UpdateSelectAvailableRooms() {
 
   const [rooms, setRoom] = useState([]);
   const token = localStorage.getItem("token");
   const checkinDate = localStorage.getItem("checkinDate");
   const checkoutDate = localStorage.getItem("checkoutDate");
   const numberOfGuests = localStorage.getItem("numberOfGuests");
+  const reservation_id = localStorage.getItem("reservation_id");
 
   const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
+
+    api.delete(`api/reservations/deleteRoomsReservation/${reservation_id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      },
+    });
+
     api
       .get("api/rooms", {
         headers: { Authorization: "Bearer " + token },
@@ -55,7 +63,7 @@ export default function UpdateAvailableRooms() {
         <img src={logoImg} alt="Logo" />
         <span>Bem vindo ao Hostel</span>
 
-        <Link className="button" to="/payment/selectPayment">
+        <Link className="button" to="/payment/updateSelectPayment">
           Selecionar forma de pagamento
         </Link>
       </header>
@@ -77,15 +85,18 @@ export default function UpdateAvailableRooms() {
             <strong>VALOR:</strong>
             <p>R$ {room.dailyRate.price},00</p>
 
-            
-            <button 
-            className={selectedItems.includes(room.id) ? "selected" : ""}
-            type="button" 
-            onClick={() => { handleSelectRoom(room.id, j) 
-              }}>
-              {count[j] ? <AiFillCheckSquare size="28px" color="#999" /> : <AiFillPlusSquare size="28px" color="#999" /> }
+            <button
+              type="button"
+              onClick={() => {
+                handleSelectRoom(room.id);
+              }}
+            >
+              {selectedItems.includes(room.id) ? (
+                <AiFillCheckSquare size="28px" color="#999" />
+              ) : (
+                <AiFillPlusSquare size="28px" color="#999" />
+              )}
             </button>
-
           </li>
         ))}
         {localStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}

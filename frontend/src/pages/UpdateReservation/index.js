@@ -2,54 +2,49 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
-import api from "../../services/api";
-import "./styles.css";
+import * as Yup from "yup";
 
 import logoImg from "../../assets/images/logo.png";
 
 export default function UpdateReservation() {
-  const [checkinDate, setCheckinDate] = useState("");
-  const [checkoutDate, setCheckoutDate] = useState("");
-  const [numberOfGuests, setNumberOfGuests] = useState("");
-
-  const token = localStorage.getItem("token");
-
+  const [checkinDate, setCheckinDate] = useState(localStorage.getItem("checkinDate"));
+  const [checkoutDate, setCheckoutDate] = useState(localStorage.getItem("checkoutDate"));
+  const [numberOfGuests, setNumberOfGuests] = useState(localStorage.getItem("numberOfGuests"));
+  
   const history = useHistory();
 
-  async function handleRegister(e) {
+  const validation = Yup.object().shape({
+    checkinDate: Yup.date().min(
+      new Date(),
+      "A data do check-in deve ser maior que a data de hoje!"
+    ),
+    checkoutDate: Yup.date()
+      .min(new Date(checkinDate), "A data do check-out deve ser maior que a data de check-in!"),
+    numberOfGuests: Yup.number()
+      .min(1, "O número de hóspedes deve ser maior que 0"),
+  });
+
+  function handleUpdate(e) {
     e.preventDefault();
 
+    validation
+      .validate({
+        checkinDate,
+        checkoutDate,
+        numberOfGuests,
+      })
+      .then(() => {
+        localStorage.setItem("checkinDate", checkinDate);
+        localStorage.setItem("checkoutDate", checkoutDate);
+        localStorage.setItem("numberOfGuests", numberOfGuests);
 
-    try {
-
-      localStorage.setItem('checkinDate', checkinDate);
-      localStorage.setItem('checkoutDate', checkoutDate);
-      localStorage.setItem('numberOfGuests', numberOfGuests);
-
-      console.log(checkinDate)
-      console.log(checkoutDate)
-      console.log(numberOfGuests)
-
-      if (checkinDate !== null && checkoutDate !== "") {
-        await api.get("api/rooms", {
-          headers: { Authorization: "Bearer " + token },
-          params: {
-            checkinDate,
-            checkoutDate,
-            numberOfGuests,
-          }
+        history.push("/room/updateSelectAvailableRooms");
+      })
+      .catch(function (err) {
+        err.errors.forEach((error) => {
+          alert(`${error}`);
         });
-  
-        history.push("/room/updateAvailableRooms");
-      } else {
-        history.push("/room/selectAvailableRooms");
-      }
-
-      
-    } catch (err) {
-      alert('Nenhum campo foi alterado!');
-      history.push("/profile");
-    }
+      });
   }
 
   return (
@@ -58,19 +53,19 @@ export default function UpdateReservation() {
         <section>
           <img src={logoImg} alt="Logo" />
 
-          <h1>Editar reserva</h1>
-          <p>Altera sua reserva para melhor te atendermos!</p>
+          <h1>Atualizar reserva</h1>
+          <p>Atualize sua reserva</p>
 
-          <Link className="back-link" to="/">
+          <Link className="back-link" to="/profile">
             <FiArrowLeft size={16} color="#E02041" />
-            Não tenho cadastro
+            Voltar
           </Link>
         </section>
 
-        <form onSubmit={handleRegister}>
-          <label> Check-in</label>
+        <form onSubmit={handleUpdate}>
           <input
             id="check-in"
+            required="true"
             type="date"
             placeholder="Check-in"
             value={checkinDate}
@@ -79,6 +74,7 @@ export default function UpdateReservation() {
           <label>Check-out</label>
           <input
             id="check-out"
+            required="true"
             type="date"
             placeholder="Check-out"
             value={checkoutDate}
@@ -87,10 +83,13 @@ export default function UpdateReservation() {
           <label>Número de hóspedes</label>
           <input
             id="numberOfGuests"
+            required="true"
+            type="number"
+            value={numberOfGuests}
             onChange={(e) => setNumberOfGuests(e.target.value)}
           />
           <button className="button" type="submit">
-            Continuar com a alteração
+            Selecionar quarto(s)
           </button>
         </form>
       </div>

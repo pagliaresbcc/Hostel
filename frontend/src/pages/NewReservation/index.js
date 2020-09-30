@@ -9,8 +9,8 @@ import "./styles.css";
 import logoImg from "../../assets/images/logo.png";
 
 export default function NewReservation() {
-  const [checkinDate, setCheckinDate] = useState("");
-  const [checkoutDate, setCheckoutDate] = useState("");
+  const [checkinDate, setCheckinDate] = useState(new Date());
+  const [checkoutDate, setCheckoutDate] = useState(new Date());
   const [numberOfGuests, setNumberOfGuests] = useState("");
   const [minDailyRate, setMinDailyRate] = useState("");
   const [maxDailyRate, setMaxDailyRate] = useState("");
@@ -23,7 +23,7 @@ export default function NewReservation() {
       "A data do check-in deve ser maior que a data de hoje!"
     ),
     checkoutDate: Yup.date()
-      .min(new Date(), "A data do check-out deve ser maior que a data de hoje!"),
+      .min(new Date(checkinDate), "A data do check-out deve ser maior que a data de check-in!"),
     numberOfGuests: Yup.number()
       .min(1, "O número de hóspedes deve ser maior que 0"),
   });
@@ -60,9 +60,9 @@ export default function NewReservation() {
           <h1>Cadastrar nova reserva</h1>
           <p>Agende sua nova reserva para a data mais próxima</p>
 
-          <Link className="back-link" to="/">
+          <Link className="back-link" to="/profile">
             <FiArrowLeft size={16} color="#E02041" />
-            Não tenho cadastro
+              Voltar
           </Link>
         </section>
 

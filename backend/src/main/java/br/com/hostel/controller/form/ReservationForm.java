@@ -81,7 +81,6 @@ public class ReservationForm {
 
 	public Reservation returnReservation(PaymentsRepository paymentsRepository, RoomRepository roomRepository) {
 		payment.setDate(LocalDateTime.now());
-		paymentsRepository.save(payment);
 		Set<Room> roomsList = new HashSet<>();
 
 		rooms_ID.forEach(id -> roomsList.add(roomRepository.findById(id).get()));

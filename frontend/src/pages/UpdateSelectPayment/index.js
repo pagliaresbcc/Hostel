@@ -5,7 +5,6 @@ import { FiArrowLeft } from "react-icons/fi";
 import Select from "react-select";
 
 import api from "../../services/api";
-import "./styles.css";
 
 import logoImg from "../../assets/images/logo.png";
 
@@ -20,6 +19,8 @@ export default function NewReservation() {
   const [nameOnCard, setNameOnCard] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
   const [securityCode, setSecurityCode] = useState("");
+
+  const reservation_id = localStorage.getItem("reservation_id");
 
   const [type, setType] = useState("");
 
@@ -50,7 +51,7 @@ export default function NewReservation() {
     }),
   };
   
-  async function handleRegister(e) {
+  async function handleUpdate(e) {
     e.preventDefault();
 
     try {
@@ -91,12 +92,14 @@ export default function NewReservation() {
         rooms_ID,
       };
 
-      await api.post("api/reservations", data, {
+      await api.put(`api/reservations/${reservation_id}`, data, {
         headers: { Authorization: "Bearer " + token },
       });
 
       history.push("/profile");
     } catch (err) {
+        console.log(rooms_ID)
+        console.log(reservation_id)
       console.log(data);
       alert("Erro nas informações, tente novamente");
     }
@@ -136,12 +139,12 @@ export default function NewReservation() {
 
           <h1>Selecione a forma de pagamento</h1>
 
-          <Link className="back-link" to="/room/selectAvailableRooms">
+          <Link className="back-link" to="/room/updateSelectAvailableRooms">
             <FiArrowLeft size={16} color="#E02041" />
             Voltar para quartos disponíveis
           </Link>
         </section>
-        <form onSubmit={handleRegister}>
+        <form onSubmit={handleUpdate}>
           <div className="input-pagamento">
             <Select
               id="payment"

@@ -10,7 +10,8 @@ import NewRoom from './pages/NewRoom';
 import SelectAvailableRooms from './pages/SelectAvailableRooms';
 import SelectPayment from './pages/SelectPayment';
 import UpdateReservation from './pages/UpdateReservation';
-import UpdateAvailableRooms from './pages/UpdateAvailableRooms';
+import UpdateSelectAvailableRooms from './pages/UpdateSelectAvailableRooms';
+import UpdateSelectPayment from './pages/UpdateSelectPayment';
 
 export default function Routes(){
     return(
@@ -24,8 +25,9 @@ export default function Routes(){
                 <Route path="/room" exact component={Room}/>
                 <Route path="/room/newRoom" component={NewRoom}/>
                 <Route path="/room/selectAvailableRooms" component={SelectAvailableRooms}/>
-                <Route path="/room/updateAvailableRooms" component={UpdateAvailableRooms}/>
+                <Route path="/room/updateSelectAvailableRooms" component={UpdateSelectAvailableRooms}/>
                 <Route path="/payment/selectPayment" component={SelectPayment}/>
+                <Route path="/payment/updateSelectPayment" component={UpdateSelectPayment}/>
             </Switch>
         </BrowserRouter>
     );
