@@ -4,7 +4,7 @@ insert into address(address_name, zip_code, city, state, country)
 INSERT INTO Customer(title, name, last_Name, birthday, address_ID, email, password) 
 	VALUES ('MRS.', 'Aluno', '2', DATE('2019-09-01'), 1, 'aluno@email.com', '$2a$10$ztYTBinS/LitQOno2jjwf.x7aNLRPs0iO1pIQ9ITqtNwTMybwV/MW');
 
-insert into daily_rate(price) values (300), (120), (120), (200), (100);
+insert into daily_rate(price) values (500), (200), (300), (350), (150);
 
 insert into room(description, number, dimension, max_number_of_guests, daily_rate_id) 
 	values 	('Quarto com uma cama de casal, duas camas de solteiro e varanda', 13, 500, 4, 1),
