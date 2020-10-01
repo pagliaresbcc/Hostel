@@ -38,11 +38,16 @@
 }
 
 .nova-reserva-container .content form {
+    margin-top: 40px;
     width: 100%;
+}
+.nova-reserva-container .content form label{
+    margin-bottom: 103px;
 }
 
 .nova-reserva-container .content form input {
     margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 

@@ -20,10 +20,10 @@ export default function NewReservation() {
   const validation = Yup.object().shape({
     checkinDate: Yup.date().min(
       new Date(),
-      "A data do check-in deve ser maior que a data de hoje!"
+      "A data de check-in deve ser maior que a data de hoje!"
     ),
     checkoutDate: Yup.date()
-      .min(new Date(checkinDate), "A data do check-out deve ser maior que a data de check-in!"),
+      .min(checkinDate, "A data de check-out deve ser maior que a data de check-in!"),
     numberOfGuests: Yup.number()
       .min(1, "O número de hóspedes deve ser maior que 0"),
   });
@@ -67,12 +67,11 @@ export default function NewReservation() {
         </section>
 
         <form onSubmit={handleRegister}>
+          <label>Check-in</label>
           <input
             id="check-in"
             required="true"
             type="date"
-            placeholder="Check-in"
-            value={checkinDate}
             onChange={(e) => setCheckinDate(e.target.value)}
           />
           <label>Check-out</label>
@@ -80,8 +79,6 @@ export default function NewReservation() {
             id="check-out"
             required="true"
             type="date"
-            placeholder="Check-out"
-            value={checkoutDate}
             onChange={(e) => setCheckoutDate(e.target.value)}
           />
           <label>Número de hóspedes</label>

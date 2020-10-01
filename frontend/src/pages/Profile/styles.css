@@ -6,6 +6,7 @@
 }
 
 .profile-container header {
+    margin-top: -50px;
     display: flex;
     align-items: center;
 }
@@ -25,14 +26,13 @@
     margin-top: 0;
 }
 
-.profile-container header button {
-    height: 60px;
-    width: 60px;
-    border-radius: 4px;
+.profile-container header .button {
+    margin-bottom: 15px;
+    line-height: 15px;
+    padding-top: 22px;
     border: 1px solid #dcdce6;
-    margin-top: 15px;
-    margin-left: 16px;
     transition: border-color 0.2s;
+    width: 20px;
 }
 
 .profile-container header button:hover {
@@ -51,20 +51,14 @@
     list-style: none;
 }
 
-.profile-container ul li {
-    background: #FFF;
-    padding: 24px;
+.profile-container .reservations-grid ul li {
+    min-width: 200px;
+    background: #fff;
+    padding: 26px;
     border-radius: 8px;
     position: relative;
 }
 
-.profile-container ul li .deleteButton{
-    position: absolute;
-    background: transparent;
-    right: 24px;
-    top: 24px;
-    border: 0;
-}
 
 .profile-container ul li .editButton {
     position: absolute;

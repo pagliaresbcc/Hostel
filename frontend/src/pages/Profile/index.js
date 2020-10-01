@@ -67,7 +67,7 @@ export default function Reserva() {
       {reservations.length === 0 ? (
         <h1>Você ainda não cadastrou nenhuma reserva!</h1>
       ) : (
-        <div>
+        <div className="reservations-grid">
           <h1>Suas reservas cadastradas</h1>
 
           <ul>
