@@ -11,7 +11,7 @@ import logoImg from "../../assets/images/logo.png";
 export default function NewReservation() {
   const [checkinDate, setCheckinDate] = useState(new Date());
   const [checkoutDate, setCheckoutDate] = useState(new Date());
-  const [numberOfGuests, setNumberOfGuests] = useState("");
+  const [numberOfGuests, setNumberOfGuests] = useState(0);
   const [minDailyRate, setMinDailyRate] = useState("");
   const [maxDailyRate, setMaxDailyRate] = useState("");
 

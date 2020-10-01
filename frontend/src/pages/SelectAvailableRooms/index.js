@@ -63,7 +63,7 @@ export default function SelectAvailableRooms() {
         {rooms.map((room, j) => (
           <li key={room.id}>
             <strong>QUARTO {room.number}:</strong>
-            <p>{room.description}</p>
+            <p >{room.description}</p>
 
             <strong>DIMENSÃO:</strong>
             <p>{room.dimension} m²</p>
