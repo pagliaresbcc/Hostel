@@ -9,6 +9,8 @@ import "./styles.css";
 import logoImg from "../../assets/images/logo.png";
 
 export default function NewReservation() {
+  const token = localStorage.getItem("token");
+
   const [checkinDate, setCheckinDate] = useState(new Date());
   const [checkoutDate, setCheckoutDate] = useState(new Date());
   const [numberOfGuests, setNumberOfGuests] = useState(0);
@@ -22,10 +24,14 @@ export default function NewReservation() {
       new Date(),
       "A data de check-in deve ser maior que a data de hoje!"
     ),
-    checkoutDate: Yup.date()
-      .min(checkinDate, "A data de check-out deve ser maior que a data de check-in!"),
-    numberOfGuests: Yup.number()
-      .min(1, "O número de hóspedes deve ser maior que 0"),
+    checkoutDate: Yup.date().min(
+      checkinDate,
+      "A data de check-out deve ser maior que a data de check-in!"
+    ),
+    numberOfGuests: Yup.number().min(
+      1,
+      "O número de hóspedes deve ser maior que 0"
+    ),
   });
 
   function handleRegister(e) {
@@ -42,7 +48,7 @@ export default function NewReservation() {
         localStorage.setItem("checkoutDate", checkoutDate);
         localStorage.setItem("numberOfGuests", numberOfGuests);
 
-        history.push("/room/selectAvailableRooms");
+        history.push("/rooms/selectAvailableRooms");
       })
       .catch(function (err) {
         err.errors.forEach((error) => {
@@ -51,61 +57,66 @@ export default function NewReservation() {
       });
   }
 
-  return (
-    <div className="nova-reserva-container">
-      <div className="content">
-        <section>
-          <img src={logoImg} alt="Logo" />
+  if (token === null) {
+    history.push("/");
+    return <div></div>;
+  } else {
+    return (
+      <div className="nova-reserva-container">
+        <div className="content">
+          <section>
+            <img src={logoImg} alt="Logo" />
 
-          <h1>Cadastrar nova reserva</h1>
-          <p>Agende sua nova reserva para a data mais próxima</p>
+            <h1>Cadastrar nova reserva</h1>
+            <p>Agende sua nova reserva para a data mais próxima</p>
 
-          <Link className="back-link" to="/profile">
-            <FiArrowLeft size={16} color="#E02041" />
+            <Link className="back-link" to="/profile">
+              <FiArrowLeft size={16} color="#E02041" />
               Voltar
-          </Link>
-        </section>
+            </Link>
+          </section>
 
-        <form onSubmit={handleRegister}>
-          <label>Check-in</label>
-          <input
-            id="check-in"
-            required="true"
-            type="date"
-            onChange={(e) => setCheckinDate(e.target.value)}
-          />
-          <label>Check-out</label>
-          <input
-            id="check-out"
-            required="true"
-            type="date"
-            onChange={(e) => setCheckoutDate(e.target.value)}
-          />
-          <label>Número de hóspedes</label>
-          <input
-            id="numberOfGuests"
-            required="true"
-            type="number"
-            value={numberOfGuests}
-            onChange={(e) => setNumberOfGuests(e.target.value)}
-          />
-          <label>Valor mínimo</label>
-          <input
-            id="minDailyRate"
-            value={minDailyRate}
-            onChange={(e) => setMinDailyRate(e.target.value)}
-          />
-          <label>Valor máximo</label>
-          <input
-            id="maxDailyRate"
-            value={maxDailyRate}
-            onChange={(e) => setMaxDailyRate(e.target.value)}
-          />
-          <button className="button" type="submit">
-            Selecionar quarto(s)
-          </button>
-        </form>
+          <form onSubmit={handleRegister}>
+            <label>Check-in</label>
+            <input
+              id="check-in"
+              required="true"
+              type="date"
+              onChange={(e) => setCheckinDate(e.target.value)}
+            />
+            <label>Check-out</label>
+            <input
+              id="check-out"
+              required="true"
+              type="date"
+              onChange={(e) => setCheckoutDate(e.target.value)}
+            />
+            <label>Número de hóspedes</label>
+            <input
+              id="numberOfGuests"
+              required="true"
+              type="number"
+              value={numberOfGuests}
+              onChange={(e) => setNumberOfGuests(e.target.value)}
+            />
+            <label>Valor mínimo</label>
+            <input
+              id="minDailyRate"
+              value={minDailyRate}
+              onChange={(e) => setMinDailyRate(e.target.value)}
+            />
+            <label>Valor máximo</label>
+            <input
+              id="maxDailyRate"
+              value={maxDailyRate}
+              onChange={(e) => setMaxDailyRate(e.target.value)}
+            />
+            <button className="button" type="submit">
+              Selecionar quarto(s)
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

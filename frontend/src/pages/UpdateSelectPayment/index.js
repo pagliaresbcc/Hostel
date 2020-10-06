@@ -50,7 +50,7 @@ export default function NewReservation() {
       font: "400 16px Roboto, sans-serif",
     }),
   };
-  
+
   async function handleUpdate(e) {
     e.preventDefault();
 
@@ -98,8 +98,8 @@ export default function NewReservation() {
 
       history.push("/profile");
     } catch (err) {
-        console.log(rooms_ID)
-        console.log(reservation_id)
+      console.log(rooms_ID);
+      console.log(reservation_id);
       console.log(data);
       alert("Erro nas informações, tente novamente");
     }
@@ -108,131 +108,136 @@ export default function NewReservation() {
   function handlePayment(option) {
     var total = 0;
 
-    var date1 = new Date(checkinDate)
-    var date2 = new Date(checkoutDate)
+    var date1 = new Date(checkinDate);
+    var date2 = new Date(checkoutDate);
     const diffTime = Math.abs(date2 - date1);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; 
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
     setType(option);
 
     rooms_ID.forEach((roomId) => {
-       api
+      api
         .get(`api/rooms/${roomId}`, {
           headers: { Authorization: "Bearer " + token },
         })
         .then((response) => {
           total += response.data.dailyRate.price * diffDays;
-          setAmount(total); 
-          setAmountTendered(total*0.9);
+          setAmount(total);
+          setAmountTendered(total * 0.9);
         });
-      });
+    });
   }
 
-  return (
-    <div className="nova-reserva-container">
-      {token === null
-      ? history.push("/")
-      : (
-      <div className="content">
-        <section>
-          <img src={logoImg} alt="Logo" />
+  if (token === null) {
+    history.push("/");
+    return <div></div>;
+  } else {
+    return (
+      <div className="nova-reserva-container">
+        {token === null ? (
+          history.push("/")
+        ) : (
+          <div className="content">
+            <section>
+              <img src={logoImg} alt="Logo" />
 
-          <h1>Selecione a forma de pagamento</h1>
+              <h1>Selecione a forma de pagamento</h1>
 
-          <Link className="back-link" to="/room/updateSelectAvailableRooms">
-            <FiArrowLeft size={16} color="#E02041" />
-            Voltar para quartos disponíveis
-          </Link>
-        </section>
-        <form onSubmit={handleUpdate}>
-          <div className="input-pagamento">
-            <Select
-              id="payment"
-              styles={customStyles}
-              placeholder="Selecione a forma de pagamento"
-              value={type}
-              onChange={handlePayment}
-              options={[
-                {
-                  value: 1,
-                  label: "Dinheiro",
-                },
-                {
-                  value: 2,
-                  label: "Cheque",
-                },
-                {
-                  value: 3,
-                  label: "Cartão de Crédito",
-                },
-              ]}
-            />
-            {type.value === 1 ? (
-              <div className="input-valor">
-                <label>Valor à vista com 10% de desconto: </label>
-                <p>R$ {amountTendered},00</p>
+              <Link className="back-link" to="/room/updateSelectAvailableRooms">
+                <FiArrowLeft size={16} color="#E02041" />
+                Voltar para quartos disponíveis
+              </Link>
+            </section>
+            <form onSubmit={handleUpdate}>
+              <div className="input-pagamento">
+                <Select
+                  id="payment"
+                  styles={customStyles}
+                  placeholder="Selecione a forma de pagamento"
+                  value={type}
+                  onChange={handlePayment}
+                  options={[
+                    {
+                      value: 1,
+                      label: "Dinheiro",
+                    },
+                    {
+                      value: 2,
+                      label: "Cheque",
+                    },
+                    {
+                      value: 3,
+                      label: "Cartão de Crédito",
+                    },
+                  ]}
+                />
+                {type.value === 1 ? (
+                  <div className="input-valor">
+                    <label>Valor à vista com 10% de desconto: </label>
+                    <p>R$ {amountTendered},00</p>
+                  </div>
+                ) : type.value === 2 ? (
+                  <div>
+                    <label id="label-valor">Valor: </label>
+                    <p>R$ {amount},00</p>
+                    <input
+                      placeholder="Agência"
+                      value={bankId}
+                      onChange={(e) => setBankId(e.target.value)}
+                    />
+                    <input
+                      placeholder="Nome do Banco"
+                      value={bankName}
+                      onChange={(e) => setBankName(e.target.value)}
+                    />
+                    <input
+                      placeholder="Número da conta (Com o dígito)"
+                      value={branchNumber}
+                      onChange={(e) => setBranchNumber(e.target.value)}
+                    />
+                  </div>
+                ) : type.value === 3 ? (
+                  <div>
+                    <label id="label-valor">Valor: </label>
+                    <p>R$ {amount},00</p>
+                    <input
+                      placeholder="Emissor"
+                      value={issuer}
+                      onChange={(e) => setIssuer(e.target.value)}
+                    />
+                    <input
+                      placeholder="Número do cartão"
+                      value={cardNumber}
+                      onChange={(e) => setCardNumber(e.target.value)}
+                    />
+                    <input
+                      placeholder="Nome no cartão"
+                      value={nameOnCard}
+                      onChange={(e) => setNameOnCard(e.target.value)}
+                    />
+                    <input
+                      placeholder="Validade"
+                      value={expirationDate}
+                      onChange={(e) => setExpirationDate(e.target.value)}
+                    />
+                    <input
+                      placeholder="Código de segurança"
+                      value={securityCode}
+                      onChange={(e) => setSecurityCode(e.target.value)}
+                    />
+                  </div>
+                ) : (
+                  <div></div>
+                )}
               </div>
-            ) : type.value === 2 ? (
-              <div>
-                <label id="label-valor">Valor: </label>
-                <p>R$ {amount},00</p>
-                <input
-                  placeholder="Agência"
-                  value={bankId}
-                  onChange={(e) => setBankId(e.target.value)}
-                />
-                <input
-                  placeholder="Nome do Banco"
-                  value={bankName}
-                  onChange={(e) => setBankName(e.target.value)}
-                />
-                <input
-                  placeholder="Número da conta (Com o dígito)"
-                  value={branchNumber}
-                  onChange={(e) => setBranchNumber(e.target.value)}
-                />
-              </div>
-            ) : type.value === 3 ? (
-              <div>
-                <label id="label-valor">Valor: </label>
-                <p>R$ {amount},00</p>
-                <input
-                  placeholder="Emissor"
-                  value={issuer}
-                  onChange={(e) => setIssuer(e.target.value)}
-                />
-                <input
-                  placeholder="Número do cartão"
-                  value={cardNumber}
-                  onChange={(e) => setCardNumber(e.target.value)}
-                />
-                <input
-                  placeholder="Nome no cartão"
-                  value={nameOnCard}
-                  onChange={(e) => setNameOnCard(e.target.value)}
-                />
-                <input
-                  placeholder="Validade"
-                  value={expirationDate}
-                  onChange={(e) => setExpirationDate(e.target.value)}
-                />
-                <input
-                  placeholder="Código de segurança"
-                  value={securityCode}
-                  onChange={(e) => setSecurityCode(e.target.value)}
-                />
-              </div>
-            ) : (
-              <div></div>
-            )}
+
+              <button className="button" type="submit">
+                Cadastrar reserva
+              </button>
+            </form>
           </div>
-          
-          <button className="button" type="submit">
-            Cadastrar reserva
-          </button>
-        </form>
+        )}
       </div>
-      )}
-    </div>
-  );
+    );
+  }
 }

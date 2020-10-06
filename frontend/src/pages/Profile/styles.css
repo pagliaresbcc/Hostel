@@ -26,13 +26,15 @@
     margin-top: 0;
 }
 
-.profile-container header .button {
-    margin-bottom: 15px;
-    line-height: 15px;
-    padding-top: 22px;
+.profile-container .profileAdmin-grid .button {
+    width: 50%;
+    margin: auto;
+    display: flex;
+    align-content: center;
+    justify-content: center;
     border: 1px solid #dcdce6;
     transition: border-color 0.2s;
-    width: 20px;
+    margin-top: 20px;
 }
 
 .profile-container header button:hover {

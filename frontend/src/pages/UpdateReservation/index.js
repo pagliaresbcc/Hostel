@@ -7,10 +7,18 @@ import * as Yup from "yup";
 import logoImg from "../../assets/images/logo.png";
 
 export default function UpdateReservation() {
-  const [checkinDate, setCheckinDate] = useState(localStorage.getItem("checkinDate"));
-  const [checkoutDate, setCheckoutDate] = useState(localStorage.getItem("checkoutDate"));
-  const [numberOfGuests, setNumberOfGuests] = useState(localStorage.getItem("numberOfGuests"));
-  
+  const [checkinDate, setCheckinDate] = useState(
+    localStorage.getItem("checkinDate")
+  );
+  const [checkoutDate, setCheckoutDate] = useState(
+    localStorage.getItem("checkoutDate")
+  );
+  const [numberOfGuests, setNumberOfGuests] = useState(
+    localStorage.getItem("numberOfGuests")
+  );
+
+  const token = localStorage.getItem("token");
+
   const history = useHistory();
 
   const validation = Yup.object().shape({
@@ -18,10 +26,14 @@ export default function UpdateReservation() {
       new Date(),
       "A data do check-in deve ser maior que a data de hoje!"
     ),
-    checkoutDate: Yup.date()
-      .min(new Date(checkinDate), "A data do check-out deve ser maior que a data de check-in!"),
-    numberOfGuests: Yup.number()
-      .min(1, "O número de hóspedes deve ser maior que 0"),
+    checkoutDate: Yup.date().min(
+      new Date(checkinDate),
+      "A data do check-out deve ser maior que a data de check-in!"
+    ),
+    numberOfGuests: Yup.number().min(
+      1,
+      "O número de hóspedes deve ser maior que 0"
+    ),
   });
 
   function handleUpdate(e) {
@@ -47,52 +59,57 @@ export default function UpdateReservation() {
       });
   }
 
-  return (
-    <div className="nova-reserva-container">
-      <div className="content">
-        <section>
-          <img src={logoImg} alt="Logo" />
+  if (token === null) {
+    history.push("/");
+    return <div></div>;
+  } else {
+    return (
+      <div className="nova-reserva-container">
+        <div className="content">
+          <section>
+            <img src={logoImg} alt="Logo" />
 
-          <h1>Atualizar reserva</h1>
-          <p>Atualize sua reserva</p>
+            <h1>Atualizar reserva</h1>
+            <p>Atualize sua reserva</p>
 
-          <Link className="back-link" to="/profile">
-            <FiArrowLeft size={16} color="#E02041" />
-            Voltar
-          </Link>
-        </section>
+            <Link className="back-link" to="/profile">
+              <FiArrowLeft size={16} color="#E02041" />
+              Voltar
+            </Link>
+          </section>
 
-        <form onSubmit={handleUpdate}>
-          <input
-            id="check-in"
-            required="true"
-            type="date"
-            placeholder="Check-in"
-            value={checkinDate}
-            onChange={(e) => setCheckinDate(e.target.value)}
-          />
-          <label>Check-out</label>
-          <input
-            id="check-out"
-            required="true"
-            type="date"
-            placeholder="Check-out"
-            value={checkoutDate}
-            onChange={(e) => setCheckoutDate(e.target.value)}
-          />
-          <label>Número de hóspedes</label>
-          <input
-            id="numberOfGuests"
-            required="true"
-            type="number"
-            value={numberOfGuests}
-            onChange={(e) => setNumberOfGuests(e.target.value)}
-          />
-          <button className="button" type="submit">
-            Selecionar quarto(s)
-          </button>
-        </form>
+          <form onSubmit={handleUpdate}>
+            <input
+              id="check-in"
+              required="true"
+              type="date"
+              placeholder="Check-in"
+              value={checkinDate}
+              onChange={(e) => setCheckinDate(e.target.value)}
+            />
+            <label>Check-out</label>
+            <input
+              id="check-out"
+              required="true"
+              type="date"
+              placeholder="Check-out"
+              value={checkoutDate}
+              onChange={(e) => setCheckoutDate(e.target.value)}
+            />
+            <label>Número de hóspedes</label>
+            <input
+              id="numberOfGuests"
+              required="true"
+              type="number"
+              value={numberOfGuests}
+              onChange={(e) => setNumberOfGuests(e.target.value)}
+            />
+            <button className="button" type="submit">
+              Selecionar quarto(s)
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

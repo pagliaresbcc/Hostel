@@ -7,7 +7,7 @@ import "./styles.css";
 import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 
-export default function Reserva() {
+export default function Profile() {
   const [reservations, setReservations] = useState([]);
 
   const history = useHistory();
@@ -15,8 +15,9 @@ export default function Reserva() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    var customer_ID = localStorage.getItem("customer_ID");
     api
-      .get("api/reservations", {
+      .get(`api/reservations/${customer_ID}`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
@@ -25,16 +26,14 @@ export default function Reserva() {
   }, [token]);
 
   async function handleUpdateReservation(id) {
-
     console.log(id);
     localStorage.setItem("reservation_id", id);
 
-    history.push("/reservation/updateReservation");
+    history.push("/reservations/updateReservation");
   }
 
   async function handleDeleteReservation(id) {
-
-    if (window.confirm('Tem certeza de que quer deletar a reserva?')) {
+    if (window.confirm("Tem certeza de que quer deletar a reserva?")) {
       try {
         api.delete(`api/reservations/${id}`, {
           headers: {
@@ -50,76 +49,81 @@ export default function Reserva() {
     }
   }
 
-  return (
-    <div className="profile-container">
-      <header>
-        <img src={logoImg} alt="Logo" />
-        <span>Bem-vindo ao Hostel</span>
+  if (token === null) {
+    history.push("/");
+    return <div></div>;
+  } else {
+    return (
+      <div className="profile-container">
+        <header>
+          <img src={logoImg} alt="Logo" />
+          <span>Olá Hóspede, bem-vindo ao Hostel!</span>
 
-        <Link className="button" to="/reservation/newReservation">
-          Cadastrar nova reserva
-        </Link>
-        <button type="button">
-          <FiPower size={18} color="#E02041" />
-        </button>
-      </header>
+          <Link className="button" to="/reservations/newReservation">
+            Cadastrar nova reserva
+          </Link>
+          <button type="button">
+            <FiPower size={18} color="#E02041" />
+          </button>
+        </header>
 
-      {reservations.length === 0 ? (
-        <h1>Você ainda não cadastrou nenhuma reserva!</h1>
-      ) : (
-        <div className="reservations-grid">
-          <h1>Suas reservas cadastradas</h1>
+        {reservations.length === 0 ? (
+          <h1>Você ainda não cadastrou nenhuma reserva!</h1>
+        ) : (
+          <div className="reservations-grid">
+            <h1>Suas reservas cadastradas</h1>
 
-          <ul>
-            {reservations.map(
-              ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
-                <li key={id}>
-                  <strong>QUARTO(S) RESERVADO(S):</strong>
-                  {rooms.map((room, j) => (
-                    <div>
-                      <p>Número do quarto: {room.number}</p>
-                      <p>Descrição: {room.description}</p>
-                      <p>Diária: R$ {room.dailyRate.price},00</p>
-                      <br />
-                    </div>
-                  ))}
-                  <br />
-                  <strong>CHECKIN:</strong>
-                  <p>{checkinDate}</p>
+            <ul>
+              {reservations.map(
+                ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
+                  <li key={id}>
+                    <strong>QUARTO(S) RESERVADO(S):</strong>
+                    {rooms.map((room, j) => (
+                      <div>
+                        <p>Número do quarto: {room.number}</p>
+                        <p>Descrição: {room.description}</p>
+                        <p>Diária: R$ {room.dailyRate.price},00</p>
+                        <br />
+                      </div>
+                    ))}
+                    <br />
+                    <strong>CHECKIN:</strong>
+                    <p>{checkinDate}</p>
 
-                  <strong>CHECKOUT:</strong>
-                  <p>{checkoutDate}</p>
+                    <strong>CHECKOUT:</strong>
+                    <p>{checkoutDate}</p>
 
-                  <strong>VALOR TOTAL:</strong>
-                  <p>
-                    R${" "}
-                    {payments.type === "cash"
-                      ? payments.amountTendered
-                      : payments.amount}
-                    ,00
-                  </p>
+                    <strong>VALOR TOTAL:</strong>
+                    <p>
+                      R${" "}
+                      {payments.type === "cash"
+                        ? payments.amountTendered
+                        : payments.amount}
+                      ,00
+                    </p>
 
-                  <button
-                    className="deleteButton"
-                    onClick={() => handleDeleteReservation(id)}
-                    type="button"
-                  >
-                    <FiTrash2 size={20} color="#a8a8b3" />
-                  </button>
+                    <button
+                      className="deleteButton"
+                      onClick={() => handleDeleteReservation(id)}
+                      type="button"
+                    >
+                      <FiTrash2 size={20} color="#a8a8b3" />
+                    </button>
 
-                  <button
-                    className="editButton"
-                    onClick={() => handleUpdateReservation(id)}
-                    type="button"
-                  >
-                    <FiEdit3 size={20} color="#a8a8b3" />
-                  </button>
-                </li>
-              )
-            )}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
+                    <button
+                      className="editButton"
+                      onClick={() => handleUpdateReservation(id)}
+                      type="button"
+                    >
+                      <FiEdit3 size={20} color="#a8a8b3" />
+                    </button>
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  }
 }
