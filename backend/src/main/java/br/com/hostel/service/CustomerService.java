@@ -68,7 +68,7 @@ public class CustomerService {
 			customerRepository.deleteById(id);
 			return ResponseEntity.ok().build();
 		} else
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There isn't a customer with that ID");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with that ID");
 	}
 	
 }

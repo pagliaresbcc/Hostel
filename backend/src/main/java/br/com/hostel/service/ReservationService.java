@@ -66,7 +66,7 @@ public class ReservationService {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Verify your checkin/checkout date");
 			}
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Customer ID didn't found");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer ID didn't found");
 	}
 
 	public ResponseEntity<List<ReservationDto>> listAllReservations(String name, Pageable pagination) {
@@ -120,7 +120,7 @@ public class ReservationService {
 			return ResponseEntity.ok(new ReservationDto(reservation));
 		}
 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There isn't a reservation with that ID");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with that ID");
 	}
 	
 	public ResponseEntity<?> deleteRoomsReservation(Long id) {
@@ -134,7 +134,7 @@ public class ReservationService {
 			
 			return ResponseEntity.ok().build();
 		} else
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There isn't a reservation with that ID");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with that ID");
 	}
 
 	public ResponseEntity<?> deleteReservation(Long id) {
@@ -146,7 +146,7 @@ public class ReservationService {
 
 			return ResponseEntity.ok().build();
 		} else
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There isn't a reservation with that ID");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with that ID");
 	}
 
 }
