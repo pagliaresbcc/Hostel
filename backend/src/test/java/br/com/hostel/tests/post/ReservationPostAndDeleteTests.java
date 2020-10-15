@@ -72,8 +72,8 @@ public class ReservationPostAndDeleteTests {
 	
 	@BeforeEach
 	public void init() throws JsonProcessingException, Exception {
-		uri = new URI("/api/reservations/");
 		
+		uri = new URI("/api/reservations/");
 		
 		//setting login variables to autenticate
 		login.setEmail("aluno@email.com");
@@ -163,6 +163,7 @@ public class ReservationPostAndDeleteTests {
 	@Test
 	public void shouldAutenticateAndDeleteOneReservationWithId1() throws Exception {
 
+		paymentsRepository.save(reservationForm.getPayment());
 		reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
 
 		mockMvc
