@@ -76,12 +76,16 @@ public class ReservationService {
 		if (name == null)
 			response = ReservationDto.converter(reservationRepository.findAll());
 		else {
+			
 			List<Customer> customerList = customerRepository.findByName(name);
+			
+			if(customerList.size() > 0) {
 
-			List<Reservation> reservations = customerList.get(0).getReservations().stream()
-					.collect(Collectors.toList());
-
-			response = ReservationDto.converter(reservations);
+				List<Reservation> reservations = customerList.get(0).getReservations().stream()
+						.collect(Collectors.toList());
+		
+				response = ReservationDto.converter(reservations);
+			}
 		}
 
 		return ResponseEntity.ok(response);
@@ -100,8 +104,7 @@ public class ReservationService {
 		return ResponseEntity.ok(response);
 	}
 
-	public ResponseEntity<?> updateReservation(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form,
-			UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> updateReservation(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form) {
 
 		Optional<Reservation> reservationOp = reservationRepository.findById(id);
 

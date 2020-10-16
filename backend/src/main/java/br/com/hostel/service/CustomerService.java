@@ -43,11 +43,12 @@ public class CustomerService {
 	}
 
 	public ResponseEntity<List<CustomerDto>> listAllCustomers(String name, Pageable pagination) {
+		
 		List<CustomerDto> response = new ArrayList<>();
 
 		if (name == null)
 			response = CustomerDto.converter(customerRepository.findAll());
-		else
+		else 
 			response = CustomerDto.converter(customerRepository.findByName(name));
 
 		return ResponseEntity.ok(response);

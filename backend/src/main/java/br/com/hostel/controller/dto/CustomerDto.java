@@ -10,31 +10,32 @@ import br.com.hostel.model.Customer;
 import br.com.hostel.model.Reservation;
 
 public class CustomerDto {
-	
+
 	private Long id;
 	private String title;
 	private String name;
-	private String lastname;
+	private String lastName;
 	private LocalDate birthday;
 	private Address address;
 	private String email;
 	private String password;
-    private Set<Reservation> reservations;
-    
-    public CustomerDto() {}
+	private Set<Reservation> reservations;
+
+	public CustomerDto() {
+	}
 
 	public CustomerDto(Customer customer) {
 		this.id = customer.getId();
 		this.title = customer.getTitle();
 		this.name = customer.getName();
-		this.lastname = customer.getLastName();
+		this.lastName = customer.getLastName();
 		this.birthday = customer.getBirthday();
 		this.address = customer.getAddress();
 		this.email = customer.getEmail();
 		this.password = customer.getPassword();
 		this.reservations = customer.getReservations();
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -47,8 +48,8 @@ public class CustomerDto {
 		return name;
 	}
 
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
 
 	public LocalDate getBirthday() {
@@ -62,11 +63,11 @@ public class CustomerDto {
 	public String getEmail() {
 		return email;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public Set<Reservation> getReservations() {
 		return reservations;
 	}
@@ -76,7 +77,7 @@ public class CustomerDto {
 		List<CustomerDto> customersDtoList = new ArrayList<>();
 		
 		customersList.forEach(customer -> customersDtoList.add(new CustomerDto(customer)));
-		
+
 		return customersDtoList;
 	}
 }

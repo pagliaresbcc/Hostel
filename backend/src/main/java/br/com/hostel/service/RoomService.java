@@ -50,8 +50,6 @@ public class RoomService {
 
 		if (roomOp.isPresent()) 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There already exists a room with this number.");
-		else if (roomOp.get().getNumber() == 0) 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Room's number is null");
 	    else {
 			roomRepository.save(room);
 

@@ -100,7 +100,7 @@ public class HostelController {
 	public ResponseEntity<?> updateReservation(@PathVariable Long id,
 			@RequestBody @Valid ReservationUpdateForm form, UriComponentsBuilder uriBuilder) {
 
-		return this.reservationService.updateReservation(id, form, uriBuilder);
+		return this.reservationService.updateReservation(id, form);
 	}
 	
 	@DeleteMapping("/reservations/deleteRoomsReservation/{id}")
