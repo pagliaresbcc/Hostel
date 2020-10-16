@@ -1,9 +1,9 @@
-package br.com.hostel.tests.get;
+package br.com.hostel.tests.put;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -12,9 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,10 +34,9 @@ import br.com.hostel.controller.dto.LoginDto;
 import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.LoginForm;
 import br.com.hostel.controller.form.ReservationForm;
+import br.com.hostel.controller.form.ReservationUpdateForm;
 import br.com.hostel.model.CheckPayment;
-import br.com.hostel.model.Customer;
 import br.com.hostel.model.Reservation;
-import br.com.hostel.repository.CustomerRepository;
 import br.com.hostel.repository.PaymentsRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
@@ -48,7 +45,7 @@ import br.com.hostel.repository.RoomRepository;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:test.properties")
-public class ReservationGetTests {
+public class ReservationPutTests {
 
 	@Autowired
 	ReservationRepository reservationRepository;
@@ -58,9 +55,6 @@ public class ReservationGetTests {
 	
 	@Autowired
 	RoomRepository roomRepository;
-	
-	@Autowired
-	CustomerRepository customerRepository;
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -74,9 +68,7 @@ public class ReservationGetTests {
 	private ReservationForm reservationForm = new ReservationForm();
 	private CheckPayment checkPayment = new CheckPayment();
 	private List<Long> rooms_ID = new ArrayList<>();
-	private Reservation reservation = new Reservation();
-	private Customer customer = new Customer();
-	private Set<Reservation> reservationsList = new HashSet<>();
+	private Reservation reservation;
 	
 	@BeforeEach
 	public void init() throws JsonProcessingException, Exception {
@@ -120,90 +112,32 @@ public class ReservationGetTests {
 		
 		paymentsRepository.save(reservationForm.getPayment());
 		reservation = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
-		reservationsList.add(reservation);
-		
-		customer = customerRepository.findById(reservationForm.getCustomer_ID()).get();
-		customer.setReservations(reservationsList);
-		customerRepository.save(customer);
 	}
 	
 	@Test
-	public void shouldReturnAllReservationsWithoutParam() throws Exception {
+	public void shouldAutenticateAndUpdateReservation() throws Exception {
 
-		Reservation reservation2 = reservation;
-		reservation2.setId(null);
-		reservation2.setCheckinDate(LocalDate.of(2021, 05, 01));
-		reservation2.setCheckoutDate(LocalDate.of(2021, 05, 04));
-		reservationRepository.save(reservation2);
-
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.headers(headers))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
-
-		String contentAsString = result.getResponse().getContentAsString();
-
-		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
-
-		/// Verify request succeed
-		assertEquals(reservationObjResponse[0].getPayments().getAmount(), reservation.getPayment().getAmount());
-		assertTrue(reservationObjResponse.length >= 2);
+		ReservationUpdateForm rsvToUpdate = new ReservationUpdateForm();
+		rsvToUpdate.setNumberOfGuests(3);
+		rsvToUpdate.setPayment(reservation.getPayment());
+		rsvToUpdate.getPayment().setAmount(5500);
+		rsvToUpdate.setRooms_ID(rooms_ID);
 		
-	}
-	
-	@Test
-	public void shouldReturnAllCustomerReservationsByName() throws Exception {
-
 		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.param("name", "Aluno")
-						.headers(headers))
-						.andDo(print())
-						.andReturn();
-
-		String contentAsString = result.getResponse().getContentAsString();
-
-		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
-
-		/// Verify request succeed
-		assertEquals(reservationObjResponse[0].getPayments().getAmount(), reservation.getPayment().getAmount());
-		assertEquals(reservationObjResponse[0].getCheckinDate(), reservation.getCheckinDate());
-	}
-
-	@Test
-	public void shouldReturnOneReservationAndStatusOkById() throws Exception {
-
-		MvcResult result = 
-				mockMvc.perform(get(uri + reservation.getId().toString())
-						.headers(headers))
-						.andDo(print())
-						.andReturn();
-
-		String contentAsString = result.getResponse().getContentAsString();
-
-		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
-
-		/// Verify request succeed
-		assertEquals(reservationObjResponse[0].getPayments().getAmount(), reservation.getPayment().getAmount());
-		assertEquals(reservationObjResponse[0].getCheckinDate(), reservation.getCheckinDate());
-	}
-
-	@Test
-	public void shouldReturnNotFoundStatusAndNullBodyByWrongParam() throws Exception {
-
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.param("name", "Teste333")
-						.headers(headers))
-						.andDo(print())
-						.andReturn();
+				mockMvc
+					.perform(put(uri+reservation.getId().toString())
+					.headers(headers)
+					.content(objectMapper.writeValueAsString(rsvToUpdate)))
+					.andDo(print())
+					.andExpect(status().isOk())
+					.andReturn();
 		
 		String contentAsString = result.getResponse().getContentAsString();
 
-		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
+		ReservationDto reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto.class);
 		
-		assertEquals(0, reservationObjResponse.length);
+		assertEquals(reservationObjResponse.getCheckinDate(), reservation.getCheckinDate());
+		assertEquals(reservationObjResponse.getPayments().getAmount(), rsvToUpdate.getPayment().getAmount());
+		assertTrue(reservationObjResponse.getNumberOfGuests() != reservation.getNumberOfGuests());
 	}
 }

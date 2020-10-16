@@ -1,7 +1,8 @@
-package br.com.hostel.tests.post;
+package br.com.hostel.tests.put;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.hostel.controller.dto.LoginDto;
 import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.LoginForm;
+import br.com.hostel.controller.form.RoomUpdateForm;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
@@ -36,7 +38,7 @@ import br.com.hostel.repository.RoomRepository;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @TestPropertySource(locations="classpath:test.properties")
-public class RoomPostAndDeleteTests {
+public class RoomPutTests {
 	
 	@Autowired
 	RoomRepository roomRepository;
@@ -55,7 +57,7 @@ public class RoomPostAndDeleteTests {
 	private DailyRate dailyRate = new DailyRate();
 	private Room room = new Room();
 	private LoginForm login = new LoginForm();
-
+	
 	@BeforeEach
 	public void init() throws JsonProcessingException, Exception {
 		uri = new URI("/api/rooms/");
@@ -79,42 +81,38 @@ public class RoomPostAndDeleteTests {
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
 		
 		dailyRate.setPrice(400);
+		dailyRateRepository.save(dailyRate);
 		
 		room.setDescription("room test");
-		room.setNumber(34);
+		room.setNumber(55);
 		room.setDimension(230.0);
 		room.setMaxNumberOfGuests(4);
 		room.setDailyRate(dailyRate);
+		
+		room = roomRepository.save(room);
 	}
 
 
 	@Test
 	public void shouldAutenticateAndDeleteOneRoomWithId2() throws Exception {
-		dailyRateRepository.save(dailyRate);
-		roomRepository.save(room);
+		RoomUpdateForm roomToUpdate = new RoomUpdateForm();
+		roomToUpdate.setDescription("test update method");
+		roomToUpdate.setDailyRate(room.getDailyRate());
+		roomToUpdate.getDailyRate().setPrice(1500.0);
 		
-		mockMvc.perform(delete(uri + room.getId().toString())
-			.headers(headers))
-			.andDo(print())
-            .andExpect(status().isOk())
-            .andReturn();
-	}
-	
-	@Test
-	public void shouldAutenticateAndCreateOneRoomAndReturnStatusCreated() throws Exception {
+		MvcResult result = mockMvc.perform(put(uri + room.getId().toString())
+				.headers(headers)
+				.content(objectMapper.writeValueAsString(roomToUpdate)))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andReturn();
 
-		MvcResult result = mockMvc.perform(post(uri)
-						.headers(headers)
-						.content(objectMapper.writeValueAsString(room)))
-						.andDo(print())
-						.andExpect(status().isCreated())
-						.andReturn();
-		
 		String contentAsString = result.getResponse().getContentAsString();
-
+		
 		RoomDto roomObjResponse = objectMapper.readValue(contentAsString, RoomDto.class);
-
-		assertEquals(room.getNumber(), roomObjResponse.getNumber());
-		assertEquals(room.getDimension(), roomObjResponse.getDimension(), 230);
+		
+		assertEquals(roomObjResponse.getNumber(), room.getNumber());
+		assertEquals(roomObjResponse.getDailyRate().getPrice(), roomToUpdate.getDailyRate().getPrice());
+		assertTrue(roomObjResponse.getDescription().compareTo(room.getDescription()) != 0);
 	}
 }

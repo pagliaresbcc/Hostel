@@ -89,7 +89,7 @@ public class CustomerPostAndDeleteTests {
 		// setting customer
 		customer.setAddress(address);
 		customer.setBirthday(LocalDate.of(1900, 12, 12));
-		customer.setEmail("washington@orkut.com");
+		customer.setEmail("washington2@orkut.com");
 		customer.setName("Washington");
 		customer.setLastName("Ferrolho");
 		customer.setTitle("MRS.");
