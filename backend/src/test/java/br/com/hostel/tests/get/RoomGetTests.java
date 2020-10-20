@@ -1,6 +1,5 @@
 package br.com.hostel.tests.get;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -14,7 +13,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -39,29 +37,25 @@ import br.com.hostel.model.CheckPayment;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:test.properties")
 public class RoomGetTests {
 	
-	/*
-	 * checkin/checkout colocar um nome mais coerente (para evitar confusão) ~~ sugestão: arrival/departure ~~
-
-	 * */
-
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@Autowired
 	ObjectMapper objectMapper;
 	
-	private URI uri;
-	private ReservationForm reservationForm = new ReservationForm();
-	private CheckPayment checkPayment = new CheckPayment();
-	private List<Long> rooms_ID = new ArrayList<>();
-	private HttpHeaders headers = new HttpHeaders();
-	private LoginForm login = new LoginForm();
+	private static URI uri;
+	private static HttpHeaders headers = new HttpHeaders();
 	
-	@BeforeEach
-	public void init() throws JsonProcessingException, Exception {
+	@BeforeAll
+	public static void beforeAll(@Autowired MockMvc mockMvc, @Autowired ObjectMapper objectMapper)
+			throws JsonProcessingException, Exception {
+		
+		ReservationForm reservationForm = new ReservationForm();
+		CheckPayment checkPayment = new CheckPayment();
+		List<Long> rooms_ID = new ArrayList<>();
+		LoginForm login = new LoginForm();
 
 		uri = new URI("/api/rooms/");
 
@@ -82,7 +76,7 @@ public class RoomGetTests {
 		// seting header to put on post and delete request parameters
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
-	
+		
 		//setting reservation object
 		reservationForm.setCheckinDate(LocalDate.of(2021, 4, 10));
 		reservationForm.setCheckoutDate(LocalDate.of(2021, 4, 17));
@@ -104,9 +98,8 @@ public class RoomGetTests {
 		mockMvc.perform(post("/api/reservations/")
 				.headers(headers)
 				.content(objectMapper.writeValueAsString(reservationForm)));
-
 	}
-			
+	
 	@Test
 	public void shouldShowOnlyAvailableRoomsWithReservationCheckinAndCheckoutDateBefore() throws Exception {
 		MvcResult result = 
@@ -123,7 +116,7 @@ public class RoomGetTests {
 		
 		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
 		
-		assertTrue(roomObjResponse.length >= 2);
+		assertEquals(5, roomObjResponse.length);
 	}
 	
 	@Test
@@ -142,7 +135,7 @@ public class RoomGetTests {
 		
 		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
 		
-		assertTrue(roomObjResponse.length >= 5);
+		assertEquals(5, roomObjResponse.length);
 	}
 	
 	@Test
@@ -161,7 +154,7 @@ public class RoomGetTests {
 		
 		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
 		
-		assertTrue(roomObjResponse.length >= 3);
+		assertEquals(3, roomObjResponse.length);
 	}
 	
 	@Test
@@ -180,7 +173,7 @@ public class RoomGetTests {
 		
 		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
 		
-		assertTrue(roomObjResponse.length >= 3);
+		assertEquals(3, roomObjResponse.length);
 	}
 	
 	@Test
@@ -199,7 +192,7 @@ public class RoomGetTests {
 		
 		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
 		
-		assertTrue(roomObjResponse.length >= 3);
+		assertEquals(3, roomObjResponse.length);
 	}
 	
 	@Test
@@ -218,7 +211,7 @@ public class RoomGetTests {
 		
 		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
 		
-		assertTrue(roomObjResponse.length >= 3);
+		assertEquals(3, roomObjResponse.length);
 	}
 	
 	@Test
@@ -236,7 +229,7 @@ public class RoomGetTests {
 		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
 
 		/// Verify request succeed
-		assertTrue(roomObjResponse.length >= 5);
+		assertEquals(5, roomObjResponse.length);
 		assertEquals(13, roomObjResponse[0].getNumber());
 		assertEquals(250, roomObjResponse[1].getDimension());
 	}

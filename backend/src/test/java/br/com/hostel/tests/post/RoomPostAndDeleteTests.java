@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.net.URI;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -35,29 +34,30 @@ import br.com.hostel.repository.RoomRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@TestPropertySource(locations="classpath:test.properties")
 public class RoomPostAndDeleteTests {
 	
 	@Autowired
-	RoomRepository roomRepository;
+	private RoomRepository roomRepository;
 	
 	@Autowired 
-	DailyRateRepository dailyRateRepository;
+	private DailyRateRepository dailyRateRepository;
 	
 	@Autowired
+	private ObjectMapper objectMapper;
+	
+	@Autowired 
 	private MockMvc mockMvc;
-	
-	@Autowired
-	ObjectMapper objectMapper;
 
-	private URI uri;
-	private HttpHeaders headers = new HttpHeaders();
-	private DailyRate dailyRate = new DailyRate();
-	private Room room = new Room();
-	private LoginForm login = new LoginForm();
+	private static URI uri;
+	private static HttpHeaders headers = new HttpHeaders();
+	private static Room room = new Room();
+	private static DailyRate dailyRate = new DailyRate(400);
 
-	@BeforeEach
-	public void init() throws JsonProcessingException, Exception {
+	@BeforeAll
+	public static void beforeAll(@Autowired ObjectMapper objectMapper, 
+			@Autowired MockMvc mockMvc) throws JsonProcessingException, Exception {
+		
+		LoginForm login = new LoginForm();
 		uri = new URI("/api/rooms/");
 
 		//setting login variables to autenticate
@@ -77,8 +77,6 @@ public class RoomPostAndDeleteTests {
 		// seting header to put on post and delete request parameters
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
-		
-		dailyRate.setPrice(400);
 		
 		room.setDescription("room test");
 		room.setNumber(34);

@@ -44,7 +44,6 @@ import br.com.hostel.repository.RoomRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:test.properties")
 public class ReservationPutTests {
 
 	@Autowired
@@ -138,6 +137,7 @@ public class ReservationPutTests {
 		
 		assertEquals(reservationObjResponse.getCheckinDate(), reservation.getCheckinDate());
 		assertEquals(reservationObjResponse.getPayments().getAmount(), rsvToUpdate.getPayment().getAmount());
+		assertEquals(rsvToUpdate.getRooms_ID().size(), reservationObjResponse.getRooms().size());
 		assertTrue(reservationObjResponse.getNumberOfGuests() != reservation.getNumberOfGuests());
 	}
 }

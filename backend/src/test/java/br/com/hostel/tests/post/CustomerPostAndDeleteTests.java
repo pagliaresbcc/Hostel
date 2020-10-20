@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.net.URI;
 import java.time.LocalDate;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -36,7 +35,6 @@ import br.com.hostel.repository.CustomerRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:test.properties")
 public class CustomerPostAndDeleteTests {
 
 	@Autowired
@@ -51,16 +49,18 @@ public class CustomerPostAndDeleteTests {
 	@Autowired
 	ObjectMapper objectMapper;
 
-	private URI uri;
-	private HttpHeaders headers = new HttpHeaders();
-	private Address address = new Address();
-	private Customer customer = new Customer();
-	private LoginForm login = new LoginForm();
+	private static URI uri;
+	private static HttpHeaders headers = new HttpHeaders();
+	private static Address address = new Address();
+	private static Customer customer = new Customer();
 	
-	@BeforeEach
-	public void init() throws JsonProcessingException, Exception {
+	@BeforeAll
+	public static void beforeAll(@Autowired MockMvc mockMvc, @Autowired ObjectMapper objectMapper)
+			throws JsonProcessingException, Exception {
 		uri = new URI("/api/customers/");
 		
+		LoginForm login = new LoginForm();
+
 		//setting login variables to autenticate
 		login.setEmail("aluno@email.com");
 		login.setPassword("123456");
@@ -96,15 +96,7 @@ public class CustomerPostAndDeleteTests {
 		customer.setPassword("1234567");
 		
 	}
-//	
-//	@Test
-//	public void testUpdateCustomerAttribute() {
-//		CustomerUpdateForm customerUpdate = new CustomerUpdateForm();
-//		
-//		customerUpdate.setName("Vitor");
-//		customerUpdate.setLastName("Muniz");
-//	}
-//	
+
 	@Test
 	public void shouldAutenticateAndDeleteOneCustomerWithId2() throws Exception {
 		

@@ -21,7 +21,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -29,8 +28,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.dto.LoginDto;
+import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.LoginForm;
 import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.model.CashPayment;
@@ -43,7 +42,6 @@ import br.com.hostel.repository.RoomRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:test.properties")
 public class ReservationPostAndDeleteTests {
 
 	@Autowired
@@ -111,9 +109,6 @@ public class ReservationPostAndDeleteTests {
 		reservationForm.setRooms_ID(rooms_ID);
 	}
 	
-	/*
-	 * Teste de sistema
-	 * */
 	@Test
 	public void shouldReturnNotFoundStatusWithNonExistentCustomerID() throws Exception {
 		
@@ -127,9 +122,6 @@ public class ReservationPostAndDeleteTests {
 				.andReturn();
 	}
 	
-	/*
-	 * 
-	 * */
 	@Test
 	public void shouldReturnBadRequestStatusWithReservationCheckinDateOlderActualDate() throws Exception {
 		
@@ -143,9 +135,6 @@ public class ReservationPostAndDeleteTests {
 				.andReturn();
 	}
 	
-	/*
-	 * 
-	 * */
 	@Test
 	public void shouldReturnBadRequestStatusWithReservationCheckoutDateOlderThanCheckinDate() throws Exception {
 		

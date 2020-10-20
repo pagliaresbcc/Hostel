@@ -1,7 +1,6 @@
 package br.com.hostel.tests.get;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -9,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import java.net.URI;
 import java.time.LocalDate;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -36,29 +34,26 @@ import br.com.hostel.repository.CustomerRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:test.properties")
 public class CustomerGetTests {
 
-	@Autowired
-	CustomerRepository customerRespository;
-
-	@Autowired
-	AddressRepository addressRepository;
-	
-	@Autowired
+	@Autowired 
 	private MockMvc mockMvc;
-
-	@Autowired
-	ObjectMapper objectMapper;
-
-	private URI uri;
-	private HttpHeaders headers = new HttpHeaders();
-	private Address address = new Address();
-	private Customer customer = new Customer();
-	private LoginForm login = new LoginForm();
 	
-	@BeforeEach
-	public void init() throws JsonProcessingException, Exception {
+	@Autowired 
+	private ObjectMapper objectMapper;
+
+	private static URI uri;
+	private static HttpHeaders headers = new HttpHeaders();
+	private static Customer customer = new Customer();
+	
+	@BeforeAll
+	public static void init(@Autowired CustomerRepository customerRespository, 
+			@Autowired AddressRepository addressRepository, @Autowired MockMvc mockMvc, 
+			@Autowired ObjectMapper objectMapper) throws JsonProcessingException, Exception {
+		
+		Address address = new Address();
+		LoginForm login = new LoginForm();
+		
 		uri = new URI("/api/customers/");
 		
 		//setting login variables to autenticate
@@ -91,21 +86,22 @@ public class CustomerGetTests {
 		customer.setBirthday(LocalDate.of(1900, 12, 12));
 		customer.setEmail("washington1@orkut.com");
 		customer.setName("Washington");
-		customer.setLastName("Ferrolho");
+		customer.setLastName("Ignácio");
 		customer.setTitle("MRS.");
 		customer.setPassword("1234567");
 		
 		addressRepository.save(address);
 		customer = customerRespository.save(customer);
+		
+		Customer customer2 = customerRespository.findById(customer.getId()).get();
+		customer2.setId(null);
+		customer2.setName("Antonio");
+		customer2.setLastName("Ferreira");
+		customerRespository.save(customer2);
 	}
 	
 	@Test
 	public void shouldReturnAllCustomersWithoutParamAndStatusOk() throws Exception {
-		
-		Customer customer2 = customer;
-		customer2.setName("Antonio");
-		customer2.setLastName("Ferreira");
-		customerRespository.save(customer2);
 		
 		MvcResult result = 
 				mockMvc.perform(get(uri)
@@ -118,7 +114,7 @@ public class CustomerGetTests {
 		CustomerDto[] customerObjResponse = objectMapper.readValue(contentAsString, CustomerDto[].class);
 		
 		/// Verify request succeed
-		assertTrue(customerObjResponse.length >= 2);
+		assertEquals(3, customerObjResponse.length);
 	}
 	
 	@Test
@@ -136,7 +132,7 @@ public class CustomerGetTests {
 		CustomerDto[] customerObjResponse = objectMapper.readValue(contentAsString, CustomerDto[].class);
 		
 		/// Verify request succeed
-		assertEquals(1, customerObjResponse.length, 1);
+		assertEquals(1, customerObjResponse.length);
 		assertEquals(customer.getName(), customerObjResponse[0].getName());
 		assertEquals(customer.getAddress().getCity(), customerObjResponse[0].getAddress().getCity());
 	}

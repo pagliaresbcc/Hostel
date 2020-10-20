@@ -2,14 +2,14 @@ package br.com.hostel.tests.put;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -37,14 +36,7 @@ import br.com.hostel.repository.RoomRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@TestPropertySource(locations="classpath:test.properties")
 public class RoomPutTests {
-	
-	@Autowired
-	RoomRepository roomRepository;
-	
-	@Autowired 
-	DailyRateRepository dailyRateRepository;
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -52,15 +44,18 @@ public class RoomPutTests {
 	@Autowired
 	ObjectMapper objectMapper;
 
-	private URI uri;
-	private HttpHeaders headers = new HttpHeaders();
-	private DailyRate dailyRate = new DailyRate();
-	private Room room = new Room();
-	private LoginForm login = new LoginForm();
+	private static URI uri;
+	private static HttpHeaders headers = new HttpHeaders();
+	private static Room room = new Room();
 	
-	@BeforeEach
-	public void init() throws JsonProcessingException, Exception {
+	@BeforeAll
+	public static void beforeAll(@Autowired RoomRepository roomRepository,
+			@Autowired DailyRateRepository dailyRateRepository, @Autowired MockMvc mockMvc, 
+			@Autowired ObjectMapper objectMapper) throws JsonProcessingException, Exception {
+		
 		uri = new URI("/api/rooms/");
+		
+		LoginForm login = new LoginForm();
 
 		//setting login variables to autenticate
 		login.setEmail("aluno@email.com");
@@ -80,7 +75,7 @@ public class RoomPutTests {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
 		
-		dailyRate.setPrice(400);
+		DailyRate dailyRate = new DailyRate(400);
 		dailyRateRepository.save(dailyRate);
 		
 		room.setDescription("room test");
@@ -91,10 +86,10 @@ public class RoomPutTests {
 		
 		room = roomRepository.save(room);
 	}
-
-
+	
 	@Test
 	public void shouldAutenticateAndDeleteOneRoomWithId2() throws Exception {
+		
 		RoomUpdateForm roomToUpdate = new RoomUpdateForm();
 		roomToUpdate.setDescription("test update method");
 		roomToUpdate.setDailyRate(room.getDailyRate());

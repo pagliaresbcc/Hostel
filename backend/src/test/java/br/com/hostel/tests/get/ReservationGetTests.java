@@ -1,7 +1,6 @@
 package br.com.hostel.tests.get;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -16,7 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -47,39 +45,30 @@ import br.com.hostel.repository.RoomRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:test.properties")
 public class ReservationGetTests {
 
-	@Autowired
-	ReservationRepository reservationRepository;
-	
-	@Autowired
-	PaymentsRepository paymentsRepository;
-	
-	@Autowired
-	RoomRepository roomRepository;
-	
-	@Autowired
-	CustomerRepository customerRepository;
-	
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@Autowired
-	ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 	
-	private URI uri;
-	private HttpHeaders headers = new HttpHeaders();
-	private LoginForm login = new LoginForm();
-	private ReservationForm reservationForm = new ReservationForm();
-	private CheckPayment checkPayment = new CheckPayment();
-	private List<Long> rooms_ID = new ArrayList<>();
-	private Reservation reservation = new Reservation();
-	private Customer customer = new Customer();
-	private Set<Reservation> reservationsList = new HashSet<>();
+	private static URI uri;
+	private static HttpHeaders headers = new HttpHeaders();
+	private static Reservation reservation;
 	
-	@BeforeEach
-	public void init() throws JsonProcessingException, Exception {
+	@BeforeAll
+    public static void beforeAll(@Autowired ReservationRepository reservationRepository, 
+    		@Autowired PaymentsRepository paymentsRepository, @Autowired CustomerRepository customerRepository, 
+    		@Autowired RoomRepository roomRepository, @Autowired MockMvc mockMvc, 
+    		@Autowired ObjectMapper objectMapper) throws JsonProcessingException, Exception {
+		
+		CheckPayment checkPayment = new CheckPayment();
+		ReservationForm reservationForm = new ReservationForm();
+		List<Long> rooms_ID = new ArrayList<>();
+		Customer customer = new Customer();
+		Set<Reservation> reservationsList = new HashSet<>();
+		LoginForm login = new LoginForm();
 		
 		uri = new URI("/api/reservations/");
 		
@@ -100,7 +89,7 @@ public class ReservationGetTests {
 		// seting header to put on post and delete request parameters
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
-		
+
 		//setting reservation object
 		reservationForm.setCheckinDate(LocalDate.of(2021, 04, 01));
 		reservationForm.setCheckoutDate(LocalDate.of(2021, 04, 04));
@@ -120,21 +109,20 @@ public class ReservationGetTests {
 		
 		paymentsRepository.save(reservationForm.getPayment());
 		reservation = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
+
+		reservationForm.setCheckinDate(LocalDate.of(2021, 05, 01));
+		reservationForm.setCheckoutDate(LocalDate.of(2021, 05, 04));
+		
+		reservation = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
 		reservationsList.add(reservation);
 		
 		customer = customerRepository.findById(reservationForm.getCustomer_ID()).get();
 		customer.setReservations(reservationsList);
-		customerRepository.save(customer);
+		customerRepository.save(customer);    
 	}
 	
 	@Test
 	public void shouldReturnAllReservationsWithoutParam() throws Exception {
-
-		Reservation reservation2 = reservation;
-		reservation2.setId(null);
-		reservation2.setCheckinDate(LocalDate.of(2021, 05, 01));
-		reservation2.setCheckoutDate(LocalDate.of(2021, 05, 04));
-		reservationRepository.save(reservation2);
 
 		MvcResult result = 
 				mockMvc.perform(get(uri)
@@ -149,8 +137,7 @@ public class ReservationGetTests {
 
 		/// Verify request succeed
 		assertEquals(reservationObjResponse[0].getPayments().getAmount(), reservation.getPayment().getAmount());
-		assertTrue(reservationObjResponse.length >= 2);
-		
+		assertEquals(2, reservationObjResponse.length);
 	}
 	
 	@Test
@@ -176,7 +163,7 @@ public class ReservationGetTests {
 	public void shouldReturnOneReservationAndStatusOkById() throws Exception {
 
 		MvcResult result = 
-				mockMvc.perform(get(uri + reservation.getId().toString())
+				mockMvc.perform(get(uri + "1")
 						.headers(headers))
 						.andDo(print())
 						.andReturn();
@@ -195,7 +182,7 @@ public class ReservationGetTests {
 
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("name", "Teste333")
+						.param("name", "Aluno333")
 						.headers(headers))
 						.andDo(print())
 						.andReturn();
