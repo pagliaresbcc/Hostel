@@ -136,8 +136,8 @@ public class ReservationGetTests {
 		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
 
 		/// Verify request succeed
-		assertEquals(reservationObjResponse[0].getPayments().getAmount(), reservation.getPayment().getAmount());
 		assertEquals(2, reservationObjResponse.length);
+		assertEquals(reservationObjResponse[0].getPayments().getAmount(), reservation.getPayment().getAmount());
 	}
 	
 	@Test
@@ -155,6 +155,7 @@ public class ReservationGetTests {
 		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
 
 		/// Verify request succeed
+		assertEquals(2, reservationObjResponse.length);
 		assertEquals(reservationObjResponse[0].getPayments().getAmount(), reservation.getPayment().getAmount());
 		assertEquals(reservationObjResponse[0].getCheckinDate(), reservation.getCheckinDate());
 	}
