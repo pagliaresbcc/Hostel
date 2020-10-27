@@ -2,6 +2,7 @@ package br.com.hostel.controller.dto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -63,6 +64,8 @@ public class ReservationDto {
 	public static List<ReservationDto> converter(List<Reservation> reservationsList) {
 	
 		List<ReservationDto> reservationDtoList = new ArrayList<>();
+		
+		Collections.sort(reservationsList);
 		
 		reservationsList.forEach(reservation -> reservationDtoList.add(new ReservationDto(reservation)));
 		

@@ -15,7 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Reservation {
+public class Reservation implements Comparable<Reservation>{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -119,6 +119,11 @@ public class Reservation {
 
 	public void setCustomer_ID(Long customer_ID) {
 		this.customer_ID = customer_ID;
+	}
+
+	@Override
+	public int compareTo(Reservation otherReservation) {
+		return this.getId().compareTo(otherReservation.getId());
 	}
 	
 }

@@ -3,6 +3,7 @@ package br.com.hostel.service;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -95,11 +96,11 @@ public class ReservationService {
 
 		Optional<Customer> customer = customerRepository.findById(customer_ID);
 
-		List<ReservationDto> response = new ArrayList<>();
-
 		List<Reservation> reservations = customer.get().getReservations().stream().collect(Collectors.toList());
-
-		response = ReservationDto.converter(reservations);
+		
+		Collections.sort(reservations);
+		
+		List<ReservationDto> response = ReservationDto.converter(reservations);
 
 		return ResponseEntity.ok(response);
 	}
@@ -151,5 +152,4 @@ public class ReservationService {
 		} else
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with that ID");
 	}
-
 }
