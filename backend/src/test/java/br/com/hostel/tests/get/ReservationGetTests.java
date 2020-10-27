@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.model.CheckPayment;
 import br.com.hostel.model.Customer;
 import br.com.hostel.model.Reservation;
+import br.com.hostel.model.Room;
 import br.com.hostel.repository.CustomerRepository;
 import br.com.hostel.repository.PaymentsRepository;
 import br.com.hostel.repository.ReservationRepository;
@@ -56,6 +58,7 @@ public class ReservationGetTests {
 	private static URI uri;
 	private static HttpHeaders headers = new HttpHeaders();
 	private static Reservation reservation1, reservation2;
+	private static List<Room> reservation2RoomsList;
 	
 	@BeforeAll
     public static void beforeAll(@Autowired ReservationRepository reservationRepository, 
@@ -114,13 +117,16 @@ public class ReservationGetTests {
 
 		reservationForm.setCheckinDate(LocalDate.of(2021, 05, 01));
 		reservationForm.setCheckoutDate(LocalDate.of(2021, 05, 04));
-		
+		rooms_ID.remove(2L);
+		rooms_ID.add(3L);
 		reservation2 = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
 		reservationsList.add(reservation2);
 		
 		customer = customerRepository.findById(reservationForm.getCustomer_ID()).get();
 		customer.setReservations(reservationsList);
-		customerRepository.save(customer);    
+		customerRepository.save(customer);   
+		
+		reservation2RoomsList = reservation2.getRooms().stream().collect(Collectors.toList());
 	}
 	
 	@Test
@@ -140,6 +146,9 @@ public class ReservationGetTests {
 		/// Verify request succeed
 		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
 		assertEquals(reservation2.getCheckoutDate(), reservationObjResponse[1].getCheckoutDate());
+		assertEquals(reservation2RoomsList.get(0).getNumber(), reservationObjResponse[1].getRooms().stream()
+																						.collect(Collectors.toList())
+																						.get(0).getNumber());
 		assertEquals(2, reservationObjResponse.length);
 	}
 	
@@ -160,6 +169,9 @@ public class ReservationGetTests {
 		/// Verify request succeed
 		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
 		assertEquals(reservation2.getCheckoutDate(), reservationObjResponse[1].getCheckoutDate());
+		assertEquals(reservation2RoomsList.get(0).getNumber(), reservationObjResponse[1].getRooms().stream()
+																						.collect(Collectors.toList())
+																						.get(0).getNumber());
 		assertEquals(2, reservationObjResponse.length);
 	}
 
@@ -179,6 +191,9 @@ public class ReservationGetTests {
 		/// Verify request succeed
 		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
 		assertEquals(reservation2.getCheckoutDate(), reservationObjResponse[1].getCheckoutDate());
+		assertEquals(reservation2RoomsList.get(0).getNumber(), reservationObjResponse[1].getRooms().stream()
+																						.collect(Collectors.toList())
+																						.get(0).getNumber());
 		assertEquals(2, reservationObjResponse.length);
 	}
 
