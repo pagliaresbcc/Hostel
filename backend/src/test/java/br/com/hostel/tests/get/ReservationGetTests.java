@@ -55,7 +55,7 @@ public class ReservationGetTests {
 	
 	private static URI uri;
 	private static HttpHeaders headers = new HttpHeaders();
-	private static Reservation reservation1, reservation2;
+	private static Reservation reservation;
 	
 	@BeforeAll
     public static void beforeAll(@Autowired ReservationRepository reservationRepository, 
@@ -108,15 +108,13 @@ public class ReservationGetTests {
 		reservationForm.setRooms_ID(rooms_ID);
 		
 		paymentsRepository.save(reservationForm.getPayment());
-		
-		reservation1 = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
-		reservationsList.add(reservation1);
+		reservation = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
 
 		reservationForm.setCheckinDate(LocalDate.of(2021, 05, 01));
 		reservationForm.setCheckoutDate(LocalDate.of(2021, 05, 04));
 		
-		reservation2 = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
-		reservationsList.add(reservation2);
+		reservation = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
+		reservationsList.add(reservation);
 		
 		customer = customerRepository.findById(reservationForm.getCustomer_ID()).get();
 		customer.setReservations(reservationsList);
@@ -138,9 +136,8 @@ public class ReservationGetTests {
 		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
 
 		/// Verify request succeed
-		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
-		assertEquals(reservation2.getCheckoutDate(), reservationObjResponse[1].getCheckoutDate());
 		assertEquals(2, reservationObjResponse.length);
+		assertEquals(reservationObjResponse[0].getPayments().getAmount(), reservation.getPayment().getAmount());
 	}
 	
 	@Test
@@ -158,9 +155,9 @@ public class ReservationGetTests {
 		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
 
 		/// Verify request succeed
-		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
-		assertEquals(reservation2.getCheckoutDate(), reservationObjResponse[1].getCheckoutDate());
 		assertEquals(2, reservationObjResponse.length);
+		assertEquals(reservationObjResponse[0].getPayments().getAmount(), reservation.getPayment().getAmount());
+		assertEquals(reservationObjResponse[0].getCheckinDate(), reservation.getCheckinDate());
 	}
 
 	@Test
@@ -177,9 +174,8 @@ public class ReservationGetTests {
 		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
 
 		/// Verify request succeed
-		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
-		assertEquals(reservation2.getCheckoutDate(), reservationObjResponse[1].getCheckoutDate());
-		assertEquals(2, reservationObjResponse.length);
+		assertEquals(reservationObjResponse[0].getPayments().getAmount(), reservation.getPayment().getAmount());
+		assertEquals(reservationObjResponse[0].getCheckinDate(), reservation.getCheckinDate());
 	}
 
 	@Test
