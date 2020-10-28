@@ -85,6 +85,17 @@ public class RoomPostAndDeleteTests {
 		room.setDailyRate(dailyRate);
 	}
 
+	@Test
+	public void shouldReturnNotFoundStatusWhenDeletingByNonExistentRoomID() throws Exception {
+		dailyRateRepository.save(dailyRate);
+		roomRepository.save(room);
+		
+		mockMvc.perform(delete(uri + "0")
+			.headers(headers))
+			.andDo(print())
+            .andExpect(status().isNotFound())
+            .andReturn();
+	}
 
 	@Test
 	public void shouldAutenticateAndDeleteOneRoomWithId2() throws Exception {

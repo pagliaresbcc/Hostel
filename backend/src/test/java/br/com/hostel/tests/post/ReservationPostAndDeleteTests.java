@@ -110,6 +110,34 @@ public class ReservationPostAndDeleteTests {
 	}
 	
 	@Test
+	public void shouldReturnNotFoundStatusWhenDeletingByNonExistentReservationID() throws Exception {
+
+		paymentsRepository.save(reservationForm.getPayment());
+		reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
+
+		mockMvc
+			.perform(delete(uri + "0")
+			.headers(headers))
+			.andDo(print())
+			.andExpect(status().isNotFound())
+			.andReturn();	
+	}
+	
+	@Test
+	public void shouldAutenticateAndDeleteOneReservationWithId1() throws Exception {
+
+		paymentsRepository.save(reservationForm.getPayment());
+		reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
+
+		mockMvc
+			.perform(delete(uri + "1")
+			.headers(headers))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andReturn();	
+	}
+	
+	@Test
 	public void shouldReturnNotFoundStatusWithNonExistentCustomerID() throws Exception {
 		
 		reservationForm.setCustomer_ID(33L);
@@ -147,20 +175,6 @@ public class ReservationPostAndDeleteTests {
 				.andDo(print())
 				.andExpect(status().isBadRequest())
 				.andReturn();
-	}
-	
-	@Test
-	public void shouldAutenticateAndDeleteOneReservationWithId1() throws Exception {
-
-		paymentsRepository.save(reservationForm.getPayment());
-		reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
-
-		mockMvc
-			.perform(delete(uri + "1")
-			.headers(headers))
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andReturn();	
 	}
 	
 	@Test

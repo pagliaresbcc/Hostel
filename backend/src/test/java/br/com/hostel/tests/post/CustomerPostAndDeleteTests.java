@@ -98,13 +98,27 @@ public class CustomerPostAndDeleteTests {
 	}
 
 	@Test
-	public void shouldAutenticateAndDeleteOneCustomerWithId2() throws Exception {
+	public void shouldReturnNotFoundStatusWhenDeletingByNonExistentCustomerID() throws Exception {
 		
 		addressRepository.save(address);
 		customerRespository.save(customer);
+		
+		mockMvc
+		.perform(delete(uri + "0")
+				.headers(headers))
+				.andDo(print())
+				.andExpect(status().isNotFound())
+				.andReturn();	
+	}
+	
+	@Test
+	public void shouldAutenticateAndDeleteOneCustomerWithId2() throws Exception {
+		
+		addressRepository.save(address);
+		customer = customerRespository.save(customer);
 
 		mockMvc
-			.perform(delete(uri + "2")
+			.perform(delete(uri + customer.getId().toString())
 			.headers(headers))
 			.andDo(print())
 			.andExpect(status().isOk())
