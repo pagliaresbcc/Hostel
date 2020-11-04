@@ -10,7 +10,7 @@ import api from "../../services/api";
 export default function Rooms() {
   const [rooms, setRoom] = useState([]);
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   const history = useHistory();
 

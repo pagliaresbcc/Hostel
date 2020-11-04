@@ -9,7 +9,7 @@ import "./styles.css";
 export default function ProfileAdmin() {
   const history = useHistory();
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   if (token === null) {
     history.push("/");

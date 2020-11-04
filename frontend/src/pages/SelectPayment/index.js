@@ -23,15 +23,15 @@ export default function NewReservation() {
 
   const [type, setType] = useState("");
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   const history = useHistory();
 
-  const customer_ID = localStorage.getItem("customer_ID");
-  const checkinDate = localStorage.getItem("checkinDate");
-  const checkoutDate = localStorage.getItem("checkoutDate");
-  const numberOfGuests = localStorage.getItem("numberOfGuests");
-  const rooms_ID = JSON.parse(localStorage.getItem("rooms_ID"));
+  const customer_ID = sessionStorage.getItem("customer_ID");
+  const checkinDate = sessionStorage.getItem("checkinDate");
+  const checkoutDate = sessionStorage.getItem("checkoutDate");
+  const numberOfGuests = sessionStorage.getItem("numberOfGuests");
+  const rooms_ID = JSON.parse(sessionStorage.getItem("rooms_ID"));
 
   var data = {};
 

@@ -25,9 +25,9 @@ export default function Logon(){
         try {
             const response = await api.post('auth', data);
 
-            localStorage.setItem('customer_ID', response.data.customer_ID);
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('type', response.data.type);
+            sessionStorage.setItem('customer_ID', response.data.customer_ID);
+            sessionStorage.setItem('token', response.data.token);
+            sessionStorage.setItem('type', response.data.type);
 
             history.push('/profile');
         } catch (err) {

@@ -16,7 +16,7 @@ export default function Profile() {
 
   const history = useHistory();
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   async function handleRegister(e) {
     e.preventDefault();

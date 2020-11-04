@@ -10,7 +10,7 @@ export default function Reservations() {
 
   const history = useHistory();
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     api
@@ -25,7 +25,7 @@ export default function Reservations() {
 
   async function handleUpdateReservation(id) {
     console.log(id);
-    localStorage.setItem("reservation_id", id);
+    sessionStorage.setItem("reservation_id", id);
 
     history.push("/reservations/updateReservation");
   }

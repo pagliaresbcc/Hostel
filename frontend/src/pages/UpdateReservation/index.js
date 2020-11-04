@@ -8,16 +8,16 @@ import logoImg from "../../assets/images/logo.png";
 
 export default function UpdateReservation() {
   const [checkinDate, setCheckinDate] = useState(
-    localStorage.getItem("checkinDate")
+    sessionStorage.getItem("checkinDate")
   );
   const [checkoutDate, setCheckoutDate] = useState(
-    localStorage.getItem("checkoutDate")
+    sessionStorage.getItem("checkoutDate")
   );
   const [numberOfGuests, setNumberOfGuests] = useState(
-    localStorage.getItem("numberOfGuests")
+    sessionStorage.getItem("numberOfGuests")
   );
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   const history = useHistory();
 
@@ -46,11 +46,11 @@ export default function UpdateReservation() {
         numberOfGuests,
       })
       .then(() => {
-        localStorage.setItem("checkinDate", checkinDate);
-        localStorage.setItem("checkoutDate", checkoutDate);
-        localStorage.setItem("numberOfGuests", numberOfGuests);
+        sessionStorage.setItem("checkinDate", checkinDate);
+        sessionStorage.setItem("checkoutDate", checkoutDate);
+        sessionStorage.setItem("numberOfGuests", numberOfGuests);
 
-        history.push("/room/updateSelectAvailableRooms");
+        history.push("/rooms/updateSelectAvailableRooms");
       })
       .catch(function (err) {
         err.errors.forEach((error) => {

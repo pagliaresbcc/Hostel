@@ -9,12 +9,12 @@ import api from "../../services/api";
 
 export default function SelectAvailableRooms() {
   const [rooms, setRoom] = useState([]);
-  const token = localStorage.getItem("token");
-  const checkinDate = localStorage.getItem("checkinDate");
-  const checkoutDate = localStorage.getItem("checkoutDate");
-  const numberOfGuests = localStorage.getItem("numberOfGuests");
-  const minDailyRate = localStorage.getItem("minDailyRate");
-  const maxDailyRate = localStorage.getItem("maxDailyRate");
+  const token = sessionStorage.getItem("token");
+  const checkinDate = sessionStorage.getItem("checkinDate");
+  const checkoutDate = sessionStorage.getItem("checkoutDate");
+  const numberOfGuests = sessionStorage.getItem("numberOfGuests");
+  const minDailyRate = sessionStorage.getItem("minDailyRate");
+  const maxDailyRate = sessionStorage.getItem("maxDailyRate");
 
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -94,7 +94,7 @@ export default function SelectAvailableRooms() {
               </button>
             </li>
           ))}
-          {localStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}
+          {sessionStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}
         </ul>
       </div>
     );

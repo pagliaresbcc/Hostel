@@ -7,11 +7,11 @@ import api from "../../services/api";
 
 export default function UpdateSelectAvailableRooms() {
   const [rooms, setRoom] = useState([]);
-  const token = localStorage.getItem("token");
-  const checkinDate = localStorage.getItem("checkinDate");
-  const checkoutDate = localStorage.getItem("checkoutDate");
-  const numberOfGuests = localStorage.getItem("numberOfGuests");
-  const reservation_id = localStorage.getItem("reservation_id");
+  const token = sessionStorage.getItem("token");
+  const checkinDate = sessionStorage.getItem("checkinDate");
+  const checkoutDate = sessionStorage.getItem("checkoutDate");
+  const numberOfGuests = sessionStorage.getItem("numberOfGuests");
+  const reservation_id = sessionStorage.getItem("reservation_id");
 
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -66,7 +66,7 @@ export default function UpdateSelectAvailableRooms() {
           <img src={logoImg} alt="Logo" />
           <span>Bem vindo ao Hostel</span>
 
-          <Link className="button" to="/payment/updateSelectPayment">
+          <Link className="button" to="/payments/updateSelectPayment">
             Selecionar forma de pagamento
           </Link>
         </header>
@@ -102,7 +102,7 @@ export default function UpdateSelectAvailableRooms() {
               </button>
             </li>
           ))}
-          {localStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}
+          {sessionStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}
         </ul>
       </div>
     );

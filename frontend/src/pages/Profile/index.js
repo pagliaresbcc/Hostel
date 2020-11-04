@@ -12,10 +12,10 @@ export default function Profile() {
 
   const history = useHistory();
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   useEffect(() => {
-    var customer_ID = localStorage.getItem("customer_ID");
+    var customer_ID = sessionStorage.getItem("customer_ID");
     api
       .get(`api/reservations/${customer_ID}`, {
         headers: { Authorization: "Bearer " + token },
@@ -26,8 +26,7 @@ export default function Profile() {
   }, [token]);
 
   async function handleUpdateReservation(id) {
-    console.log(id);
-    localStorage.setItem("reservation_id", id);
+    sessionStorage.setItem("reservation_id", id);
 
     history.push("/reservations/updateReservation");
   }

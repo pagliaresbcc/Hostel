@@ -9,7 +9,7 @@ import "./styles.css";
 import logoImg from "../../assets/images/logo.png";
 
 export default function NewReservation() {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   const [checkinDate, setCheckinDate] = useState(new Date());
   const [checkoutDate, setCheckoutDate] = useState(new Date());
@@ -44,9 +44,9 @@ export default function NewReservation() {
         numberOfGuests,
       })
       .then(() => {
-        localStorage.setItem("checkinDate", checkinDate);
-        localStorage.setItem("checkoutDate", checkoutDate);
-        localStorage.setItem("numberOfGuests", numberOfGuests);
+        sessionStorage.setItem("checkinDate", checkinDate);
+        sessionStorage.setItem("checkoutDate", checkoutDate);
+        sessionStorage.setItem("numberOfGuests", numberOfGuests);
 
         history.push("/rooms/selectAvailableRooms");
       })
