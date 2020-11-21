@@ -92,17 +92,20 @@ public class ReservationService {
 		return ResponseEntity.ok(response);
 	}
 
-	public ResponseEntity<List<ReservationDto>> listCustomerReservations(Long customer_ID) {
+	public ResponseEntity<?> listCustomerReservations(Long customer_ID) {
 
 		Optional<Customer> customer = customerRepository.findById(customer_ID);
-
-		List<Reservation> reservations = customer.get().getReservations().stream().collect(Collectors.toList());
 		
-		Collections.sort(reservations);
-		
-		List<ReservationDto> response = ReservationDto.converter(reservations);
-
-		return ResponseEntity.ok(response);
+		if (customer.isPresent()) {
+			List<Reservation> reservations = customer.get().getReservations().stream().collect(Collectors.toList());
+			
+			Collections.sort(reservations);
+			
+			List<ReservationDto> response = ReservationDto.converter(reservations);
+	
+			return ResponseEntity.ok(response);
+		} else
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + customer_ID);
 	}
 
 	public ResponseEntity<?> updateReservation(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form) {
@@ -115,16 +118,15 @@ public class ReservationService {
 					roomRepository);
 
 			if (reservation.getRooms().isEmpty())
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rooms list cannot be empty");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reservation rooms list cannot be empty");
 			else
 				reservation.getRooms().forEach(room -> roomRepository.save(room));
 
 			paymentsRepository.save(reservation.getPayment());
 
 			return ResponseEntity.ok(new ReservationDto(reservation));
-		}
-
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with that ID");
+		} else 
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with id = " + id);
 	}
 	
 	public ResponseEntity<?> deleteRoomsReservation(Long id) {
@@ -138,7 +140,7 @@ public class ReservationService {
 			
 			return ResponseEntity.ok().build();
 		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with that ID");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with id = " + id);
 	}
 
 	public ResponseEntity<?> deleteReservation(Long id) {
@@ -150,6 +152,6 @@ public class ReservationService {
 
 			return ResponseEntity.ok().build();
 		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with that ID");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with id = " + id);
 	}
 }
