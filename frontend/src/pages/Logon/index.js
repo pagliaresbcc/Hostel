@@ -28,8 +28,9 @@ export default function Logon(){
             sessionStorage.setItem('customer_ID', response.data.customer_ID);
             sessionStorage.setItem('token', response.data.token);
             sessionStorage.setItem('type', response.data.type);
+            sessionStorage.setItem('role', response.data.role);
 
-            history.push('/profile');
+            history.push('/profileAdmin');
         } catch (err) {
             alert('Falha no Login, tente novamente');
         }

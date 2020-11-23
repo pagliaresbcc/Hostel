@@ -24,8 +24,21 @@ public class Address implements Serializable {
 	@Column(nullable=false)
 	private String state;
 	@Column(nullable=false)
-	private String country;
+	private String country;	
+	
+	public Address() {
+		
+	}
 	 
+	public Address(String addressName, String zipCode, String city, String state, String country) {
+		super();
+		this.addressName = addressName;
+		this.zipCode = zipCode;
+		this.city = city;
+		this.state = state;
+		this.country = country;
+	}
+
 	public Long getId() {
 		return this.id;
 	}

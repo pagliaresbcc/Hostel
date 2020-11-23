@@ -10,14 +10,13 @@ export default function UpdateReservation() {
   const [checkinDate, setCheckinDate] = useState(
     sessionStorage.getItem("checkinDate")
   );
+  
   const [checkoutDate, setCheckoutDate] = useState(
     sessionStorage.getItem("checkoutDate")
   );
   const [numberOfGuests, setNumberOfGuests] = useState(
     sessionStorage.getItem("numberOfGuests")
   );
-
-  const token = sessionStorage.getItem("token");
 
   const history = useHistory();
 
@@ -59,57 +58,53 @@ export default function UpdateReservation() {
       });
   }
 
-  if (token === null) {
-    history.push("/");
-    return <div></div>;
-  } else {
-    return (
-      <div className="nova-reserva-container">
-        <div className="content">
-          <section>
-            <img src={logoImg} alt="Logo" />
+  return (
+    <div className="nova-reserva-container">
+      <div className="content">
+        <section>
+          <img src={logoImg} alt="Logo" />
 
-            <h1>Atualizar reserva</h1>
-            <p>Atualize sua reserva</p>
+          <h1>Atualizar reserva</h1>
+          <p>Atualize sua reserva</p>
 
-            <Link className="back-link" to="/profile">
-              <FiArrowLeft size={16} color="#E02041" />
-              Voltar
-            </Link>
-          </section>
+          <Link className="back-link" to="/reservations">
+            <FiArrowLeft size={16} color="#E02041" />
+            Voltar
+          </Link>
+        </section>
 
-          <form onSubmit={handleUpdate}>
-            <input
-              id="check-in"
-              required="true"
-              type="date"
-              placeholder="Check-in"
-              value={checkinDate}
-              onChange={(e) => setCheckinDate(e.target.value)}
-            />
-            <label>Check-out</label>
-            <input
-              id="check-out"
-              required="true"
-              type="date"
-              placeholder="Check-out"
-              value={checkoutDate}
-              onChange={(e) => setCheckoutDate(e.target.value)}
-            />
-            <label>Número de hóspedes</label>
-            <input
-              id="numberOfGuests"
-              required="true"
-              type="number"
-              value={numberOfGuests}
-              onChange={(e) => setNumberOfGuests(e.target.value)}
-            />
-            <button className="button" type="submit">
-              Selecionar quarto(s)
-            </button>
-          </form>
-        </div>
+        <form onSubmit={handleUpdate}>
+        <label>Check-in</label>
+          <input
+            id="check-in"
+            required="true"
+            type="date"
+            placeholder="Check-in"
+            value={checkinDate}
+            onChange={(e) => setCheckinDate(e.target.value)}
+          />
+          <label>Check-out</label>
+          <input
+            id="check-out"
+            required="true"
+            type="date"
+            placeholder="Check-out"
+            value={checkoutDate}
+            onChange={(e) => setCheckoutDate(e.target.value)}
+          />
+          <label>Número de hóspedes</label>
+          <input
+            id="numberOfGuests"
+            required="true"
+            type="number"
+            value={numberOfGuests}
+            onChange={(e) => setNumberOfGuests(e.target.value)}
+          />
+          <button className="button" type="submit">
+            Selecionar quarto(s)
+          </button>
+        </form>
       </div>
-    );
-  }
+    </div>
+  );
 }

@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.hostel.controller.dto.CustomerDto;
 import br.com.hostel.controller.form.CustomerForm;
 import br.com.hostel.model.Customer;
+import br.com.hostel.model.Role;
 import br.com.hostel.repository.AddressRepository;
 import br.com.hostel.repository.CustomerRepository;
 

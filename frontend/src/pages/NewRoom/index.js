@@ -40,68 +40,64 @@ export default function Profile() {
 
       alert("Cadastrado");
 
-      history.push("/profile");
+      history.push("/rooms");
     } catch (err) {
       alert("Erro no cadastro, tente novamente");
     }
   }
 
-  if (token === null) {
-    history.push("/");
-    return <div></div>;
-  } else {
-    return (
-      <div className="novo-quarto-container">
-        <div className="content">
-          <section>
-            <img src={logoImg} alt="Logo" />
+  return (
+    <div className="novo-quarto-container">
+      <div className="content">
+        <section>
+          <img src={logoImg} alt="Logo" />
 
-            <h1>Cadastrar novo quarto</h1>
-            <p>Adicione mais uma acomadação especial para os clientes</p>
+          <h1>Cadastrar novo quarto</h1>
+          <p>Adicione mais uma acomadação especial para os clientes</p>
 
-            <Link className="back-link" to="/profile">
-              <FiArrowLeft size={16} color="#E02041" />
-              Voltar
-            </Link>
-          </section>
+          <Link className="back-link" to="/profileAdmin">
+            <FiArrowLeft size={16} color="#E02041" />
+            Voltar
+          </Link>
+        </section>
 
-          <form onSubmit={handleRegister}>
-            <input
-              placeholder="Número do quarto"
-              value={number}
-              onChange={(e) => setNumber(e.target.value)}
-            />
+        <form onSubmit={handleRegister}>
+          <input
+            placeholder="Número do quarto"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+          />
 
-            <textarea
-              placeholder="Descrição"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+          <textarea
+            placeholder="Descrição"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
 
-            <input
-              placeholder="Dimensão (em m²)"
-              value={dimension}
-              onChange={(e) => setDimension(e.target.value)}
-            />
+          <input
+            placeholder="Dimensão (em m²)"
+            value={dimension}
+            onChange={(e) => setDimension(e.target.value)}
+          />
 
-            <input
-              placeholder="Número máximo de hóspedes"
-              value={maxNumberOfGuests}
-              onChange={(e) => setMaxNumberOfGuests(e.target.value)}
-            />
+          <input
+            placeholder="Número máximo de hóspedes"
+            value={maxNumberOfGuests}
+            onChange={(e) => setMaxNumberOfGuests(e.target.value)}
+          />
 
-            <input
-              placeholder="Valor da diária (em R$)"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-            />
+          <input
+            placeholder="Valor da diária (em R$)"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
 
-            <button className="button" type="submit">
-              Cadastrar
-            </button>
-          </form>
-        </div>
+          <button className="button" type="submit">
+            Cadastrar
+          </button>
+        </form>
       </div>
-    );
-  }
+    </div>
+  );
+  
 }
