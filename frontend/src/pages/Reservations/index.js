@@ -12,8 +12,13 @@ export default function Reservations() {
 
   const token = sessionStorage.getItem("token");
 
+  const role = sessionStorage.getItem("role");
+  const customer_ID = sessionStorage.getItem("customer_ID");
+
   useEffect(() => {
-    api
+
+    if(role === "ROLE_ADMIN") {
+      api
       .get("api/reservations/", {
         headers: { Authorization: "Bearer " + token },
       })
@@ -21,7 +26,18 @@ export default function Reservations() {
         setReservations(response.data);
         console.log(response.data);
       });
-  }, [token]);
+    } else {
+      api
+      .get(`api/reservations/${customer_ID}`, {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .then((response) => {
+        setReservations(response.data);
+        console.log(response.data);
+      });
+    }
+    
+  }, [customer_ID, role, token]);
 
   async function handleUpdateReservation(id) {
     console.log(id);
@@ -47,77 +63,72 @@ export default function Reservations() {
     }
   }
 
-  if (token === null) {
-    history.push("/");
-    return <div></div>;
-  } else {
-    return (
-      <div className="profile-container">
-        <header>
-          <img src={logoImg} alt="Logo" />
-          <span>Bem-vindo ao Hostel</span>
+  return (
+    <div className="profile-container">
+      <header>
+        <img src={logoImg} alt="Logo" />
+        <span>Bem-vindo ao Hostel</span>
 
-          <Link className="button" to="/reservations/newReservation">
-            Cadastrar nova reserva
-          </Link>
-          <button type="button">
-            <FiPower size={18} color="#E02041" />
-          </button>
-        </header>
+        <Link className="button" to="/reservations/newReservation">
+          Cadastrar nova reserva
+        </Link>
+        <button type="button">
+          <FiPower size={18} color="#E02041" />
+        </button>
+      </header>
 
-        <div className="reservations-grid">
-          <h1>Reservas cadastradas</h1>
+      <div className="reservations-grid">
+        <h1>Reservas cadastradas</h1>
 
-          <ul>
-            {reservations.map(
-              ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
-                <li key={id}>
-                  <strong>QUARTO(S) RESERVADO(S):</strong>
-                  {rooms.map((room, j) => (
-                    <div>
-                      <p>Número do quarto: {room.number}</p>
-                      <p>Descrição: {room.description}</p>
-                      <p>Diária: R$ {room.dailyRate.price},00</p>
-                      <br />
-                    </div>
-                  ))}
-                  <br />
-                  <strong>CHECKIN:</strong>
-                  <p>{checkinDate}</p>
+        <ul>
+          {reservations.map(
+            ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
+              <li key={id}>
+                <strong>QUARTO(S) RESERVADO(S):</strong>
+                {rooms.map((room, j) => (
+                  <div>
+                    <p>Número do quarto: {room.number}</p>
+                    <p>Descrição: {room.description}</p>
+                    <p>Diária: R$ {room.dailyRate.price},00</p>
+                    <br />
+                  </div>
+                ))}
+                <br />
+                <strong>CHECKIN:</strong>
+                <p>{checkinDate}</p>
 
-                  <strong>CHECKOUT:</strong>
-                  <p>{checkoutDate}</p>
+                <strong>CHECKOUT:</strong>
+                <p>{checkoutDate}</p>
 
-                  <strong>VALOR TOTAL:</strong>
-                  <p>
-                    R${" "}
-                    {payments.type === "cash"
-                      ? payments.amountTendered
-                      : payments.amount}
-                    ,00
-                  </p>
+                <strong>VALOR TOTAL:</strong>
+                <p>
+                  R${" "}
+                  {payments.type === "cash"
+                    ? payments.amountTendered
+                    : payments.amount}
+                  ,00
+                </p>
 
-                  <button
-                    className="deleteButton"
-                    onClick={() => handleDeleteReservation(id)}
-                    type="button"
-                  >
-                    <FiTrash2 size={20} color="#a8a8b3" />
-                  </button>
+                <button
+                  className="deleteButton"
+                  onClick={() => handleDeleteReservation(id)}
+                  type="button"
+                >
+                  <FiTrash2 size={20} color="#a8a8b3" />
+                </button>
 
-                  <button
-                    className="editButton"
-                    onClick={() => handleUpdateReservation(id)}
-                    type="button"
-                  >
-                    <FiEdit3 size={20} color="#a8a8b3" />
-                  </button>
-                </li>
-              )
-            )}
-          </ul>
-        </div>
+                <button
+                  className="editButton"
+                  onClick={() => handleUpdateReservation(id)}
+                  type="button"
+                >
+                  <FiEdit3 size={20} color="#a8a8b3" />
+                </button>
+              </li>
+            )
+          )}
+        </ul>
       </div>
-    );
-  }
+    </div>
+  );
 }

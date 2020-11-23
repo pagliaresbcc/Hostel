@@ -6,28 +6,25 @@ import logoImg from "../../assets/images/logo.png";
 
 import "./styles.css";
 
-export default function ProfileAdmin() {
+export default function ProfileUser() {
 
   return (
     <div className="profile-container">
       <header>
         <img src={logoImg} alt="Logo" />
-        <span>Olá, Administrador, bem-vindo ao Hostel!</span>
+        <span>Olá, Usuário, bem-vindo ao Hostel!</span>
 
-        <button type="button">
-          <FiPower size={18} color="#E02041" />
-        </button>
+        <Link className="back-link" to="/">
+            <FiPower size={18} color="#E02041" />
+        </Link>
       </header>
 
       <div className="profile-grid">
         <Link className="button" to="/reservations">
           Gerenciar reservas
         </Link>
-        <Link className="button" to="/rooms">
-          Gerenciar quartos
-        </Link>
-        <Link className="button" to="/customers">
-          Gerenciar hóspedes
+        <Link className="button" to="/user/updateCustomer">
+          Atualizar perfil
         </Link>
       </div>
     </div>

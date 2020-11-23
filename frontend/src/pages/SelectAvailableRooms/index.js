@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AiFillPlusSquare, AiFillCheckSquare } from "react-icons/ai";
 
 import "./styles.css";
@@ -17,8 +17,6 @@ export default function SelectAvailableRooms() {
   const maxDailyRate = sessionStorage.getItem("maxDailyRate");
 
   const [selectedItems, setSelectedItems] = useState([]);
-
-  const history = useHistory();
 
   useEffect(() => {
     api
@@ -48,55 +46,50 @@ export default function SelectAvailableRooms() {
     }
   }
 
-  if (token === null) {
-    history.push("/");
-    return <div></div>;
-  } else {
-    return (
-      <div className="profile-container">
-        <header>
-          <img src={logoImg} alt="Logo" />
-          <span>Bem vindo ao Hostel</span>
+  return (
+    <div className="profile-container">
+      <header>
+        <img src={logoImg} alt="Logo" />
+        <span>Bem vindo ao Hostel</span>
 
-          <Link className="button" to="/payments/selectPayment">
-            Selecionar forma de pagamento
-          </Link>
-        </header>
+        <Link className="button" to="/payments/selectPayment">
+          Selecionar forma de pagamento
+        </Link>
+      </header>
 
-        <h1>Quartos Disponiveis</h1>
+      <h1>Quartos Disponiveis</h1>
 
-        <ul>
-          {rooms.map((room, j) => (
-            <li key={room.id}>
-              <strong>QUARTO {room.number}:</strong>
-              <p>{room.description}</p>
+      <ul>
+        {rooms.map((room, j) => (
+          <li key={room.id}>
+            <strong>QUARTO {room.number}:</strong>
+            <p>{room.description}</p>
 
-              <strong>DIMENSÃO:</strong>
-              <p>{room.dimension} m²</p>
+            <strong>DIMENSÃO:</strong>
+            <p>{room.dimension} m²</p>
 
-              <strong>LIMITE DE HÓSPEDES:</strong>
-              <p>{room.maxNumberOfGuests} pessoas</p>
+            <strong>LIMITE DE HÓSPEDES:</strong>
+            <p>{room.maxNumberOfGuests} pessoas</p>
 
-              <strong>VALOR DA DIÁRIA:</strong>
-              <p>R$ {room.dailyRate.price},00</p>
+            <strong>VALOR DA DIÁRIA:</strong>
+            <p>R$ {room.dailyRate.price},00</p>
 
-              <button
-                type="button"
-                onClick={() => {
-                  handleSelectRoom(room.id);
-                }}
-              >
-                {selectedItems.includes(room.id) ? (
-                  <AiFillCheckSquare size="28px" color="#999" />
-                ) : (
-                  <AiFillPlusSquare size="28px" color="#999" />
-                )}
-              </button>
-            </li>
-          ))}
-          {sessionStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}
-        </ul>
-      </div>
-    );
-  }
+            <button
+              type="button"
+              onClick={() => {
+                handleSelectRoom(room.id);
+              }}
+            >
+              {selectedItems.includes(room.id) ? (
+                <AiFillCheckSquare size="28px" color="#999" />
+              ) : (
+                <AiFillPlusSquare size="28px" color="#999" />
+              )}
+            </button>
+          </li>
+        ))}
+        {sessionStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}
+      </ul>
+    </div>
+  );
 }

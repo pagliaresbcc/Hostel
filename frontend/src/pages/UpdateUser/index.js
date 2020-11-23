@@ -1,62 +1,79 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
-
-import api from "../../services/api";
-import "./styles.css";
 
 import logoImg from "../../assets/images/logo.png";
 
-export default function Register() {
-  const [title, setTitle] = useState("");
-  const [name, setName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [addressName, setAddressName] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+import api from "../../services/api";
 
-  const history = useHistory();
+export default function UpdateCustomer() {
 
-  async function handleRegister(e) {
+  const [customer, setCustomer] = useState([]);
+
+  const token = sessionStorage.getItem("token");
+
+  useEffect(() => {
+    var customer_ID = sessionStorage.getItem("customer_ID");
+    api
+      .get(`api/customers/${customer_ID}`, {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .then((response) => {
+        setCustomer(response.data);
+      });
+  }, [token]);
+
+
+  
+  const [title, setTitle] = useState(
+    sessionStorage.getItem('title')
+  );
+  setTitle(customer.title)
+
+  const [name, setName] = useState(
+    sessionStorage.getItem("name")
+  );
+  
+  const [lastName, setLastName] = useState(
+    sessionStorage.getItem("lastName")
+  );
+  
+  const [birthday, setBirthday] = useState(
+    sessionStorage.getItem("birthday")
+  );
+  
+  const [addressName, setAddressName] = useState(
+    sessionStorage.getItem("addressName")
+  );
+  
+  const [zipCode, setZipCode] = useState(
+    sessionStorage.getItem("zipCode")
+  );
+  
+  const [city, setCity] = useState(
+    sessionStorage.getItem("city")
+  );
+
+  const [state, setState] = useState(
+    sessionStorage.getItem("state")
+  );
+
+  const [country, setCountry] = useState(
+    sessionStorage.getItem("country")
+  );
+
+  const [email, setEmail] = useState(
+    sessionStorage.getItem("email")
+  );
+
+  const [password, setPassword] = useState(
+    sessionStorage.getItem("password")
+  );
+
+  function handleUpdate(e) {
     e.preventDefault();
 
-    var role = 'ROLE_USER'
-
-    const address = {
-      addressName,
-      zipCode,
-      city,
-      state,
-      country,
-    };
-
-    const data = {
-      title,
-      name,
-      lastName,
-      birthday,
-      address,
-      email,
-      password,
-      role,
-    };
-
-    console.log(role)
-
-    try {
-      await api.post("api/customers", data);
-
-      alert("Cadastrado");
-
-      history.push("/");
-    } catch (err) {
-      alert("Erro no cadastro, tente novamente");
-    }
+    
   }
 
   return (
@@ -65,16 +82,15 @@ export default function Register() {
         <section>
           <img src={logoImg} alt="Logo" />
 
-          <h1>Cadastro</h1>
-          <p>Faça seu cadastro, entre na plataforma e faça já sua reserva.</p>
+          <h1>Atualizar Cadastro</h1>
 
-          <Link className="back-link" to="/">
+          <Link className="back-link" to="/customers">
             <FiArrowLeft size={16} color="#E02041" />
-            Já tenho cadastro
+            Voltar
           </Link>
         </section>
 
-        <form onSubmit={handleRegister}>
+        <form onSubmit={handleUpdate}>
           <input
             placeholder="Título"
             value={title}
@@ -154,7 +170,7 @@ export default function Register() {
           />
 
           <button className="button" type="submit">
-            Cadastrar
+            Atualizar
           </button>
         </form>
       </div>

@@ -46,8 +46,6 @@ export default function Register() {
       role,
     };
 
-    console.log(role)
-
     try {
       await api.post("api/customers", data);
 
@@ -66,11 +64,11 @@ export default function Register() {
           <img src={logoImg} alt="Logo" />
 
           <h1>Cadastro</h1>
-          <p>Faça seu cadastro, entre na plataforma e faça já sua reserva.</p>
+          <p>Faça um novo cadastro.</p>
 
-          <Link className="back-link" to="/">
+          <Link className="back-link" to="/customers">
             <FiArrowLeft size={16} color="#E02041" />
-            Já tenho cadastro
+            Voltar
           </Link>
         </section>
 
