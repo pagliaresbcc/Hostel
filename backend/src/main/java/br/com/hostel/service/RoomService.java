@@ -49,7 +49,7 @@ public class RoomService {
 		Optional<Room> roomOp = roomRepository.findByNumber(room.getNumber());
 
 		if (roomOp.isPresent()) 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There already exists a room with this number.");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There already exists a room with number = " + room.getNumber());
 	    else {
 			roomRepository.save(room);
 
@@ -85,25 +85,32 @@ public class RoomService {
 		return ResponseEntity.ok(response);
 	}
 
-	public ResponseEntity<RoomDto> listOneRoom(Long id) {
+	public ResponseEntity<?> listOneRoom(Long id) {
 		
 		Optional<Room> room = roomRepository.findById(id);
-
-		return ResponseEntity.ok(new RoomDto(room.get()));
+		
+		if (room.isPresent()) {
+			return ResponseEntity.ok(new RoomDto(room.get()));
+		} else 
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a room with id = " + id);
 	}
 
-	public ResponseEntity<RoomDto> updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
+	public ResponseEntity<?> updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
 			UriComponentsBuilder uriBuilder) {
 
 		Optional<Room> roomOp = roomRepository.findById(id);
+		
+		if (roomOp.isPresent()) {
 
-		Room room = form.updateRoomForm(id, roomOp.get(), roomRepository);
-
-		dailyRateRepository.save(room.getDailyRate());
-
-		roomRepository.save(room);
-
-		return ResponseEntity.ok(new RoomDto(room));
+			Room room = form.updateRoomForm(id, roomOp.get(), roomRepository);
+	
+			dailyRateRepository.save(room.getDailyRate());
+	
+			roomRepository.save(room);
+	
+			return ResponseEntity.ok(new RoomDto(room));
+		} else
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a room with id = " + id);
 	}
 
 	public ResponseEntity<?> deleteRoom(Long id) {

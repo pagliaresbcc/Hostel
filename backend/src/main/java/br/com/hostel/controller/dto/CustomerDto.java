@@ -8,6 +8,7 @@ import java.util.Set;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Customer;
 import br.com.hostel.model.Reservation;
+import br.com.hostel.model.Role;
 
 public class CustomerDto {
 
@@ -19,6 +20,7 @@ public class CustomerDto {
 	private Address address;
 	private String email;
 	private String password;
+	private Role role;
 	private Set<Reservation> reservations;
 
 	public CustomerDto() {
@@ -33,6 +35,7 @@ public class CustomerDto {
 		this.address = customer.getAddress();
 		this.email = customer.getEmail();
 		this.password = customer.getPassword();
+		this.role = customer.getRole();
 		this.reservations = customer.getReservations();
 	}
 
@@ -71,7 +74,11 @@ public class CustomerDto {
 	public Set<Reservation> getReservations() {
 		return reservations;
 	}
-
+	
+	public Role getRole() {
+		return role;
+	}
+	
 	public static List<CustomerDto> converter(List<Customer> customersList) {
 
 		List<CustomerDto> customersDtoList = new ArrayList<>();

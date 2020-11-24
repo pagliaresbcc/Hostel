@@ -2,7 +2,9 @@ package br.com.hostel.model.exceptions;
 
  public class CustomerNotFoundException extends Exception{
 	 
-	 private String name;
+	private static final long serialVersionUID = 1L;
+	
+	private String name;
 	 private String lastName;
 		
 	 public CustomerNotFoundException(String message, String name, String lastName) {

@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.hostel.controller.dto.CustomerDto;
 import br.com.hostel.controller.form.CustomerForm;
 import br.com.hostel.model.Customer;
+import br.com.hostel.model.Role;
 import br.com.hostel.repository.AddressRepository;
 import br.com.hostel.repository.CustomerRepository;
 
@@ -38,7 +39,7 @@ public class CustomerService {
 			URI uri = uriBuilder.path("/customers/{id}").buildAndExpand(customer.getId()).toUri();
 			return ResponseEntity.created(uri).body(new CustomerDto(customer));
 		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There already exists a customer with that e-mail!");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There already exists a customer with e-mail = " + form.getEmail());
 		}
 	}
 
@@ -54,11 +55,13 @@ public class CustomerService {
 		return ResponseEntity.ok(response);
 	}
 
-	public ResponseEntity<CustomerDto> listOneCustomer(Long id) {
+	public ResponseEntity<?> listOneCustomer(Long id) {
 		
 		Optional<Customer> customer = customerRepository.findById(id);
 		
-		return ResponseEntity.ok(new CustomerDto(customer.get()));
+		if (customer.isPresent()) return ResponseEntity.ok(new CustomerDto(customer.get()));
+		
+		else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + id);
 	}
 
 	public ResponseEntity<?> deleteCustomer(Long id) {
@@ -69,7 +72,7 @@ public class CustomerService {
 			customerRepository.deleteById(id);
 			return ResponseEntity.ok().build();
 		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with that ID");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + id);
 	}
 	
 }

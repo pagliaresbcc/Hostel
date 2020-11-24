@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Customer;
+import br.com.hostel.model.Role;
 import br.com.hostel.repository.AddressRepository;
 
 public class CustomerForm {
@@ -26,6 +27,8 @@ public class CustomerForm {
 	private String email;
 	@NotNull 
 	private String password;
+	@NotNull
+	private Role role;
 	
 	public String getTitle() {
 		return title;
@@ -83,10 +86,18 @@ public class CustomerForm {
 		this.password = password;
 	}
 	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 	public Customer returnCustomer(AddressRepository addressRepository) {
 		addressRepository.save(address);
 		
 		return new Customer(title, name, lastname, birthday, address, email, 
-				new BCryptPasswordEncoder().encode(password));
+				new BCryptPasswordEncoder().encode(password), role);
 	}
 }

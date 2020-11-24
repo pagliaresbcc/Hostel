@@ -35,7 +35,7 @@ public class Customer implements UserDetails {
 	private String lastName;
 	@Column(nullable = false)
 	private LocalDate birthday;
-	@OneToOne(cascade=CascadeType.REMOVE)
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "address_ID", nullable = false)
 	private Address address;
 	@Column(nullable = false)
@@ -43,19 +43,29 @@ public class Customer implements UserDetails {
 	@Column(nullable = false)
 	private String password;
 	
-	@Column(name="perfis") @OneToMany(fetch = FetchType.EAGER)
+	@Column(columnDefinition = "ENUM('ROLE_USER', 'ROLE_ADMIN')")
+    @Enumerated(EnumType.STRING)
+	private Role role;
+
+	@Column(name = "perfis")
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<Perfil> perfis = new ArrayList<>();
-	
-	@OneToMany(cascade={CascadeType.REMOVE, CascadeType.MERGE})
-    @Column(name="reservations")
-    private Set<Reservation> reservations = new HashSet<>();
-    
+
+	@OneToMany(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
+	@Column(name = "reservations")
+	private Set<Reservation> reservations = new HashSet<>();
+
 	public Customer() {
-		
+
 	}
-	
+
+	public Customer(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+
 	public Customer(String title, String name, String lastName, LocalDate birthday, Address address, String email,
-			String password) {
+			String password, Role role) {
 		this.title = title;
 		this.name = name;
 		this.lastName = lastName;
@@ -63,8 +73,8 @@ public class Customer implements UserDetails {
 		this.address = address;
 		this.email = email;
 		this.password = password;
+		this.role = role;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -91,7 +101,6 @@ public class Customer implements UserDetails {
 		return true;
 	}
 
-	
 	public Long getId() {
 		return this.id;
 	}
@@ -151,7 +160,7 @@ public class Customer implements UserDetails {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public Set<Reservation> getReservations() {
 		return this.reservations;
 	}
@@ -164,9 +173,17 @@ public class Customer implements UserDetails {
 		this.reservations.add(reservation);
 	}
 	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.perfis ;
+		return this.perfis;
 	}
 
 	@Override

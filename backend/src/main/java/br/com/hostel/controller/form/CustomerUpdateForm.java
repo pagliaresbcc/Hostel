@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Customer;
+import br.com.hostel.model.Role;
 import br.com.hostel.repository.CustomerRepository;
 
 public class CustomerUpdateForm {
@@ -15,6 +16,7 @@ public class CustomerUpdateForm {
 	private Address address; 
 	private String email;
 	private String password;
+	private Role role;
 	
 	public String getTitle() {
 		return title;
@@ -32,8 +34,12 @@ public class CustomerUpdateForm {
 		this.name = name;
 	}
 	
-	public String getLastName() {
+	public String getLastname() {
 		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 	
 	public void setLastName(String lastname) {
@@ -72,6 +78,15 @@ public class CustomerUpdateForm {
 		this.password = password;
 	}
 	
+	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 	public Customer updateCustomerForm(Long id, Customer customer, CustomerRepository customerRepository) {
 		verifyIfParamIsNotNull(customer, customerRepository);
 		return customer;
@@ -102,6 +117,9 @@ public class CustomerUpdateForm {
 		
 		if (password != null) 
 			customer.setPassword(password);
+		
+		if(role != null)
+			customer.setRole(role);
 		
 	}
 	
