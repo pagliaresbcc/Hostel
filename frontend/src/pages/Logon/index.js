@@ -30,7 +30,7 @@ export default function Logon(){
             sessionStorage.setItem('type', response.data.type);
             sessionStorage.setItem('role', response.data.role);
 
-            history.push('/profileAdmin');
+            history.push('/customers/profile');
         } catch (err) {
             alert('Falha no Login, tente novamente');
         }

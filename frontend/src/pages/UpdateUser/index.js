@@ -6,7 +6,7 @@ import logoImg from "../../assets/images/logo.png";
 
 import api from "../../services/api";
 
-export default function UpdateCustomer() {
+export default function UpdateUser() {
 
   const [customer, setCustomer] = useState([]);
 
