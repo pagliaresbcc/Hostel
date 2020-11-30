@@ -4,6 +4,7 @@ import { FiPower, FiTrash2, FiEdit3 } from "react-icons/fi";
 
 import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
+import "./styles.css";
 
 export default function Reservations() {
   const [reservations, setReservations] = useState([]);
@@ -24,16 +25,14 @@ export default function Reservations() {
       })
       .then((response) => {
         setReservations(response.data);
-        console.log(response.data);
       });
     } else {
       api
-      .get(`api/reservations/${customer_ID}`, {
+      .get(`api/customers/${customer_ID}/reservations`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
         setReservations(response.data);
-        console.log(response.data);
       });
     }
     

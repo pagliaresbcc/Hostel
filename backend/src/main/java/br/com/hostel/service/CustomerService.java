@@ -2,8 +2,10 @@ package br.com.hostel.service;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.dto.CustomerDto;
+import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.CustomerForm;
 import br.com.hostel.model.Customer;
+import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Role;
 import br.com.hostel.repository.AddressRepository;
 import br.com.hostel.repository.CustomerRepository;
@@ -62,6 +66,22 @@ public class CustomerService {
 		if (customer.isPresent()) return ResponseEntity.ok(new CustomerDto(customer.get()));
 		
 		else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + id);
+	}
+	
+	public ResponseEntity<?> listCustomerReservations(Long customer_ID) {
+
+		Optional<Customer> customer = customerRepository.findById(customer_ID);
+		
+		if (customer.isPresent()) {
+			List<Reservation> reservations = customer.get().getReservations().stream().collect(Collectors.toList());
+			
+			Collections.sort(reservations);
+			
+			List<ReservationDto> response = ReservationDto.converter(reservations);
+	
+			return ResponseEntity.ok(response);
+		} else
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + customer_ID);
 	}
 
 	public ResponseEntity<?> deleteCustomer(Long id) {

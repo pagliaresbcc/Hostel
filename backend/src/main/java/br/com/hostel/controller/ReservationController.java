@@ -47,12 +47,6 @@ public class ReservationController {
 		return this.reservationService.listAllReservations(name, pagination);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<?> listCustomerReservations(@PathVariable Long id) {
-
-		return this.reservationService.listCustomerReservations(id);
-	}
-	
 
 	@PutMapping("/{id}")
 	@Transactional

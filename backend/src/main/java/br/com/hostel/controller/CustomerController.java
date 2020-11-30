@@ -52,6 +52,12 @@ public class CustomerController {
 
 		return this.customerService.listOneCustomer(id);
 	}
+	
+	@GetMapping("/{id}/reservations")
+	public ResponseEntity<?> listCustomerReservations(@PathVariable Long id) {
+
+		return this.customerService.listCustomerReservations(id);
+	}
 
 	@DeleteMapping("/{id}")
 	@Transactional

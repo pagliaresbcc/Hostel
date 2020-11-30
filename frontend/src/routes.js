@@ -4,6 +4,7 @@ import { isAuthenticated, isAdmin } from './auth';
 
 import Logon from './pages/Logon';
 import Register from './pages/Register';
+import Profile from './pages/Profile';
 import ProfileAdmin from './pages/ProfileAdmin';
 import ProfileUser from './pages/ProfileUser';
 import Customers from './pages/Customers';
@@ -55,6 +56,7 @@ const Routes = () => (
             <AdminRoute path="/customers/newCustomer" exact component={NewCustomer}/>
             <AdminRoute path="/customers/updateCustomer" exact component={UpdateCustomer}/>
             <PrivateRoute path="/user/updateCustomer" exact component={UpdateUser}/>
+            <PrivateRoute path="/profile" exact component={Profile}/>
             <PrivateRoute path="/reservations" exact component={Reservations}/>
             <PrivateRoute path="/reservations/newReservation" component={NewReservation}/>
             <PrivateRoute path="/reservations/updateReservation" component={UpdateReservation}/>

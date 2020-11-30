@@ -9,6 +9,7 @@ import api from "../../services/api";
 
 export default function Profile() {
   const [reservations, setReservations] = useState([]);
+  const [customer, setCustomer] = useState('');
 
   const history = useHistory();
 
@@ -17,17 +18,28 @@ export default function Profile() {
   useEffect(() => {
     var customer_ID = sessionStorage.getItem("customer_ID");
     api
-      .get(`api/reservations/${customer_ID}`, {
+      .get(`api/customers/${customer_ID}`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
-        setReservations(response.data);
+        setCustomer(response.data);
       });
   }, [token]);
 
+  console.log(customer.reservations)
+  // useEffect(() => {
+  //   var customer_ID = sessionStorage.getItem("customer_ID");
+  //   api
+  //     .get(`api/reservations/${customer_ID}`, {
+  //       headers: { Authorization: "Bearer " + token },
+  //     })
+  //     .then((response) => {
+  //       setReservations(response.data);
+  //     });
+  // }, [token]);
+
   async function handleUpdateReservation(id) {
     sessionStorage.setItem("reservation_id", id);
-    console.log(id)
 
     history.push("/reservations/updateReservation");
   }
@@ -49,76 +61,81 @@ export default function Profile() {
     }
   }
 
-  return (
-    <div className="profile-container">
-      <header>
-        <img src={logoImg} alt="Logo" />
-        <span>Olá Hóspede, bem-vindo ao Hostel!</span>
+  if (token === null) {
+    history.push("/");
+    return <div></div>;
+  } else {
+    return (
+      <div className="profile-container">
+        <header>
+          <img src={logoImg} alt="Logo" />
+          <span>Olá {customer.name}, bem-vindo ao Hostel!</span>
 
-        <Link className="button" to="/reservations/newReservation">
-          Cadastrar nova reserva
-        </Link>
-        <button type="button">
-          <FiPower size={18} color="#E02041" />
-        </button>
-      </header>
+          <Link className="button" to="/reservations/newReservation">
+            Cadastrar nova reserva
+          </Link>
+          <button type="button">
+            <FiPower size={18} color="#E02041" />
+          </button>
+        </header>
 
-      {reservations.length === 0 ? (
-        <h1>Você ainda não cadastrou nenhuma reserva!</h1>
-      ) : (
-        <div className="reservations-grid">
-          <h1>Suas reservas cadastradas</h1>
+        {reservations.length === 0 ? (
+          <h1>Você ainda não cadastrou nenhuma reserva!</h1>
+        ) : (
+          <div className="reservations-grid">
+            <h1>Suas reservas cadastradas</h1>
 
-          <ul>
-            {reservations.map(
-              ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
-                <li key={id}>
-                  <strong>QUARTO(S) RESERVADO(S):</strong>
-                  {rooms.map((room, j) => (
-                    <div>
-                      <p>Número do quarto: {room.number}</p>
-                      <p>Descrição: {room.description}</p>
-                      <p>Diária: R$ {room.dailyRate.price},00</p>
-                      <br />
-                    </div>
-                  ))}
-                  <br />
-                  <strong>CHECKIN:</strong>
-                  <p>{checkinDate}</p>
+            <ul>
+              {reservations.map(
+                ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
+                  <li key={id}>
+                    <strong>QUARTO(S) RESERVADO(S):</strong>
+                    {rooms.map((room, j) => (
+                      <div>
+                        <p>Número do quarto: {room.number}</p>
+                        <p>Descrição: {room.description}</p>
+                        <p>Diária: R$ {room.dailyRate.price},00</p>
+                        <br />
+                      </div>
+                    ))}
+                    <br />
+                    <strong>CHECKIN:</strong>
+                    <p>{checkinDate}</p>
 
-                  <strong>CHECKOUT:</strong>
-                  <p>{checkoutDate}</p>
+                    <strong>CHECKOUT:</strong>
+                    <p>{checkoutDate}</p>
 
-                  <strong>VALOR TOTAL:</strong>
-                  <p>
-                    R${" "}
-                    {payments.type === "cash"
-                      ? payments.amountTendered
-                      : payments.amount}
-                    ,00
-                  </p>
+                    <strong>VALOR TOTAL:</strong>
+                    <p>
+                      R${" "}
+                      {payments.type === "cash"
+                        ? payments.amountTendered
+                        : payments.amount}
+                      ,00
+                    </p>
 
-                  <button
-                    className="deleteButton"
-                    onClick={() => handleDeleteReservation(id)}
-                    type="button"
-                  >
-                    <FiTrash2 size={20} color="#a8a8b3" />
-                  </button>
+                    <button
+                      className="deleteButton"
+                      onClick={() => handleDeleteReservation(id)}
+                      type="button"
+                    >
+                      <FiTrash2 size={20} color="#a8a8b3" />
+                    </button>
 
-                  <button
-                    className="editButton"
-                    onClick={() => handleUpdateReservation(id)}
-                    type="button"
-                  >
-                    <FiEdit3 size={20} color="#a8a8b3" />
-                  </button>
-                </li>
-              )
-            )}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
+                    <button
+                      className="editButton"
+                      onClick={() => handleUpdateReservation(id)}
+                      type="button"
+                    >
+                      <FiEdit3 size={20} color="#a8a8b3" />
+                    </button>
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  }
 }

@@ -92,22 +92,6 @@ public class ReservationService {
 		return ResponseEntity.ok(response);
 	}
 
-	public ResponseEntity<?> listCustomerReservations(Long customer_ID) {
-
-		Optional<Customer> customer = customerRepository.findById(customer_ID);
-		
-		if (customer.isPresent()) {
-			List<Reservation> reservations = customer.get().getReservations().stream().collect(Collectors.toList());
-			
-			Collections.sort(reservations);
-			
-			List<ReservationDto> response = ReservationDto.converter(reservations);
-	
-			return ResponseEntity.ok(response);
-		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + customer_ID);
-	}
-
 	public ResponseEntity<?> updateReservation(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form) {
 
 		Optional<Reservation> reservationOp = reservationRepository.findById(id);
