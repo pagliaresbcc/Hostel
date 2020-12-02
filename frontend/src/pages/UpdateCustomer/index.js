@@ -1,16 +1,22 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
 import logoImg from "../../assets/images/logo.png";
 
 
 export default function UpdateCustomer() {
+  const history = useHistory();
+
+  const x = sessionStorage.getItem("token");
+  console.log(x);
+  useEffect(() => {
+    history.go(0);
+  }, [x]);
 
   const [title, setTitle] = useState(
     sessionStorage.getItem("title")
   );
-
 
   const [name, setName] = useState(
     sessionStorage.getItem("name")
@@ -46,10 +52,6 @@ export default function UpdateCustomer() {
 
   const [email, setEmail] = useState(
     sessionStorage.getItem("email")
-  );
-
-  const [password, setPassword] = useState(
-    sessionStorage.getItem("password")
   );
 
   function handleUpdate(e) {
@@ -142,13 +144,6 @@ export default function UpdateCustomer() {
             placeholder="E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
           />
 
           <button className="button" type="submit">

@@ -9,7 +9,7 @@ import api from "../../services/api";
 
 export default function Customers() {
   const [customers, setCustomer] = useState([]);
-  
+
   const history = useHistory();
 
 
@@ -26,10 +26,25 @@ export default function Customers() {
   }, [token]);
 
   async function handleUpdateCustomer(id) {
+    sessionStorage.setItem("customer_id", id);
+    api
+      .get(`api/customers/${id}`, {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .then((response) => {
+        sessionStorage.setItem("title", response.data.title);
+        sessionStorage.setItem("name", response.data.name);
+        sessionStorage.setItem("lastName", response.data.lastName);
+        sessionStorage.setItem("birthday", response.data.birthday);
+        sessionStorage.setItem("addressName", response.data.address.addressName);
+        sessionStorage.setItem("zipCode", response.data.address.zipCode);
+        sessionStorage.setItem("city", response.data.address.city);
+        sessionStorage.setItem("state", response.data.address.state);
+        sessionStorage.setItem("country", response.data.address.country);
+        sessionStorage.setItem("email", response.data.email);
+      });
 
-    console.log(id)
-
-    history.push("/customers/updateCustomer");
+      history.push("/customers/updateCustomer");
   }
 
   async function handleDeleteCustomer(id) {
