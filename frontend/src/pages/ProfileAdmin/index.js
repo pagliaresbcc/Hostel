@@ -20,13 +20,13 @@ export default function ProfileAdmin() {
       </header>
 
       <div className="profile-grid">
-        <Link className="button" to="/reservations">
+        <Link className="button" to="/admin/reservations">
           Gerenciar reservas
         </Link>
-        <Link className="button" to="/rooms">
+        <Link className="button" to="/admin/rooms">
           Gerenciar quartos
         </Link>
-        <Link className="button" to="/customers">
+        <Link className="button" to="/admin/customers">
           Gerenciar hóspedes
         </Link>
       </div>

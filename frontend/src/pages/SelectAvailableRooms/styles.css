@@ -10,6 +10,17 @@
     align-items: center;
 }
 
+.profile-container .rooms-header-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-container .rooms-header-label .button {
+    width: 30%;
+    margin-top: 50px;
+}
+
 .profile-container header span {
     font-size: 28px;
     margin-left: 24px;

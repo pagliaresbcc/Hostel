@@ -66,7 +66,7 @@ export default function UpdateCustomer() {
 
           <h1>Atualizar Cadastro</h1>
 
-          <Link className="back-link" to="/customers/profile">
+          <Link className="back-link" to="/admin/customers">
             <FiArrowLeft size={16} color="#E02041" />
             Voltar
           </Link>

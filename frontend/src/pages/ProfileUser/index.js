@@ -80,7 +80,7 @@ export default function Profile() {
         </header>
 
         {reservations.length === 0 ? (
-          <div>
+          <div className="welcome-reservations-grid">
           <h1>Você ainda não cadastrou nenhuma reserva!</h1>
           <Link className="button" to="/reservations/newReservation">
             Cadastrar nova reserva

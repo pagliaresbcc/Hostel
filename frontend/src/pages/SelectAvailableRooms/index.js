@@ -51,14 +51,14 @@ export default function SelectAvailableRooms() {
       <header>
         <img src={logoImg} alt="Logo" />
         <span>Bem vindo ao Hostel</span>
-
-        <Link className="button" to="/payments/selectPayment">
-          Selecionar forma de pagamento
-        </Link>
       </header>
 
-      <h1>Quartos Disponiveis</h1>
-
+      <div className="rooms-header-label">
+        <h1>Quartos Disponiveis</h1>
+        <Link className="button" to="/payments/selectPayment">
+            Selecionar forma de pagamento
+        </Link>
+      </div>
       <ul>
         {rooms.map((room, j) => (
           <li key={room.id}>
