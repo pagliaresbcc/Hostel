@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.hostel.controller.dto.CustomerDto;
 import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.CustomerForm;
+import br.com.hostel.controller.form.CustomerUpdateForm;
 import br.com.hostel.model.Customer;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Role;
@@ -92,6 +95,19 @@ public class CustomerService {
 			customerRepository.deleteById(id);
 			return ResponseEntity.ok().build();
 		} else
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + id);
+	}
+
+	public ResponseEntity<?> updateCustomer(Long id, @Valid CustomerUpdateForm form) {
+		Optional<Customer> customerOp = customerRepository.findById(id);
+
+		if (customerOp.isPresent()) {
+			
+			Customer customer = form.updateCustomerForm(id, customerOp.get(), customerRepository);
+			addressRepository.save(customer.getAddress());
+
+			return ResponseEntity.ok(new CustomerDto(customer));
+		} else 
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + id);
 	}
 	

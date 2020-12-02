@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +24,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.dto.CustomerDto;
 import br.com.hostel.controller.form.CustomerForm;
+import br.com.hostel.controller.form.CustomerUpdateForm;
+import br.com.hostel.controller.form.ReservationUpdateForm;
 import br.com.hostel.service.CustomerService;
 
 @RestController
@@ -45,6 +48,14 @@ public class CustomerController {
 			throws URISyntaxException {
 
 		return this.customerService.listAllCustomers(name, pagination);
+	}
+	
+	@PutMapping("/{id}")
+	@Transactional
+	public ResponseEntity<?> updateReservation(@PathVariable Long id,
+			@RequestBody @Valid CustomerUpdateForm form, UriComponentsBuilder uriBuilder) {
+
+		return this.customerService.updateCustomer(id, form);
 	}
 
 	@GetMapping("/{id}")
