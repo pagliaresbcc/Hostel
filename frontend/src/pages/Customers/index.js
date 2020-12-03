@@ -70,7 +70,8 @@ export default function Customers() {
             <strong>Endereço:</strong>
             <p>Rua: {address.addressName}</p>
             <p>Cep: {address.zipCode}</p>
-            <p>Cidade: {address.city} Estado: {address.state}</p>
+            <p>Cidade: {address.city}</p>
+            <p>Estado: {address.state}</p>
             <p>Pais: {address.country}</p>
 
             <button

@@ -52,8 +52,8 @@ const Routes = () => (
             <AdminRoute path="/admin/profileAdmin" exact component={ProfileAdmin}/>
             <AdminRoute path="/admin/customers" exact component={Customers}/>
             <AdminRoute path="/admin/customers/newCustomer" exact component={NewCustomer}/>
-            <AdminRoute path="/admin/customers/updateCustomer" exact component={UpdateUser}/>
-            <PrivateRoute path="/customers/updateCustomer" exact component={UpdateCustomer}/>
+            <AdminRoute path="/admin/customers/updateCustomer" exact component={UpdateCustomer}/>
+            <PrivateRoute path="/customers/updateCustomer" exact component={UpdateUser}/>
             <PrivateRoute path="/customers/profile" exact component={ProfileUser}/>
             <PrivateRoute path="/reservations" exact component={Reservations}/>
             <PrivateRoute path="/reservations/newReservation" component={NewReservation}/>

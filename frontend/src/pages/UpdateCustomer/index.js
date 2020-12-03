@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
 import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 
 export default function UpdateCustomer() {
+
+  const history = useHistory();
 
   const [title, setTitle] = useState();
 
@@ -50,21 +52,27 @@ export default function UpdateCustomer() {
   async function handleUpdate(e) {
     e.preventDefault();
 
+    var address = {
+      addressName,
+      zipCode,
+      city,
+      state,
+      country
+    }
+
     var data = {
       title,
       name,
       lastName,
       birthday,
-      addressName,
-      zipCode,
-      city,
-      state,
-      country,
+      address,
     };
 
     await api.put(`api/customers/${customer_id}`, data, {
       headers: { Authorization: "Bearer " + token },
     });
+
+    history.push('/admin/customers');
   }
 
   return (
