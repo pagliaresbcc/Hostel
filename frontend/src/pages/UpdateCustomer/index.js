@@ -8,15 +8,13 @@ import logoImg from "../../assets/images/logo.png";
 export default function UpdateCustomer() {
   const history = useHistory();
 
-  const x = sessionStorage.getItem("token");
-  console.log(x);
-  useEffect(() => {
-    history.go(0);
-  }, [x]);
-
   const [title, setTitle] = useState(
     sessionStorage.getItem("title")
   );
+
+  useEffect(() => {
+    setTitle(sessionStorage.getItem('title'))
+  })
 
   const [name, setName] = useState(
     sessionStorage.getItem("name")
