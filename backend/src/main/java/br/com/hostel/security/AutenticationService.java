@@ -8,22 +8,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.hostel.model.Customer;
-import br.com.hostel.repository.CustomerRepository;
+import br.com.hostel.model.Guest;
+import br.com.hostel.repository.GuestRepository;
 
 @Service
 //UserDetailsService serve para indicar ao spring q essa classe possui a logica de utenticação
 public class AutenticationService implements UserDetailsService {
 
 	@Autowired
-	CustomerRepository repository;
+	GuestRepository repository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<Customer> customer = repository.findByEmail(username);
+		Optional<Guest> guest = repository.findByEmail(username);
 
-		if (customer.isPresent())
-			return customer.get();
+		if (guest.isPresent())
+			return guest.get();
 		else
 			throw new UsernameNotFoundException("Ivalid data");
 	}

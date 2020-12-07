@@ -2,8 +2,6 @@ package br.com.hostel.e2e;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
@@ -12,9 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import br.com.hostel.model.Address;
-import br.com.hostel.model.Customer;
 
 @RunWith(JUnitPlatform.class)
 public class ReservationTest {
@@ -37,7 +32,7 @@ public class ReservationTest {
 	}
 
 	@Test
-	public void RegisterANonExistentcustomer() throws InterruptedException {
+	public void registerANonExistentGuest() throws InterruptedException {
 
 		driver.findElement(By.xpath("//*[@id=\"check-in\"]")).sendKeys("24102020");
 		Thread.sleep(1000);

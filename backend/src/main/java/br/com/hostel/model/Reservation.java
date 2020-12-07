@@ -22,7 +22,7 @@ public class Reservation implements Comparable<Reservation>{
 	private Long id;
 	
 	@Column(nullable=false)
-	private Long customer_ID;
+	private Long guest_ID;
 	@Column(nullable=false)
 	private int numberOfGuests;
 	@Column(nullable=false)
@@ -40,8 +40,8 @@ public class Reservation implements Comparable<Reservation>{
 	@JoinColumn(name = "payment_ID", nullable = false)
 	private Payments payment;
 	
-	public Reservation(Long customer_ID, int numberOfGuests,LocalDate reservationDate, LocalDate checkinDate, LocalDate checkoutDate, Set<Room> rooms, Payments payment) {
-		this.customer_ID = customer_ID;
+	public Reservation(Long guest_ID, int numberOfGuests,LocalDate reservationDate, LocalDate checkinDate, LocalDate checkoutDate, Set<Room> rooms, Payments payment) {
+		this.guest_ID = guest_ID;
 		this.numberOfGuests = numberOfGuests;
 		this.reservationDate = reservationDate;
 		this.checkinDate = checkinDate;
@@ -113,12 +113,12 @@ public class Reservation implements Comparable<Reservation>{
 		this.rooms = rooms;
 	}
 
-	public Long getCustomer_ID() {
-		return customer_ID;
+	public Long getGuest_ID() {
+		return guest_ID;
 	}
 
-	public void setCustomer_ID(Long customer_ID) {
-		this.customer_ID = customer_ID;
+	public void setGuest_ID(Long guest_ID) {
+		this.guest_ID = guest_ID;
 	}
 
 	@Override

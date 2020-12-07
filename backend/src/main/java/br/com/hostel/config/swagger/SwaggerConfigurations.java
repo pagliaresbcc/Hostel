@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -25,7 +25,7 @@ public class SwaggerConfigurations {
                 .apis(RequestHandlerSelectors.basePackage("br.com.hostel"))
                 .paths(PathSelectors.ant("/**"))
                 .build()
-                .ignoredParameterTypes(Customer.class)
+                .ignoredParameterTypes(Guest.class)
                 .globalOperationParameters(Arrays.asList(
                                 new ParameterBuilder()
                                     .name("Authorization")

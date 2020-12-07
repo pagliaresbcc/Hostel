@@ -22,58 +22,57 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.hostel.controller.dto.CustomerDto;
-import br.com.hostel.controller.form.CustomerForm;
-import br.com.hostel.controller.form.CustomerUpdateForm;
-import br.com.hostel.controller.form.ReservationUpdateForm;
-import br.com.hostel.service.CustomerService;
+import br.com.hostel.controller.dto.GuestDto;
+import br.com.hostel.controller.form.GuestForm;
+import br.com.hostel.controller.form.GuestUpdateForm;
+import br.com.hostel.service.GuestService;
 
 @RestController
-@RequestMapping("/api/customers")
-public class CustomerController {
+@RequestMapping("/api/guests")
+public class GuestController {
 	
 	@Autowired
-	private CustomerService customerService;
+	private GuestService guestService;
 
 	@PostMapping
-	public ResponseEntity<?> registerCustomer(@RequestBody @Valid CustomerForm form,
+	public ResponseEntity<?> createGuest(@RequestBody @Valid GuestForm form,
 			UriComponentsBuilder uriBuilder) {
 
-		return this.customerService.registerCustomer(form, uriBuilder);
+		return this.guestService.createGuest(form, uriBuilder);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<CustomerDto>> listAllCustomers(@RequestParam(required = false) String name,
+	public ResponseEntity<List<GuestDto>> listAllGuests(@RequestParam(required = false) String name,
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pagination)
 			throws URISyntaxException {
 
-		return this.customerService.listAllCustomers(name, pagination);
+		return this.guestService.listAllGuests(name, pagination);
 	}
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> updateReservation(@PathVariable Long id,
-			@RequestBody @Valid CustomerUpdateForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> updateGuest(@PathVariable Long id,
+			@RequestBody @Valid GuestUpdateForm form, UriComponentsBuilder uriBuilder) {
 
-		return this.customerService.updateCustomer(id, form);
+		return this.guestService.updateGuest(id, form);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> listOneCustomer(@PathVariable Long id) {
+	public ResponseEntity<?> listOneGuest(@PathVariable Long id) {
 
-		return this.customerService.listOneCustomer(id);
+		return this.guestService.listOneGuest(id);
 	}
 	
 	@GetMapping("/{id}/reservations")
-	public ResponseEntity<?> listCustomerReservations(@PathVariable Long id) {
+	public ResponseEntity<?> listGuestReservations(@PathVariable Long id) {
 
-		return this.customerService.listCustomerReservations(id);
+		return this.guestService.listGuestReservations(id);
 	}
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> deleteCustomer(@PathVariable Long id) {
+	public ResponseEntity<?> deleteGuest(@PathVariable Long id) {
 
-		return this.customerService.deleteCustomer(id);
+		return this.guestService.deleteGuest(id);
 	}
 }

@@ -6,13 +6,13 @@ public class LoginDto {
 
 	private String token;
 	private String type;
-	private Long customer_ID;
+	private Long guest_ID;
 	private Role role;
 
-	public LoginDto(String token, String tipo, Long customer_ID, Role role) {
+	public LoginDto(String token, String tipo, Long guest_ID, Role role) {
 		this.token = token;
 		this.type = tipo;
-		this.customer_ID = customer_ID;
+		this.guest_ID = guest_ID;
 		this.role = role;
 	}
 
@@ -24,8 +24,8 @@ public class LoginDto {
 		return type;
 	}
 
-	public Long getCustomer_ID() {
-		return customer_ID;
+	public Long getGuest_ID() {
+		return guest_ID;
 	}
 
 	public Role getRole() {

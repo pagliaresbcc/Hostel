@@ -26,7 +26,7 @@ const AdminRoute = ({component: Component, ...rest}) => (
             isAdmin() ? (
                 <Component { ...props} />
             ) : (
-                <Redirect to={{ pathname: '/customers/profile', state: { from: props.location}}} />
+                <Redirect to={{ pathname: '/guests/profile', state: { from: props.location}}} />
             )
         ) : (
             <Redirect to={{ pathname: '/', state: { from: props.location}}} />
@@ -50,11 +50,11 @@ const Routes = () => (
             <Route path="/" exact component={Logon}/>
             <Route path="/register" exact component={Register}/>
             <AdminRoute path="/admin/profileAdmin" exact component={ProfileAdmin}/>
-            <AdminRoute path="/admin/customers" exact component={Guest}/>
-            <AdminRoute path="/admin/customers/newCustomer" exact component={NewGuest}/>
-            <AdminRoute path="/admin/customers/updateCustomer" exact component={UpdateGuest}/>
-            <PrivateRoute path="/customers/updateCustomer" exact component={UpdateUser}/>
-            <PrivateRoute path="/customers/profile" exact component={ProfileUser}/>
+            <AdminRoute path="/admin/guests" exact component={Guest}/>
+            <AdminRoute path="/admin/guests/newguest" exact component={NewGuest}/>
+            <AdminRoute path="/admin/guests/updateguest" exact component={UpdateGuest}/>
+            <PrivateRoute path="/guests/updateguest" exact component={UpdateUser}/>
+            <PrivateRoute path="/guests/profile" exact component={ProfileUser}/>
             <PrivateRoute path="/reservations" exact component={Reservation}/>
             <PrivateRoute path="/reservations/newReservation" component={NewReservation}/>
             <PrivateRoute path="/reservations/updateReservation" component={UpdateReservation}/>

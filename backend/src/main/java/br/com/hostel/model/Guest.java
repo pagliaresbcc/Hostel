@@ -14,13 +14,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * Entity implementation class for Entity: Customer
+ * Entity implementation class for Entity: Guest
  *
  */
 @Entity
 //UserDetails serve para dizer ao Sring qual será a classe de usuário
 //para autenticação no sistema
-public class Customer implements UserDetails {
+public class Guest implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -55,16 +55,16 @@ public class Customer implements UserDetails {
 	@Column(name = "reservations")
 	private Set<Reservation> reservations = new HashSet<>();
 
-	public Customer() {
+	public Guest() {
 
 	}
 
-	public Customer(String email, String password) {
+	public Guest(String email, String password) {
 		this.email = email;
 		this.password = password;
 	}
 
-	public Customer(String title, String name, String lastName, LocalDate birthday, Address address, String email,
+	public Guest(String title, String name, String lastName, LocalDate birthday, Address address, String email,
 			String password, Role role) {
 		this.title = title;
 		this.name = name;
@@ -92,7 +92,7 @@ public class Customer implements UserDetails {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Customer other = (Customer) obj;
+		Guest other = (Guest) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

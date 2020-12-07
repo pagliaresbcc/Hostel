@@ -18,7 +18,7 @@ import br.com.hostel.repository.RoomRepository;
 public class ReservationForm {
 
 	@NotNull
-	private Long customer_ID;
+	private Long guest_ID;
 	@NotNull
     int numberOfGuests;
 	@NotNull
@@ -30,12 +30,12 @@ public class ReservationForm {
 	@NotNull
 	private Payments payment;
 
-	public Long getCustomer_ID() {
-		return customer_ID;
+	public Long getGuest_ID() {
+		return guest_ID;
 	}
 
-	public void setCustomer_ID(Long customer_ID) {
-		this.customer_ID = customer_ID;
+	public void setGuest_ID(Long guest_ID) {
+		this.guest_ID = guest_ID;
 	}
 
 	public int getNumberOfGuests() {
@@ -85,7 +85,7 @@ public class ReservationForm {
 
 		rooms_ID.forEach(id -> roomsList.add(roomRepository.findById(id).get()));
 
-		return new Reservation(customer_ID, numberOfGuests, LocalDate.now(), checkinDate, checkoutDate, 
+		return new Reservation(guest_ID, numberOfGuests, LocalDate.now(), checkinDate, checkoutDate, 
 				roomsList, payment);
 	}
 

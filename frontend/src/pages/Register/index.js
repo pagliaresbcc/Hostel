@@ -49,7 +49,7 @@ export default function Register() {
     console.log(role)
 
     try {
-      await api.post("api/customers", data);
+      await api.post("api/guests", data);
 
       alert("Cadastrado");
 

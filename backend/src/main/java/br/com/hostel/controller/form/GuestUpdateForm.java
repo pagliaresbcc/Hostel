@@ -3,11 +3,11 @@ package br.com.hostel.controller.form;
 import java.time.LocalDate;
 
 import br.com.hostel.model.Address;
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 import br.com.hostel.model.Role;
-import br.com.hostel.repository.CustomerRepository;
+import br.com.hostel.repository.GuestRepository;
 
-public class CustomerUpdateForm {
+public class GuestUpdateForm {
 	
 	private String title;
 	private String name;
@@ -68,30 +68,30 @@ public class CustomerUpdateForm {
 		this.role = role;
 	}
 
-	public Customer updateCustomerForm(Long id, Customer customer, CustomerRepository customerRepository) {
-		verifyIfParamIsNotNull(customer, customerRepository);
-		return customer;
+	public Guest updateGuestForm(Long id, Guest guest, GuestRepository guestRepository) {
+		verifyIfParamIsNotNull(guest, guestRepository);
+		return guest;
 	}
 	
-	private void verifyIfParamIsNotNull(Customer customer, CustomerRepository customerRepository) {
+	private void verifyIfParamIsNotNull(Guest guest, GuestRepository guestRepository) {
 		
 		if (title != null)
-			customer.setTitle(title);
+			guest.setTitle(title);
 		
 		if (name != null) 
-			customer.setName(name);
+			guest.setName(name);
 		
 		if (lastname != null) 
-			customer.setLastName(lastname);
+			guest.setLastName(lastname);
 		
 		if(birthday != null) 
-			customer.setBirthday(birthday);
+			guest.setBirthday(birthday);
 		
 		if (address != null) 
-			customer.setAddress(address);
+			guest.setAddress(address);
 		
 		if(role != null)
-			customer.setRole(role);
+			guest.setRole(role);
 		
 	}
 	

@@ -7,11 +7,11 @@ import javax.validation.constraints.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.hostel.model.Address;
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 import br.com.hostel.model.Role;
 import br.com.hostel.repository.AddressRepository;
 
-public class CustomerForm {
+public class GuestForm {
 	
 	@NotNull 
 	private String title;
@@ -94,10 +94,10 @@ public class CustomerForm {
 		this.role = role;
 	}
 
-	public Customer returnCustomer(AddressRepository addressRepository) {
+	public Guest returnGuest(AddressRepository addressRepository) {
 		addressRepository.save(address);
 		
-		return new Customer(title, name, lastname, birthday, address, email, 
+		return new Guest(title, name, lastname, birthday, address, email, 
 				new BCryptPasswordEncoder().encode(password), role);
 	}
 }

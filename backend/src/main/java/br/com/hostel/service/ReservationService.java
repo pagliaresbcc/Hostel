@@ -3,7 +3,6 @@ package br.com.hostel.service;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,9 +21,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.controller.form.ReservationUpdateForm;
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
-import br.com.hostel.repository.CustomerRepository;
+import br.com.hostel.repository.GuestRepository;
 import br.com.hostel.repository.PaymentsRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
@@ -42,32 +41,32 @@ public class ReservationService {
 	private RoomRepository roomRepository;
 
 	@Autowired
-	private CustomerRepository customerRepository;
+	private GuestRepository guestRepository;
 
 	public ResponseEntity<?> registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) {
 		Reservation reservation = form.returnReservation(paymentsRepository, roomRepository);
-		Optional<Customer> customerOp = customerRepository.findById(reservation.getCustomer_ID());
+		Optional<Guest> guestOp = guestRepository.findById(reservation.getGuest_ID());
 
-		if (customerOp.isPresent()) {
+		if (guestOp.isPresent()) {
 			if (reservation.getRooms().isEmpty())
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rooms list cannot be empty");
 			else if (reservation.getCheckinDate().isAfter(LocalDate.now())
 					&& reservation.getCheckoutDate().isAfter(reservation.getCheckinDate())) {
-				Customer customer = customerOp.get();
+				Guest guest = guestOp.get();
 
 				paymentsRepository.save(reservation.getPayment());
 				reservationRepository.save(reservation);
-				customer.addReservation(reservation);
-				customerRepository.save(customer);
+				guest.addReservation(reservation);
+				guestRepository.save(guest);
 
-				URI uri = uriBuilder.path("/reservations/{id}").buildAndExpand(customer.getId()).toUri();
+				URI uri = uriBuilder.path("/reservations/{id}").buildAndExpand(guest.getId()).toUri();
 
 				return ResponseEntity.created(uri).body(new ReservationDto(reservation));
 			} else {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Verify your checkin/checkout date");
 			}
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer ID didn't found");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Guest ID didn't found");
 	}
 
 	public ResponseEntity<List<ReservationDto>> listAllReservations(String name, Pageable pagination) {
@@ -78,11 +77,11 @@ public class ReservationService {
 			response = ReservationDto.converter(reservationRepository.findAll());
 		else {
 			
-			List<Customer> customerList = customerRepository.findByName(name);
+			List<Guest> guestList = guestRepository.findByName(name);
 			
-			if(customerList.size() > 0) {
+			if(guestList.size() > 0) {
 
-				List<Reservation> reservations = customerList.get(0).getReservations().stream()
+				List<Reservation> reservations = guestList.get(0).getReservations().stream()
 						.collect(Collectors.toList());
 		
 				response = ReservationDto.converter(reservations);

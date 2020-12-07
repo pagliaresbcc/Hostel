@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsUtils;
 
-import br.com.hostel.repository.CustomerRepository;
+import br.com.hostel.repository.GuestRepository;
 
 @EnableWebSecurity
 @Configuration
@@ -28,7 +28,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	private TokenService tokenService;
 
 	@Autowired
-	private CustomerRepository customerRepository;
+	private GuestRepository guestRepository;
 
 	// com esse método é possível importar o AuthenticationManager na classe
 	// AutenticationController, que nao faz isso por padrao
@@ -52,12 +52,12 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 				.antMatchers(HttpMethod.POST, "/auth").permitAll() // permite publicamente somente o post
-				.antMatchers(HttpMethod.POST, "/api/customers").permitAll() 
+				.antMatchers(HttpMethod.POST, "/api/guests").permitAll() 
 				.anyRequest().authenticated() // qualquer outra requisicao precisara estar autenticado
 ////		.and().formLogin() //formulario de autenticacao nativo do spring (não usado pois ele cria sessão, deixando de ser stateless)
 				.and().csrf().disable()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //diz para o spring nao criar session para cada cliente
-				.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, customerRepository), UsernamePasswordAuthenticationFilter.class); //diz para o spring rodar o filtro criado antes de tudo
+				.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, guestRepository), UsernamePasswordAuthenticationFilter.class); //diz para o spring rodar o filtro criado antes de tudo
 																					
 		;
 	}

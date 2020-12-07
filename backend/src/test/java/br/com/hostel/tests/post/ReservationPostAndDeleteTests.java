@@ -74,7 +74,7 @@ public class ReservationPostAndDeleteTests {
 		uri = new URI("/api/reservations/");
 		
 		//setting login variables to autenticate
-		login.setEmail("aluno@email.com");
+		login.setEmail("admin@email.com");
 		login.setPassword("123456");
 
 		//posting on /auth to get token
@@ -95,7 +95,7 @@ public class ReservationPostAndDeleteTests {
 		reservationForm.setCheckinDate(LocalDate.of(2021, 04, 01));
 		reservationForm.setCheckoutDate(LocalDate.of(2021, 04, 04));
 		reservationForm.setNumberOfGuests(2);
-		reservationForm.setCustomer_ID(1L);
+		reservationForm.setGuest_ID(1L);
 		
 		checkPayment.setAmount(3000);
 		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2020, 01, 25), LocalTime.of(21, 31)));
@@ -138,9 +138,9 @@ public class ReservationPostAndDeleteTests {
 	}
 	
 	@Test
-	public void shouldReturnNotFoundStatusWithNonExistentCustomerID() throws Exception {
+	public void shouldReturnNotFoundStatusWithNonExistentGuestID() throws Exception {
 		
-		reservationForm.setCustomer_ID(33L);
+		reservationForm.setGuest_ID(33L);
 		
 		mockMvc.perform(post(uri)
 				.headers(headers)

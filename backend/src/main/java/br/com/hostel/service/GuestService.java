@@ -16,67 +16,66 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.hostel.controller.dto.CustomerDto;
+import br.com.hostel.controller.dto.GuestDto;
 import br.com.hostel.controller.dto.ReservationDto;
-import br.com.hostel.controller.form.CustomerForm;
-import br.com.hostel.controller.form.CustomerUpdateForm;
-import br.com.hostel.model.Customer;
+import br.com.hostel.controller.form.GuestForm;
+import br.com.hostel.controller.form.GuestUpdateForm;
+import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
-import br.com.hostel.model.Role;
 import br.com.hostel.repository.AddressRepository;
-import br.com.hostel.repository.CustomerRepository;
+import br.com.hostel.repository.GuestRepository;
 
 @Service
-public class CustomerService {
+public class GuestService {
 	
 	@Autowired
-	private CustomerRepository customerRepository;
+	private GuestRepository guestRepository;
 
 	@Autowired
 	private AddressRepository addressRepository;
 
-	public ResponseEntity<?> registerCustomer(CustomerForm form, UriComponentsBuilder uriBuilder) {
-		Optional<Customer> customerEmail = customerRepository.findByEmail(form.getEmail());
+	public ResponseEntity<?> createGuest(GuestForm form, UriComponentsBuilder uriBuilder) {
+		Optional<Guest> guestEmail = guestRepository.findByEmail(form.getEmail());
 		
-		if(!customerEmail.isPresent()) {
+		if(!guestEmail.isPresent()) {
 			
-			Customer customer = form.returnCustomer(addressRepository);
-			customerRepository.save(customer);
+			Guest guest = form.returnGuest(addressRepository);
+			guestRepository.save(guest);
 
-			URI uri = uriBuilder.path("/customers/{id}").buildAndExpand(customer.getId()).toUri();
-			return ResponseEntity.created(uri).body(new CustomerDto(customer));
+			URI uri = uriBuilder.path("/guests/{id}").buildAndExpand(guest.getId()).toUri();
+			return ResponseEntity.created(uri).body(new GuestDto(guest));
 		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There already exists a customer with e-mail = " + form.getEmail());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There already exists a guest with e-mail = " + form.getEmail());
 		}
 	}
 
-	public ResponseEntity<List<CustomerDto>> listAllCustomers(String name, Pageable pagination) {
+	public ResponseEntity<List<GuestDto>> listAllGuests(String name, Pageable pagination) {
 		
-		List<CustomerDto> response = new ArrayList<>();
+		List<GuestDto> response = new ArrayList<>();
 
 		if (name == null)
-			response = CustomerDto.converter(customerRepository.findAll());
+			response = GuestDto.converter(guestRepository.findAll());
 		else 
-			response = CustomerDto.converter(customerRepository.findByName(name));
+			response = GuestDto.converter(guestRepository.findByName(name));
 
 		return ResponseEntity.ok(response);
 	}
 
-	public ResponseEntity<?> listOneCustomer(Long id) {
+	public ResponseEntity<?> listOneGuest(Long id) {
 		
-		Optional<Customer> customer = customerRepository.findById(id);
+		Optional<Guest> guest = guestRepository.findById(id);
 		
-		if (customer.isPresent()) return ResponseEntity.ok(new CustomerDto(customer.get()));
+		if (guest.isPresent()) return ResponseEntity.ok(new GuestDto(guest.get()));
 		
-		else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + id);
+		else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a guest with id = " + id);
 	}
 	
-	public ResponseEntity<?> listCustomerReservations(Long customer_ID) {
+	public ResponseEntity<?> listGuestReservations(Long guest_ID) {
 
-		Optional<Customer> customer = customerRepository.findById(customer_ID);
+		Optional<Guest> guest = guestRepository.findById(guest_ID);
 		
-		if (customer.isPresent()) {
-			List<Reservation> reservations = customer.get().getReservations().stream().collect(Collectors.toList());
+		if (guest.isPresent()) {
+			List<Reservation> reservations = guest.get().getReservations().stream().collect(Collectors.toList());
 			
 			Collections.sort(reservations);
 			
@@ -84,31 +83,31 @@ public class CustomerService {
 	
 			return ResponseEntity.ok(response);
 		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + customer_ID);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a guest with id = " + guest_ID);
 	}
 
-	public ResponseEntity<?> deleteCustomer(Long id) {
+	public ResponseEntity<?> deleteGuest(Long id) {
 		
-		Optional<Customer> customer = customerRepository.findById(id);
+		Optional<Guest> guest = guestRepository.findById(id);
 		
-		if (customer.isPresent()) {
-			customerRepository.deleteById(id);
+		if (guest.isPresent()) {
+			guestRepository.deleteById(id);
 			return ResponseEntity.ok().build();
 		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a guest with id = " + id);
 	}
 
-	public ResponseEntity<?> updateCustomer(Long id, @Valid CustomerUpdateForm form) {
-		Optional<Customer> customerOp = customerRepository.findById(id);
+	public ResponseEntity<?> updateGuest(Long id, @Valid GuestUpdateForm form) {
+		Optional<Guest> guestOp = guestRepository.findById(id);
 
-		if (customerOp.isPresent()) {
+		if (guestOp.isPresent()) {
 			
-			Customer customer = form.updateCustomerForm(id, customerOp.get(), customerRepository);
-			addressRepository.save(customer.getAddress());
+			Guest guest = form.updateGuestForm(id, guestOp.get(), guestRepository);
+			addressRepository.save(guest.getAddress());
 
-			return ResponseEntity.ok(new CustomerDto(customer));
+			return ResponseEntity.ok(new GuestDto(guest));
 		} else 
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a customer with id = " + id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a guest with id = " + id);
 	}
 	
 }

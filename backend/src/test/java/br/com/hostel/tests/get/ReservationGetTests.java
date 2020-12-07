@@ -36,10 +36,10 @@ import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.LoginForm;
 import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.model.CheckPayment;
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
-import br.com.hostel.repository.CustomerRepository;
+import br.com.hostel.repository.GuestRepository;
 import br.com.hostel.repository.PaymentsRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
@@ -62,21 +62,21 @@ public class ReservationGetTests {
 	
 	@BeforeAll
     public static void beforeAll(@Autowired ReservationRepository reservationRepository, 
-    		@Autowired PaymentsRepository paymentsRepository, @Autowired CustomerRepository customerRepository, 
+    		@Autowired PaymentsRepository paymentsRepository, @Autowired GuestRepository guestRepository, 
     		@Autowired RoomRepository roomRepository, @Autowired MockMvc mockMvc, 
     		@Autowired ObjectMapper objectMapper) throws JsonProcessingException, Exception {
 		
 		CheckPayment checkPayment = new CheckPayment();
 		ReservationForm reservationForm = new ReservationForm();
 		List<Long> rooms_ID = new ArrayList<>();
-		Customer customer = new Customer();
+		Guest guest = new Guest();
 		Set<Reservation> reservationsList = new HashSet<>();
 		LoginForm login = new LoginForm();
 		
 		uri = new URI("/api/reservations/");
 		
 		//setting login variables to autenticate
-		login.setEmail("aluno@email.com");
+		login.setEmail("admin@email.com");
 		login.setPassword("123456");
 
 		//posting on /auth to get token
@@ -97,7 +97,7 @@ public class ReservationGetTests {
 		reservationForm.setCheckinDate(LocalDate.of(2021, 04, 01));
 		reservationForm.setCheckoutDate(LocalDate.of(2021, 04, 04));
 		reservationForm.setNumberOfGuests(4);
-		reservationForm.setCustomer_ID(1L);
+		reservationForm.setGuest_ID(1L);
 		
 		checkPayment.setAmount(3000);
 		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2020, 01, 25), LocalTime.of(21, 31)));
@@ -122,9 +122,9 @@ public class ReservationGetTests {
 		reservation2 = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
 		reservationsList.add(reservation2);
 		
-		customer = customerRepository.findById(reservationForm.getCustomer_ID()).get();
-		customer.setReservations(reservationsList);
-		customerRepository.save(customer);   
+		guest = guestRepository.findById(reservationForm.getGuest_ID()).get();
+		guest.setReservations(reservationsList);
+		guestRepository.save(guest);   
 		
 		reservation2RoomsList = reservation2.getRooms().stream().collect(Collectors.toList());
 	}
@@ -153,33 +153,11 @@ public class ReservationGetTests {
 	}
 	
 	@Test
-	public void shouldReturnAllCustomerReservationsByName() throws Exception {
+	public void shouldReturnAllReservationsByGuestName() throws Exception {
 
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("name", "Aluno")
-						.headers(headers))
-						.andDo(print())
-						.andReturn();
-
-		String contentAsString = result.getResponse().getContentAsString();
-
-		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
-
-		/// Verify request succeed
-		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
-		assertEquals(reservation2.getCheckoutDate(), reservationObjResponse[1].getCheckoutDate());
-		assertEquals(reservation2RoomsList.get(0).getNumber(), reservationObjResponse[1].getRooms().stream()
-																						.collect(Collectors.toList())
-																						.get(0).getNumber());
-		assertEquals(2, reservationObjResponse.length);
-	}
-
-	@Test
-	public void shouldReturnOneReservationAndStatusOkById() throws Exception {
-
-		MvcResult result = 
-				mockMvc.perform(get(uri + "1")
+						.param("name", "admin")
 						.headers(headers))
 						.andDo(print())
 						.andReturn();
@@ -202,7 +180,7 @@ public class ReservationGetTests {
 
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("name", "Aluno333")
+						.param("name", "admin333")
 						.headers(headers))
 						.andDo(print())
 						.andReturn();

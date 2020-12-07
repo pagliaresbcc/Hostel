@@ -26,7 +26,7 @@ export default function ProfileAdmin() {
         <Link className="button" to="/admin/rooms">
           Gerenciar quartos
         </Link>
-        <Link className="button" to="/admin/customers">
+        <Link className="button" to="/admin/guests">
           Gerenciar hóspedes
         </Link>
       </div>

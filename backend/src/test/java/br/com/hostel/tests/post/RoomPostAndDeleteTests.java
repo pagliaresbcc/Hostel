@@ -61,7 +61,7 @@ public class RoomPostAndDeleteTests {
 		uri = new URI("/api/rooms/");
 
 		//setting login variables to autenticate
-		login.setEmail("aluno@email.com");
+		login.setEmail("admin@email.com");
 		login.setPassword("123456");
 
 		//posting on /auth to get token

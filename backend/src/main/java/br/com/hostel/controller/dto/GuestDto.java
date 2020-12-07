@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 import br.com.hostel.model.Address;
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Role;
 
-public class CustomerDto {
+public class GuestDto {
 
 	private Long id;
 	private String title;
@@ -23,20 +23,20 @@ public class CustomerDto {
 	private Role role;
 	private Set<Reservation> reservations;
 
-	public CustomerDto() {
+	public GuestDto() {
 	}
 
-	public CustomerDto(Customer customer) {
-		this.id = customer.getId();
-		this.title = customer.getTitle();
-		this.name = customer.getName();
-		this.lastName = customer.getLastName();
-		this.birthday = customer.getBirthday();
-		this.address = customer.getAddress();
-		this.email = customer.getEmail();
-		this.password = customer.getPassword();
-		this.role = customer.getRole();
-		this.reservations = customer.getReservations();
+	public GuestDto(Guest guest) {
+		this.id = guest.getId();
+		this.title = guest.getTitle();
+		this.name = guest.getName();
+		this.lastName = guest.getLastName();
+		this.birthday = guest.getBirthday();
+		this.address = guest.getAddress();
+		this.email = guest.getEmail();
+		this.password = guest.getPassword();
+		this.role = guest.getRole();
+		this.reservations = guest.getReservations();
 	}
 
 	public Long getId() {
@@ -79,12 +79,12 @@ public class CustomerDto {
 		return role;
 	}
 	
-	public static List<CustomerDto> converter(List<Customer> customersList) {
+	public static List<GuestDto> converter(List<Guest> guestsList) {
 
-		List<CustomerDto> customersDtoList = new ArrayList<>();
+		List<GuestDto> guestsDtoList = new ArrayList<>();
 		
-		customersList.forEach(customer -> customersDtoList.add(new CustomerDto(customer)));
+		guestsList.forEach(guest -> guestsDtoList.add(new GuestDto(guest)));
 
-		return customersDtoList;
+		return guestsDtoList;
 	}
 }

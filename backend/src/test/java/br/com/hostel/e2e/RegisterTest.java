@@ -12,7 +12,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import br.com.hostel.model.Address;
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 import br.com.hostel.model.Role;
 
 @RunWith(JUnitPlatform.class)
@@ -20,15 +20,15 @@ public class RegisterTest {
 
 	ChromeConnection chromeConnection = new ChromeConnection();
 	WebDriver driver = chromeConnection.Connection();
-	Customer newCustomer, existentCustomer;
+	Guest newGuest, existentGuest;
 
 	@BeforeEach
 	public void init() {
 		Address newAddress = new Address("Av Paulista", "01311-000", "São Paulo", "SP", "Brasil");
-		newCustomer = new Customer("Dr.", "Sócrates", "Oliveira", LocalDate.of(1954, 2, 19), newAddress,
+		newGuest = new Guest("Dr.", "Sócrates", "Oliveira", LocalDate.of(1954, 2, 19), newAddress,
 				"socratesccp@gmail.com", "123456", Role.ROLE_ADMIN);
 		Address existentAddress = new Address("Rua 2", "13900-000", "Amparo", "SP", "Brasil");
-		existentCustomer = new Customer("Mrs.", "Admin", "Hostel", LocalDate.of(2000, 9, 1), existentAddress,
+		existentGuest = new Guest("Mrs.", "Admin", "Hostel", LocalDate.of(2000, 9, 1), existentAddress,
 				"admin@email.com", "123456", Role.ROLE_ADMIN);
 		
 		driver.get("http://localhost:3000/");
@@ -38,37 +38,37 @@ public class RegisterTest {
 	}
 
 	@Test
-	public void RegisterANonExistentcustomer() throws InterruptedException {
+	public void registerANonExistentGuest() throws InterruptedException {
 
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/input[1]")).sendKeys(newCustomer.getTitle());
+		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/input[1]")).sendKeys(newGuest.getTitle());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[1]/input[1]"))
-				.sendKeys(newCustomer.getName());
+				.sendKeys(newGuest.getName());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[1]/input[2]	"))
-				.sendKeys(newCustomer.getLastName());
+				.sendKeys(newGuest.getLastName());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"birthday\"]"))
-				.sendKeys(ConvertLocalDateIntoBrazilianString(newCustomer.getBirthday()));
+				.sendKeys(convertLocalDateIntoBrazilianString(newGuest.getBirthday()));
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[2]/input[1]"))
-				.sendKeys(newCustomer.getAddress().getAddressName());
+				.sendKeys(newGuest.getAddress().getAddressName());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[2]/div/input[1]"))
-				.sendKeys(newCustomer.getAddress().getCity());
+				.sendKeys(newGuest.getAddress().getCity());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[2]/div/input[2]"))
-				.sendKeys(newCustomer.getAddress().getState());
+				.sendKeys(newGuest.getAddress().getState());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[2]/input[2]"))
-				.sendKeys(newCustomer.getAddress().getCountry());
+				.sendKeys(newGuest.getAddress().getCountry());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[2]/input[3]"))
-				.sendKeys(newCustomer.getAddress().getZipCode());
+				.sendKeys(newGuest.getAddress().getZipCode());
 		Thread.sleep(1000);
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/input[3]")).sendKeys(newCustomer.getEmail());
+		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/input[3]")).sendKeys(newGuest.getEmail());
 		Thread.sleep(1000);
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/input[4]")).sendKeys(newCustomer.getPassword());
+		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/input[4]")).sendKeys(newGuest.getPassword());
 		Thread.sleep(3000);
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();
@@ -82,40 +82,40 @@ public class RegisterTest {
 	}
 
 	@Test
-	public void RegisterAExistentCustomer() throws InterruptedException {
+	public void registerAnExistentGuest() throws InterruptedException {
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/input[1]"))
-				.sendKeys(existentCustomer.getTitle());
+				.sendKeys(existentGuest.getTitle());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[1]/input[1]"))
-				.sendKeys(existentCustomer.getName());
+				.sendKeys(existentGuest.getName());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[1]/input[2]"))
-				.sendKeys(existentCustomer.getLastName());
+				.sendKeys(existentGuest.getLastName());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"birthday\"]"))
-				.sendKeys(ConvertLocalDateIntoBrazilianString(existentCustomer.getBirthday()));
+				.sendKeys(convertLocalDateIntoBrazilianString(existentGuest.getBirthday()));
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[2]/input[1]"))
-				.sendKeys(existentCustomer.getAddress().getAddressName());
+				.sendKeys(existentGuest.getAddress().getAddressName());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[2]/div/input[1]"))
-				.sendKeys(existentCustomer.getAddress().getCity());
+				.sendKeys(existentGuest.getAddress().getCity());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[2]/div/input[2]"))
-				.sendKeys(existentCustomer.getAddress().getState());
+				.sendKeys(existentGuest.getAddress().getState());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[2]/input[2]"))
-				.sendKeys(existentCustomer.getAddress().getCountry());
+				.sendKeys(existentGuest.getAddress().getCountry());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/div[2]/input[3]"))
-				.sendKeys(existentCustomer.getAddress().getZipCode());
+				.sendKeys(existentGuest.getAddress().getZipCode());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/input[3]"))
-				.sendKeys(existentCustomer.getEmail());
+				.sendKeys(existentGuest.getEmail());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/input[4]"))
-				.sendKeys(existentCustomer.getPassword());
+				.sendKeys(existentGuest.getPassword());
 		Thread.sleep(3000);
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();
@@ -129,7 +129,7 @@ public class RegisterTest {
 		driver.close();
 	}
 
-	public String ConvertLocalDateIntoBrazilianString(LocalDate birthday) {
+	public String convertLocalDateIntoBrazilianString(LocalDate birthday) {
 		return (birthday.getDayOfMonth() < 10 ? (0 + "" + birthday.getDayOfMonth()) : birthday.getDayOfMonth()) + ""
 				+ (birthday.getMonth().getValue() < 10 ? (0 + "" + birthday.getMonth().getValue())
 						: birthday.getMonth().getValue())

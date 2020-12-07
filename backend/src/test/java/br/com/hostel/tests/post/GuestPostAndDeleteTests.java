@@ -24,21 +24,22 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.hostel.controller.dto.CustomerDto;
+import br.com.hostel.controller.dto.GuestDto;
 import br.com.hostel.controller.dto.LoginDto;
 import br.com.hostel.controller.form.LoginForm;
 import br.com.hostel.model.Address;
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
+import br.com.hostel.model.Role;
 import br.com.hostel.repository.AddressRepository;
-import br.com.hostel.repository.CustomerRepository;
+import br.com.hostel.repository.GuestRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class CustomerPostAndDeleteTests {
+public class GuestPostAndDeleteTests {
 
 	@Autowired
-	CustomerRepository customerRespository;
+	GuestRepository guestRespository;
 
 	@Autowired
 	AddressRepository addressRepository;
@@ -52,17 +53,17 @@ public class CustomerPostAndDeleteTests {
 	private static URI uri;
 	private static HttpHeaders headers = new HttpHeaders();
 	private static Address address = new Address();
-	private static Customer customer = new Customer();
+	private static Guest guest = new Guest();
 	
 	@BeforeAll
 	public static void beforeAll(@Autowired MockMvc mockMvc, @Autowired ObjectMapper objectMapper)
 			throws JsonProcessingException, Exception {
-		uri = new URI("/api/customers/");
+		uri = new URI("/api/guests/");
 		
 		LoginForm login = new LoginForm();
 
 		//setting login variables to autenticate
-		login.setEmail("aluno@email.com");
+		login.setEmail("admin@email.com");
 		login.setPassword("123456");
 
 		//posting on /auth to get token
@@ -79,29 +80,30 @@ public class CustomerPostAndDeleteTests {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
 		
-		// setting address to put into the customer paramseters
+		// setting address to put into the guest paramseters
 		address.setAddressName("rua x");
 		address.setCity("Amparo");
 		address.setCountry("Brasil");
 		address.setState("SP");
 		address.setZipCode("13900-000");
 		
-		// setting customer
-		customer.setAddress(address);
-		customer.setBirthday(LocalDate.of(1900, 12, 12));
-		customer.setEmail("washington2@orkut.com");
-		customer.setName("Washington");
-		customer.setLastName("Ferrolho");
-		customer.setTitle("MRS.");
-		customer.setPassword("1234567");
+		// setting guest
+		guest.setAddress(address);
+		guest.setBirthday(LocalDate.of(1900, 12, 12));
+		guest.setEmail("washington2@orkut.com");
+		guest.setName("Washington");
+		guest.setLastName("Ferrolho");
+		guest.setTitle("MRS.");
+		guest.setPassword("1234567");
+		guest.setRole(Role.ROLE_USER);
 		
 	}
 
 	@Test
-	public void shouldReturnNotFoundStatusWhenDeletingByNonExistentCustomerID() throws Exception {
+	public void shouldReturnNotFoundStatusWhenDeletingByNonExistentGuestID() throws Exception {
 		
 		addressRepository.save(address);
-		customerRespository.save(customer);
+		guestRespository.save(guest);
 		
 		mockMvc
 		.perform(delete(uri + "0")
@@ -112,13 +114,13 @@ public class CustomerPostAndDeleteTests {
 	}
 	
 	@Test
-	public void shouldAutenticateAndDeleteOneCustomerWithId2() throws Exception {
+	public void shouldAutenticateAndDeleteOneGuestWithId2() throws Exception {
 		
 		addressRepository.save(address);
-		customer = customerRespository.save(customer);
+		guest = guestRespository.save(guest);
 
 		mockMvc
-			.perform(delete(uri + customer.getId().toString())
+			.perform(delete(uri + guest.getId().toString())
 			.headers(headers))
 			.andDo(print())
 			.andExpect(status().isOk())
@@ -126,23 +128,23 @@ public class CustomerPostAndDeleteTests {
 	}
 	
 	@Test
-	public void shouldAutenticateAndCreateOneCustomerAndReturnStatusCreated() throws Exception {
+	public void shouldAutenticateAndCreateOneGuestAndReturnStatusCreated() throws Exception {
 
 		MvcResult result = 
 				mockMvc
 					.perform(post(uri)
 					.headers(headers)
-					.content(objectMapper.writeValueAsString(customer)))
+					.content(objectMapper.writeValueAsString(guest)))
 					.andDo(print())
 					.andExpect(status().isCreated())
 					.andReturn();
 
 		String contentAsString = result.getResponse().getContentAsString();
 
-		CustomerDto customerObjResponse = objectMapper.readValue(contentAsString, CustomerDto.class);
+		GuestDto guestObjResponse = objectMapper.readValue(contentAsString, GuestDto.class);
 
-		assertEquals(customerObjResponse.getName(), "Washington");
-		assertEquals(customerObjResponse.getAddress().getCity(), "Amparo");
+		assertEquals(guestObjResponse.getName(), "Washington");
+		assertEquals(guestObjResponse.getAddress().getCity(), "Amparo");
 	}
 
 }

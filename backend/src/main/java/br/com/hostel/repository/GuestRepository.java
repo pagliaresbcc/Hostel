@@ -6,18 +6,13 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.hostel.model.Address;
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 
-public interface CustomerRepository extends JpaRepository<Customer, Long>{
+public interface GuestRepository extends JpaRepository<Guest, Long>{
 
-	//como curso é outra tabela, se fizer concatenado findByTABELAATRIBUTO
-	//o spring ja gera a query automatico 
+	List<Guest> findByName(String nome);
 	
-	//se houver uma variavel customerNome, para pegar a variavel nome dentro de Curso
-	//seria findByCustomer_Nome
-	List<Customer> findByName(String nome);
-	
-	Optional<Customer> findByEmail(String email);
+	Optional<Guest> findByEmail(String email);
 	
 	Address findByAddressId(Long id);	
 	

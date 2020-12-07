@@ -33,7 +33,7 @@ export default function UpdateUser() {
 
   useEffect(() => {
     api
-      .get(`api/customers/${guest_ID}`, {
+      .get(`api/guests/${guest_ID}`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
@@ -68,11 +68,11 @@ export default function UpdateUser() {
       address,
     };
 
-    await api.put(`api/customers/${guest_ID}`, data, {
+    await api.put(`api/guests/${guest_ID}`, data, {
       headers: { Authorization: "Bearer " + token },
     });
 
-    history.push('/customers/profile');
+    history.push('/guests/profile');
   }
 
   return (
@@ -83,7 +83,7 @@ export default function UpdateUser() {
 
           <h1>Atualizar Cadastro</h1>
 
-          <Link className="back-link" to="/customers/profile">
+          <Link className="back-link" to="/guests/profile">
             <FiArrowLeft size={16} color="#E02041" />
             Voltar
           </Link>

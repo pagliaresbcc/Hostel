@@ -18,7 +18,7 @@ export default function Profile() {
   useEffect(() => {
     var guest_ID = sessionStorage.getItem("guest_ID");
     api
-      .get(`api/customers/${guest_ID}`, {
+      .get(`api/guests/${guest_ID}`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
@@ -71,7 +71,7 @@ export default function Profile() {
           <img src={logoImg} alt="Logo" />
           <span>Olá {guest.name}, bem-vindo ao Hostel!</span>
 
-          <Link className="button" to="/customers/updateCustomer">
+          <Link className="button" to="/guests/updateguest">
             Editar perfil
           </Link>
           <button type="button">

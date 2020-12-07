@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import br.com.hostel.controller.CustomerController;
+import br.com.hostel.controller.GuestController;
 import br.com.hostel.controller.ReservationController;
 import br.com.hostel.controller.RoomController;
 
@@ -14,7 +14,7 @@ import br.com.hostel.controller.RoomController;
 public class SmokeTest {
 
 	@Autowired
-	private CustomerController customerController;
+	private GuestController guestController;
 	
 	@Autowired
 	private ReservationController reservationController;
@@ -24,7 +24,7 @@ public class SmokeTest {
 
 	@Test
 	public void contexLoads() throws Exception {
-		assertThat(customerController).isNotNull();
+		assertThat(guestController).isNotNull();
 		assertThat(reservationController).isNotNull();
 		assertThat(roomController).isNotNull();
 	}

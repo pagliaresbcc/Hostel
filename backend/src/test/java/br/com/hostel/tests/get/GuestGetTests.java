@@ -23,18 +23,18 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.hostel.controller.dto.CustomerDto;
+import br.com.hostel.controller.dto.GuestDto;
 import br.com.hostel.controller.dto.LoginDto;
 import br.com.hostel.controller.form.LoginForm;
 import br.com.hostel.model.Address;
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 import br.com.hostel.repository.AddressRepository;
-import br.com.hostel.repository.CustomerRepository;
+import br.com.hostel.repository.GuestRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class CustomerGetTests {
+public class GuestGetTests {
 
 	@Autowired 
 	private MockMvc mockMvc;
@@ -44,20 +44,20 @@ public class CustomerGetTests {
 
 	private static URI uri;
 	private static HttpHeaders headers = new HttpHeaders();
-	private static Customer customer = new Customer();
+	private static Guest guest = new Guest();
 	
 	@BeforeAll
-	public static void init(@Autowired CustomerRepository customerRespository, 
+	public static void init(@Autowired GuestRepository guestRespository, 
 			@Autowired AddressRepository addressRepository, @Autowired MockMvc mockMvc, 
 			@Autowired ObjectMapper objectMapper) throws JsonProcessingException, Exception {
 		
 		Address address = new Address();
 		LoginForm login = new LoginForm();
 		
-		uri = new URI("/api/customers/");
+		uri = new URI("/api/guests/");
 		
 		//setting login variables to autenticate
-		login.setEmail("aluno@email.com");
+		login.setEmail("admin@email.com");
 		login.setPassword("123456");
 
 		//posting on /auth to get token
@@ -74,34 +74,34 @@ public class CustomerGetTests {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
 		
-		// setting address to put into the customer paramseters
+		// setting address to put into the guest paramseters
 		address.setAddressName("rua x");
 		address.setCity("Amparo");
 		address.setCountry("Brasil");
 		address.setState("SP");
 		address.setZipCode("13900-000");
 		
-		// setting customer
-		customer.setAddress(address);
-		customer.setBirthday(LocalDate.of(1900, 12, 12));
-		customer.setEmail("washington1@orkut.com");
-		customer.setName("Washington");
-		customer.setLastName("Ignácio");
-		customer.setTitle("MRS.");
-		customer.setPassword("1234567");
+		// setting guest
+		guest.setAddress(address);
+		guest.setBirthday(LocalDate.of(1900, 12, 12));
+		guest.setEmail("washington1@orkut.com");
+		guest.setName("Washington");
+		guest.setLastName("Ignácio");
+		guest.setTitle("MRS.");
+		guest.setPassword("1234567");
 		
 		addressRepository.save(address);
-		customer = customerRespository.save(customer);
+		guest = guestRespository.save(guest);
 		
-		Customer customer2 = customerRespository.findById(customer.getId()).get();
-		customer2.setId(null);
-		customer2.setName("Antonio");
-		customer2.setLastName("Ferreira");
-		customerRespository.save(customer2);
+		Guest guest2 = guestRespository.findById(guest.getId()).get();
+		guest2.setId(null);
+		guest2.setName("Antonio");
+		guest2.setLastName("Ferreira");
+		guestRespository.save(guest2);
 	}
 	
 	@Test
-	public void shouldReturnAllCustomersWithoutParamAndStatusOk() throws Exception {
+	public void shouldReturnAllGuestsWithoutParamAndStatusOk() throws Exception {
 		
 		MvcResult result = 
 				mockMvc.perform(get(uri)
@@ -111,14 +111,14 @@ public class CustomerGetTests {
 
 		String contentAsString = result.getResponse().getContentAsString();
 
-		CustomerDto[] customerObjResponse = objectMapper.readValue(contentAsString, CustomerDto[].class);
+		GuestDto[] guestObjResponse = objectMapper.readValue(contentAsString, GuestDto[].class);
 		
 		/// Verify request succeed
-		assertEquals(3, customerObjResponse.length);
+		assertEquals(3, guestObjResponse.length);
 	}
 	
 	@Test
-	public void shouldReturnOneCustomerByParamAndStatusOk() throws Exception {
+	public void shouldReturnOneGuestByParamAndStatusOk() throws Exception {
 
 		MvcResult result = 
 				mockMvc.perform(get(uri)
@@ -129,30 +129,30 @@ public class CustomerGetTests {
 
 		String contentAsString = result.getResponse().getContentAsString();
 
-		CustomerDto[] customerObjResponse = objectMapper.readValue(contentAsString, CustomerDto[].class);
+		GuestDto[] guestObjResponse = objectMapper.readValue(contentAsString, GuestDto[].class);
 		
 		/// Verify request succeed
-		assertEquals(1, customerObjResponse.length);
-		assertEquals(customer.getName(), customerObjResponse[0].getName());
-		assertEquals(customer.getAddress().getCity(), customerObjResponse[0].getAddress().getCity());
+		assertEquals(1, guestObjResponse.length);
+		assertEquals(guest.getName(), guestObjResponse[0].getName());
+		assertEquals(guest.getAddress().getCity(), guestObjResponse[0].getAddress().getCity());
 	}
 	
 	@Test
-	public void shouldReturnOneCustomerByIdAndStatusOk() throws Exception {
+	public void shouldReturnOneGuestByIdAndStatusOk() throws Exception {
 
 		MvcResult result = 
-				mockMvc.perform(get(uri + customer.getId().toString())
+				mockMvc.perform(get(uri + guest.getId().toString())
 						.headers(headers))
 						.andDo(print())
 						.andReturn();
 
 		String contentAsString = result.getResponse().getContentAsString();
 
-		CustomerDto customerObjResponse = objectMapper.readValue(contentAsString, CustomerDto.class);
+		GuestDto guestObjResponse = objectMapper.readValue(contentAsString, GuestDto.class);
 		
 		/// Verify request succeed
-		assertEquals(customer.getName(), customerObjResponse.getName());
-		assertEquals(customer.getAddress().getCity(), customerObjResponse.getAddress().getCity());
+		assertEquals(guest.getName(), guestObjResponse.getName());
+		assertEquals(guest.getAddress().getCity(), guestObjResponse.getAddress().getCity());
 
 	}
 
@@ -169,9 +169,9 @@ public class CustomerGetTests {
 		
 		String contentAsString = result.getResponse().getContentAsString();
 
-		CustomerDto[] customerObjResponse = objectMapper.readValue(contentAsString, CustomerDto[].class);
+		GuestDto[] guestObjResponse = objectMapper.readValue(contentAsString, GuestDto[].class);
 		
-		assertEquals(0, customerObjResponse.length);
+		assertEquals(0, guestObjResponse.length);
 	}
 
 }

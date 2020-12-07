@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.hostel.controller.dto.LoginDto;
 import br.com.hostel.controller.form.LoginForm;
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 import br.com.hostel.security.TokenService;
 
 @RestController
@@ -37,8 +37,8 @@ public class AutenticationController {
 		try {
 			Authentication authentication = authManager.authenticate(loginData);
 			String token = tokenService.generateToken(authentication); 
-			Customer loggedCustomer = (Customer) authentication.getPrincipal();
-			return ResponseEntity.ok(new LoginDto(token, "Bearer", loggedCustomer.getId(), loggedCustomer.getRole()));
+			Guest loggedGuest = (Guest) authentication.getPrincipal();
+			return ResponseEntity.ok(new LoginDto(token, "Bearer", loggedGuest.getId(), loggedGuest.getRole()));
 		} catch (AuthenticationException e) { 
 			return ResponseEntity.badRequest().build();
 		}

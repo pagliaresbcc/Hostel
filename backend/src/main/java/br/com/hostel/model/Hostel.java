@@ -29,13 +29,13 @@ public class Hostel {
 	@OneToMany
 	private Set<Reservation> reservations;
 	@OneToMany
-	private Set<Customer> customers;
+	private Set<Guest> guests;
 	@OneToMany
 	private Set<Room> rooms;
 
-	public Hostel() { // Creator - Hostel aggregates reservations, customers and rooms
+	public Hostel() { // Creator - Hostel aggregates reservations, guests and rooms
 		reservations = new HashSet<>();
-		customers = new HashSet<>();
+		guests = new HashSet<>();
 		rooms = new HashSet<>();
 	}
 
@@ -81,12 +81,12 @@ public class Hostel {
 		this.reservations = reservations;
 	}
 
-	public Set<Customer> getCustomers() {
-		return customers;
+	public Set<Guest> getGuests() {
+		return guests;
 	}
 
-	public void setCustomers(Set<Customer> customers) {
-		this.customers = customers;
+	public void setGuests(Set<Guest> guests) {
+		this.guests = guests;
 	}
 
 	public Set<Room> getRooms() {

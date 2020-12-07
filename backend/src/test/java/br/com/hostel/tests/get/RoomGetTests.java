@@ -60,7 +60,7 @@ public class RoomGetTests {
 		uri = new URI("/api/rooms/");
 
 		//setting login variables to autenticate
-		login.setEmail("aluno@email.com");
+		login.setEmail("admin@email.com");
 		login.setPassword("123456");
 
 		//posting on /auth to get token
@@ -81,7 +81,7 @@ public class RoomGetTests {
 		reservationForm.setCheckinDate(LocalDate.of(2021, 4, 10));
 		reservationForm.setCheckoutDate(LocalDate.of(2021, 4, 17));
 		reservationForm.setNumberOfGuests(2);
-		reservationForm.setCustomer_ID(1L);
+		reservationForm.setGuest_ID(1L);
 		
 		checkPayment.setAmount(3000);
 		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2020, 01, 25), LocalTime.of(21, 31)));

@@ -11,17 +11,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import br.com.hostel.model.Customer;
-import br.com.hostel.repository.CustomerRepository;
+import br.com.hostel.model.Guest;
+import br.com.hostel.repository.GuestRepository;
 
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
 	private TokenService tokenService;
 
-	private CustomerRepository repository;
+	private GuestRepository repository;
 
 	// necessario criar construtor pois em Filters não da pra injetar dependencias
-	public AutenticacaoViaTokenFilter(TokenService tokenService, CustomerRepository repository) {
+	public AutenticacaoViaTokenFilter(TokenService tokenService, GuestRepository repository) {
 		this.tokenService = tokenService;
 		this.repository = repository;
 	}
@@ -41,9 +41,9 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 	private void autenticarCliente(String token) {
 		Long idUsuario = tokenService.getIdUsuario(token);
 
-		Customer customer = repository.findById(idUsuario).get();
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(customer, null,
-				customer.getAuthorities());
+		Guest guest = repository.findById(idUsuario).get();
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(guest, null,
+				guest.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 

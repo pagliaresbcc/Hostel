@@ -11,32 +11,32 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import br.com.hostel.model.Customer;
+import br.com.hostel.model.Guest;
 
 @RunWith(JUnitPlatform.class)
 public class LoginTest {
 
 	ChromeConnection chromeConnection = new ChromeConnection();
 	WebDriver driver = chromeConnection.Connection();
-	Customer existentCustomer, nonExistentCustomer;
+	Guest existentGuest, nonExistentGuest;
 
 	@BeforeEach
 	public void init() {
-		existentCustomer = new Customer("admin@email.com", "123456");
-		nonExistentCustomer = new Customer("random@gmail.com", "123456");
+		existentGuest = new Guest("admin@email.com", "123456");
+		nonExistentGuest = new Guest("random@gmail.com", "123456");
 		
 		driver.get("http://localhost:3000/");
 		driver.manage().window().maximize();
 	}
 
 	@Test
-	public void LoginANonExistentcustomer() throws InterruptedException {
+	public void loginANonExistentGuest() throws InterruptedException {
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/input[1]"))
-				.sendKeys(nonExistentCustomer.getEmail());
+				.sendKeys(nonExistentGuest.getEmail());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/input[2]"))
-				.sendKeys(nonExistentCustomer.getPassword());
+				.sendKeys(nonExistentGuest.getPassword());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/button")).click();
 		Thread.sleep(3000);
@@ -49,13 +49,13 @@ public class LoginTest {
 	}
 
 	@Test
-	public void RegisterAExistentcustomer() throws InterruptedException {
+	public void registerAnExistentGuest() throws InterruptedException {
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/input[1]"))
-				.sendKeys(existentCustomer.getEmail());
+				.sendKeys(existentGuest.getEmail());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/input[2]"))
-				.sendKeys(existentCustomer.getPassword());
+				.sendKeys(existentGuest.getPassword());
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/button")).click();
 		Thread.sleep(3000);
@@ -66,7 +66,7 @@ public class LoginTest {
 		driver.close();
 	}
 
-	public String ConvertLocalDateIntoBrazilianString(LocalDate birthday) {
+	public String convertLocalDateIntoBrazilianString(LocalDate birthday) {
 		return (birthday.getDayOfMonth() < 10 ? (0 + "" + birthday.getDayOfMonth()) : birthday.getDayOfMonth()) + ""
 				+ (birthday.getMonth().getValue() < 10 ? (0 + "" + birthday.getMonth().getValue())
 						: birthday.getMonth().getValue())
