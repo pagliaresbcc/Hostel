@@ -7,8 +7,8 @@ import "./styles.css";
 import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 
-export default function Customers() {
-  const [customers, setCustomer] = useState([]);
+export default function Guest() {
+  const [guest, setGuest] = useState([]);
 
   const history = useHistory();
 
@@ -21,17 +21,17 @@ export default function Customers() {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
-        setCustomer(response.data);
+        setGuest(response.data);
       });
   }, [token]);
 
-  function handleUpdateCustomer(id) {
-    sessionStorage.setItem("customer_id", id);
+  function handleUpdateGuest(id) {
+    sessionStorage.setItem("guest_id", id);
     
     history.push("/customers/updateCustomer");
   }
 
-  async function handleDeleteCustomer(id) {
+  async function handleDeleteGuest(id) {
     try {
       alert("Deletou");
       api.delete(`api/customers/${id}`, {
@@ -61,7 +61,7 @@ export default function Customers() {
       </header>
       <h1>Clientes cadastrados</h1>
       <ul>
-      {customers.map(
+      {guest.map(
             ({ id, title, name, lastName, email, address }, i) => (
           <li key={id}>
             <strong>{title} {name} {lastName}</strong>
@@ -76,7 +76,7 @@ export default function Customers() {
 
             <button
               className="deleteButton"
-              onClick={() => handleDeleteCustomer(id)}
+              onClick={() => handleDeleteGuest(id)}
               type="button"
             >
               <FiTrash2 size={20} color="#a8a8b3" />
@@ -84,7 +84,7 @@ export default function Customers() {
 
             <button
               className="editButton"
-              onClick={() => handleUpdateCustomer(id)}
+              onClick={() => handleUpdateGuest(id)}
               type="button"
             >
               <FiEdit3 size={20} color="#a8a8b3" />

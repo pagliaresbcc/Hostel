@@ -6,11 +6,11 @@ import Logon from './pages/Logon';
 import Register from './pages/Register';
 import ProfileAdmin from './pages/ProfileAdmin';
 import ProfileUser from './pages/ProfileUser';
-import Customers from './pages/Customers';
-import NewCustomer from './pages/NewCustomer';
-import UpdateCustomer from './pages/UpdateCustomer';
+import Guest from './pages/Guest';
+import NewGuest from './pages/NewGuest';
+import UpdateGuest from './pages/UpdateGuest';
 import UpdateUser from './pages/UpdateUser';
-import Reservations from './pages/Reservations';
+import Reservation from './pages/Reservation';
 import NewReservation from './pages/NewReservation';
 import UpdateReservation from './pages/UpdateReservation';
 import Rooms from './pages/Rooms';
@@ -50,12 +50,12 @@ const Routes = () => (
             <Route path="/" exact component={Logon}/>
             <Route path="/register" exact component={Register}/>
             <AdminRoute path="/admin/profileAdmin" exact component={ProfileAdmin}/>
-            <AdminRoute path="/admin/customers" exact component={Customers}/>
-            <AdminRoute path="/admin/customers/newCustomer" exact component={NewCustomer}/>
-            <AdminRoute path="/admin/customers/updateCustomer" exact component={UpdateCustomer}/>
+            <AdminRoute path="/admin/customers" exact component={Guest}/>
+            <AdminRoute path="/admin/customers/newCustomer" exact component={NewGuest}/>
+            <AdminRoute path="/admin/customers/updateCustomer" exact component={UpdateGuest}/>
             <PrivateRoute path="/customers/updateCustomer" exact component={UpdateUser}/>
             <PrivateRoute path="/customers/profile" exact component={ProfileUser}/>
-            <PrivateRoute path="/reservations" exact component={Reservations}/>
+            <PrivateRoute path="/reservations" exact component={Reservation}/>
             <PrivateRoute path="/reservations/newReservation" component={NewReservation}/>
             <PrivateRoute path="/reservations/updateReservation" component={UpdateReservation}/>
             <AdminRoute path="/rooms" exact component={Rooms}/>

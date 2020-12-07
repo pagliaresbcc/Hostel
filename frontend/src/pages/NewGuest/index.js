@@ -7,7 +7,7 @@ import "./styles.css";
 
 import logoImg from "../../assets/images/logo.png";
 
-export default function Register() {
+export default function NewGuest() {
   const [title, setTitle] = useState("");
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");

@@ -6,7 +6,7 @@ import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 import "./styles.css";
 
-export default function Reservations() {
+export default function Reservation() {
   const [reservations, setReservations] = useState([]);
 
   const history = useHistory();

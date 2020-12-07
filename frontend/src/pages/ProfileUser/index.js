@@ -9,28 +9,28 @@ import api from "../../services/api";
 
 export default function Profile() {
   const [reservations, setReservations] = useState([]);
-  const [customer, setCustomer] = useState('');
+  const [guest, setGuest] = useState('');
 
   const history = useHistory();
 
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
-    var customer_ID = sessionStorage.getItem("customer_ID");
+    var guest_ID = sessionStorage.getItem("guest_ID");
     api
-      .get(`api/customers/${customer_ID}`, {
+      .get(`api/customers/${guest_ID}`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
-        setCustomer(response.data);
+        setGuest(response.data);
       });
   }, [token]);
 
-  console.log(customer.reservations)
+  // console.log(guest.reservations)
   // useEffect(() => {
-  //   var customer_ID = sessionStorage.getItem("customer_ID");
+  //   var guest_ID = sessionStorage.getItem("guest_ID");
   //   api
-  //     .get(`api/reservations/${customer_ID}`, {
+  //     .get(`api/reservations/${guest_ID}`, {
   //       headers: { Authorization: "Bearer " + token },
   //     })
   //     .then((response) => {
@@ -69,7 +69,7 @@ export default function Profile() {
       <div className="profile-container">
         <header>
           <img src={logoImg} alt="Logo" />
-          <span>Olá {customer.name}, bem-vindo ao Hostel!</span>
+          <span>Olá {guest.name}, bem-vindo ao Hostel!</span>
 
           <Link className="button" to="/customers/updateCustomer">
             Editar perfil

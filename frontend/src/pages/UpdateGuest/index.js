@@ -5,7 +5,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 
-export default function UpdateCustomer() {
+export default function UpdateGuest() {
 
   const history = useHistory();
 
@@ -27,13 +27,13 @@ export default function UpdateCustomer() {
 
   const [country, setCountry] = useState();
 
-  const customer_id = sessionStorage.getItem("customer_id");
+  const guest_id = sessionStorage.getItem("guest_id");
 
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     api
-      .get(`api/customers/${customer_id}`, {
+      .get(`api/customers/${guest_id}`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
@@ -68,7 +68,7 @@ export default function UpdateCustomer() {
       address,
     };
 
-    await api.put(`api/customers/${customer_id}`, data, {
+    await api.put(`api/customers/${guest_id}`, data, {
       headers: { Authorization: "Bearer " + token },
     });
 

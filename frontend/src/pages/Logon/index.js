@@ -25,7 +25,7 @@ export default function Logon(){
         try {
             const response = await api.post('auth', data);
 
-            sessionStorage.setItem('customer_ID', response.data.customer_ID);
+            sessionStorage.setItem('guest_ID', response.data.guest_ID);
             sessionStorage.setItem('token', response.data.token);
             sessionStorage.setItem('type', response.data.type);
             sessionStorage.setItem('role', response.data.role);
