@@ -12,7 +12,7 @@ export default function AdminProfile() {
     <div className="profile-container">
       <header>
         <img src={logoImg} alt="Logo" />
-        <span>Olá, Administrador, bem-vindo ao Hostel!</span>
+        <span>Olá Administrador, bem-vindo ao Hostel!</span>
 
         <button type="button">
           <FiPower size={18} color="#E02041" />

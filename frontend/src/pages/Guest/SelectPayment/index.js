@@ -36,17 +36,19 @@ export default function NewReservation() {
   var data = {};
 
   const customStyles = {
-    option: (provided, state) => ({
-      ...provided,
-    }),
     control: (provided) => ({
       ...provided,
-      marginBottom: "20px",
-      width: "100%",
-      height: "60px",
       color: "#333",
       border: "1px solid #dcdce6",
       font: "400 16px Roboto, sans-serif",
+      display: "flex",
+      alignItems: "center",
+    }),
+    input: (provided) => ({
+      ...provided,
+      height: "60px",
+      display: "flex",
+      alignItems: "center",
     }),
   };
 

@@ -14,12 +14,12 @@ export default function UpdateSelectAvailableRooms() {
   const checkinDate = sessionStorage.getItem("checkinDate");
   const checkoutDate = sessionStorage.getItem("checkoutDate");
   const numberOfGuests = sessionStorage.getItem("numberOfGuests");
-  const reservation_id = sessionStorage.getItem("reservation_id");
+  const reservation_ID = sessionStorage.getItem("reservation_ID");
 
   const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
-    api.delete(`api/reservations/deleteRoomsReservation/${reservation_id}`, {
+    api.delete(`api/reservations/deleteRoomsReservation/${reservation_ID}`, {
       headers: {
         Authorization: "Bearer " + token,
         "Access-Control-Allow-Origin": "*",
@@ -27,6 +27,8 @@ export default function UpdateSelectAvailableRooms() {
       },
     });
 
+    console.log(checkinDate)
+    console.log(checkoutDate)
     api
       .get("api/rooms", {
         headers: { Authorization: "Bearer " + token },
@@ -66,7 +68,7 @@ export default function UpdateSelectAvailableRooms() {
 
       <div className="rooms-header-label">
         <h1>Quartos Disponiveis</h1>
-        <Link className="button" to="/guest/select-payment">
+        <Link className="button" to="/guest/update-selected-payment">
           Selecionar forma de pagamento
         </Link>
       </div>

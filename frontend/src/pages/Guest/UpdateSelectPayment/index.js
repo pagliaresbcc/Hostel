@@ -20,7 +20,7 @@ export default function NewReservation() {
   const [expirationDate, setExpirationDate] = useState("");
   const [securityCode, setSecurityCode] = useState("");
 
-  const reservation_id = sessionStorage.getItem("reservation_id");
+  const reservation_ID = sessionStorage.getItem("reservation_ID");
 
   const [type, setType] = useState("");
 
@@ -37,17 +37,19 @@ export default function NewReservation() {
   var data = {};
 
   const customStyles = {
-    option: (provided, state) => ({
-      ...provided,
-    }),
     control: (provided) => ({
       ...provided,
-      marginBottom: "20px",
-      width: "100%",
-      height: "60px",
       color: "#333",
       border: "1px solid #dcdce6",
       font: "400 16px Roboto, sans-serif",
+      display: "flex",
+      alignItems: "center",
+    }),
+    input: (provided) => ({
+      ...provided,
+      height: "60px",
+      display: "flex",
+      alignItems: "center",
     }),
   };
 
@@ -92,14 +94,14 @@ export default function NewReservation() {
         rooms_ID,
       };
 
-      await api.put(`api/reservations/${reservation_id}`, data, {
+      await api.put(`api/reservations/${reservation_ID}`, data, {
         headers: { Authorization: "Bearer " + token },
       });
 
       history.push("/guest/profile");
     } catch (err) {
       console.log(rooms_ID);
-      console.log(reservation_id);
+      console.log(reservation_ID);
       console.log(data);
       alert("Erro nas informações, tente novamente");
     }
@@ -139,7 +141,7 @@ export default function NewReservation() {
 
             <h1>Selecione a forma de pagamento</h1>
 
-            <Link className="back-link" to="/guest/select-available-rooms">
+            <Link className="back-link" to="/guest/update-selected-rooms">
               <FiArrowLeft size={16} color="#E02041" />
               Voltar para quartos disponíveis
             </Link>
