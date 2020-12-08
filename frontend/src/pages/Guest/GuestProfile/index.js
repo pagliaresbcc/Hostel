@@ -4,19 +4,20 @@ import { FiPower, FiTrash2, FiEdit3 } from "react-icons/fi";
 
 import "./styles.css";
 
-import logoImg from "../../assets/images/logo.png";
-import api from "../../services/api";
+import logoImg from "../../../assets/images/logo.png";
+import api from "../../../services/api";
 
-export default function Profile() {
+export default function GuestProfile() {
   const [reservations, setReservations] = useState([]);
-  const [guest, setGuest] = useState('');
+  const [guest, setGuest] = useState("");
 
   const history = useHistory();
 
   const token = sessionStorage.getItem("token");
 
+  const guest_ID = sessionStorage.getItem("guest_ID");
+
   useEffect(() => {
-    var guest_ID = sessionStorage.getItem("guest_ID");
     api
       .get(`api/guests/${guest_ID}`, {
         headers: { Authorization: "Bearer " + token },
@@ -28,7 +29,6 @@ export default function Profile() {
 
   // console.log(guest.reservations)
   useEffect(() => {
-    var guest_ID = sessionStorage.getItem("guest_ID");
     api
       .get(`api/guests/${guest_ID}/reservations`, {
         headers: { Authorization: "Bearer " + token },
@@ -39,7 +39,7 @@ export default function Profile() {
   }, [token]);
 
   async function handleUpdateReservation(id) {
-    sessionStorage.setItem("reservation_id", id);
+    sessionStorage.setItem("reservation_ID", id);
 
     history.push("/guest/update-reservation");
   }
@@ -71,7 +71,13 @@ export default function Profile() {
           <img src={logoImg} alt="Logo" />
           <span>Olá {guest.name}, bem-vindo ao Hostel!</span>
 
-          <Link className="button" to="/guest/update">
+          <Link
+            className="button"
+            onClick={() => {
+              sessionStorage.setItem("guest_ID", guest_ID);
+            }}
+            to="/guest/update"
+          >
             Editar perfil
           </Link>
           <button type="button">
@@ -81,15 +87,20 @@ export default function Profile() {
 
         {reservations.length === 0 ? (
           <div className="welcome-reservations-grid">
-          <h1>Você ainda não cadastrou nenhuma reserva!</h1>
-          <Link className="button" to="/guest/new-reservation">
-            Cadastrar nova reserva
-          </Link>
+            <h1>Você ainda não cadastrou nenhuma reserva!</h1>
+            <Link className="button" to="/guest/new-reservation">
+              Cadastrar nova reserva
+            </Link>
           </div>
         ) : (
           <div className="reservations-grid">
-            <h1>Suas reservas cadastradas</h1>
 
+            <div className="rooms-header-label">
+              <h1>Suas reservas cadastradas</h1>
+              <Link className="button" to="/guest/new-reservation">
+                Cadastrar nova reserva
+              </Link>
+            </div>
             <ul>
               {reservations.map(
                 ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (

@@ -4,10 +4,10 @@ import { FiArrowLeft } from "react-icons/fi";
 
 import Select from "react-select";
 
-import api from "../../services/api";
+import api from "../../../services/api";
 import "./styles.css";
 
-import logoImg from "../../assets/images/logo.png";
+import logoImg from "../../../assets/images/logo.png";
 
 export default function NewReservation() {
   const [amount, setAmount] = useState("");

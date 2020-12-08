@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { FiPower, FiTrash2, FiEdit3, FiArrowLeft } from "react-icons/fi";
 
-import logoImg from "../../assets/images/logo.png";
-import api from "../../services/api";
+import logoImg from "../../../assets/images/logo.png";
+import api from "../../../services/api";
 import "./styles.css";
 
 export default function Reservations() {

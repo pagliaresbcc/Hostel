@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
-import logoImg from "../../assets/images/logo.png";
-import api from "../../services/api";
+import logoImg from "../../../assets/images/logo.png";
+import api from "../../../services/api";
 
 export default function UpdateUser() {
 

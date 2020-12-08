@@ -42,7 +42,7 @@ export default function Login(){
                 <img src={logoImg} alt="Logo" />
 
                 <form onSubmit={handleLogin}>
-                    <h1>Faça seu logon</h1>
+                    <h1>Faça seu login</h1>
 
                     <input type="email"
                         placeholder="Seu email" 

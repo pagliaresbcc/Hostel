@@ -4,8 +4,8 @@ import { FiArrowLeft, FiPower, FiTrash2 } from "react-icons/fi";
 
 import "./styles.css";
 
-import logoImg from "../../assets/images/logo.png";
-import api from "../../services/api";
+import logoImg from "../../../assets/images/logo.png";
+import api from "../../../services/api";
 
 export default function Rooms() {
   const [rooms, setRoom] = useState([]);

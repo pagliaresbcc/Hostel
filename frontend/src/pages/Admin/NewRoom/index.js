@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
-import api from "../../services/api";
+import api from "../../../services/api";
 import "./styles.css";
 
-import logoImg from "../../assets/images/logo.png";
+import logoImg from "../../../assets/images/logo.png";
 
 export default function Profile() {
   const [number, setNumber] = useState("");

@@ -4,8 +4,8 @@ import { FiPower, FiTrash2, FiEdit3, FiArrowLeft } from "react-icons/fi";
 
 import "./styles.css";
 
-import logoImg from "../../assets/images/logo.png";
-import api from "../../services/api";
+import logoImg from "../../../assets/images/logo.png";
+import api from "../../../services/api";
 
 export default function Guest() {
   const [guest, setGuest] = useState([]);

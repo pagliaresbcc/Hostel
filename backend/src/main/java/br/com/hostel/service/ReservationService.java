@@ -90,6 +90,15 @@ public class ReservationService {
 
 		return ResponseEntity.ok(response);
 	}
+	
+	public ResponseEntity<?> listOneReservation(Long id) {
+		
+		Optional<Reservation> reservation = reservationRepository.findById(id);
+		
+		if (reservation.isPresent()) return ResponseEntity.ok(new ReservationDto(reservation.get()));
+		
+		else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with id = " + id);
+	}
 
 	public ResponseEntity<?> updateReservation(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form) {
 

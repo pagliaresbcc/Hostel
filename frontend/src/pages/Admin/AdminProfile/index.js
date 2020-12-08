@@ -2,11 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FiPower } from "react-icons/fi";
 
-import logoImg from "../../assets/images/logo.png";
+import logoImg from "../../../assets/images/logo.png";
 
 import "./styles.css";
 
-export default function ProfileAdmin() {
+export default function AdminProfile() {
 
   return (
     <div className="profile-container">

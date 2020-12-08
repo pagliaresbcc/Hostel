@@ -2,21 +2,26 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AiFillPlusSquare, AiFillCheckSquare } from "react-icons/ai";
 
-import logoImg from "../../assets/images/logo.png";
-import api from "../../services/api";
+import "./styles.css";
 
-export default function UpdateSelectAvailableRooms() {
+import logoImg from "../../../assets/images/logo.png";
+import api from "../../../services/api";
+import { FiArrowLeft } from "react-icons/fi";
+
+export default function SelectAvailableRooms() {
   const [rooms, setRoom] = useState([]);
   const token = sessionStorage.getItem("token");
   const checkinDate = sessionStorage.getItem("checkinDate");
   const checkoutDate = sessionStorage.getItem("checkoutDate");
   const numberOfGuests = sessionStorage.getItem("numberOfGuests");
-  const reservation_id = sessionStorage.getItem("reservation_id");
+  const minDailyRate = sessionStorage.getItem("minDailyRate");
+  const maxDailyRate = sessionStorage.getItem("maxDailyRate");
+  const reservation_ID = sessionStorage.getItem("reservation_ID");
 
   const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
-    api.delete(`api/reservations/deleteRoomsReservation/${reservation_id}`, {
+    api.delete(`api/reservations/deleteRoomsReservation/${reservation_ID}`, {
       headers: {
         Authorization: "Bearer " + token,
         "Access-Control-Allow-Origin": "*",
@@ -31,6 +36,8 @@ export default function UpdateSelectAvailableRooms() {
           checkinDate,
           checkoutDate,
           numberOfGuests,
+          minDailyRate,
+          maxDailyRate,
         },
       })
       .then((response) => {
@@ -38,13 +45,8 @@ export default function UpdateSelectAvailableRooms() {
       });
   });
 
-  var [count, setCount] = useState(Array(rooms.length).fill(false));
-
-  function handleSelectRoom(id, index) {
+  function handleSelectRoom(id) {
     const alreadySelected = selectedItems.findIndex((rooms) => rooms === id);
-
-    count.splice(index, 1, !count[index]);
-    setCount(count);
 
     if (alreadySelected >= 0) {
       const filteredItems = selectedItems.filter((rooms) => rooms !== id);
@@ -59,14 +61,14 @@ export default function UpdateSelectAvailableRooms() {
       <header>
         <img src={logoImg} alt="Logo" />
         <span>Bem vindo ao Hostel</span>
-
-        <Link className="button" to="/guests/payments/update/select-payment">
-          Selecionar forma de pagamento
-        </Link>
       </header>
 
-      <h1>Quartos Disponiveis</h1>
-
+      <div className="rooms-header-label">
+        <h1>Quartos Disponiveis</h1>
+        <Link className="button" to="/guest/select-payment">
+          Selecionar forma de pagamento
+        </Link>
+      </div>
       <ul>
         {rooms.map((room, j) => (
           <li key={room.id}>
@@ -79,7 +81,7 @@ export default function UpdateSelectAvailableRooms() {
             <strong>LIMITE DE HÓSPEDES:</strong>
             <p>{room.maxNumberOfGuests} pessoas</p>
 
-            <strong>VALOR:</strong>
+            <strong>VALOR DA DIÁRIA:</strong>
             <p>R$ {room.dailyRate.price},00</p>
 
             <button
@@ -98,6 +100,10 @@ export default function UpdateSelectAvailableRooms() {
         ))}
         {sessionStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}
       </ul>
+      <Link className="back-link" to="/guest/profile">
+        <FiArrowLeft size={16} color="#E02041" />
+        Voltar
+      </Link>
     </div>
   );
 }
