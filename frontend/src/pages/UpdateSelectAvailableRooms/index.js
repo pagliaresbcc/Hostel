@@ -60,7 +60,7 @@ export default function UpdateSelectAvailableRooms() {
         <img src={logoImg} alt="Logo" />
         <span>Bem vindo ao Hostel</span>
 
-        <Link className="button" to="/payments/updateSelectPayment">
+        <Link className="button" to="/guests/payments/update/select-payment">
           Selecionar forma de pagamento
         </Link>
       </header>

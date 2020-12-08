@@ -8,7 +8,7 @@ import api from '../../services/api';
 
 import logoImg from '../../assets/images/logo.png';
 
-export default function Logon(){
+export default function Login(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -30,7 +30,7 @@ export default function Logon(){
             sessionStorage.setItem('type', response.data.type);
             sessionStorage.setItem('role', response.data.role);
 
-            history.push('/admin/profileAdmin');
+            history.push('/admin/profile');
         } catch (err) {
             alert('Falha no Login, tente novamente');
         }

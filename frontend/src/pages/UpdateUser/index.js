@@ -72,7 +72,7 @@ export default function UpdateUser() {
       headers: { Authorization: "Bearer " + token },
     });
 
-    history.push('/guests/profile');
+    history.push('/guest/profile');
   }
 
   return (
@@ -83,7 +83,7 @@ export default function UpdateUser() {
 
           <h1>Atualizar Cadastro</h1>
 
-          <Link className="back-link" to="/guests/profile">
+          <Link className="back-link" to="/guest/profile">
             <FiArrowLeft size={16} color="#E02041" />
             Voltar
           </Link>

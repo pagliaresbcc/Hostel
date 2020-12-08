@@ -2,19 +2,19 @@ import React from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { isAuthenticated, isAdmin } from './auth';
 
-import Logon from './pages/Logon';
+import Login from './pages/Login';
 import Register from './pages/Register';
 import ProfileAdmin from './pages/ProfileAdmin';
-import ProfileUser from './pages/ProfileUser';
-import Guest from './pages/Guest';
-import NewGuest from './pages/NewGuest';
-import UpdateGuest from './pages/UpdateGuest';
+import User from './pages/ProfileUser';
+import NewUser from './pages/NewUser';
 import UpdateUser from './pages/UpdateUser';
-import Reservation from './pages/Reservation';
-import NewReservation from './pages/NewReservation';
-import UpdateReservation from './pages/UpdateReservation';
+import Reservations from './pages/Reservations';
 import Rooms from './pages/Rooms';
 import NewRoom from './pages/NewRoom';
+import Guest from './pages/Guest';
+import UpdateGuest from './pages/UpdateGuest';
+import NewReservation from './pages/NewReservation';
+import UpdateReservation from './pages/UpdateReservation';
 import SelectAvailableRooms from './pages/SelectAvailableRooms';
 import UpdateSelectAvailableRooms from './pages/UpdateSelectAvailableRooms';
 import SelectPayment from './pages/SelectPayment';
@@ -26,7 +26,7 @@ const AdminRoute = ({component: Component, ...rest}) => (
             isAdmin() ? (
                 <Component { ...props} />
             ) : (
-                <Redirect to={{ pathname: '/guests/profile', state: { from: props.location}}} />
+                <Redirect to={{ pathname: '/guest/profile', state: { from: props.location}}} />
             )
         ) : (
             <Redirect to={{ pathname: '/', state: { from: props.location}}} />
@@ -47,23 +47,23 @@ const PrivateRoute = ({component: Component, ...rest}) => (
 const Routes = () => (
     <BrowserRouter>
         <Switch>
-            <Route path="/" exact component={Logon}/>
+            <Route path="/" exact component={Login}/>
             <Route path="/register" exact component={Register}/>
-            <AdminRoute path="/admin/profileAdmin" exact component={ProfileAdmin}/>
-            <AdminRoute path="/admin/guests" exact component={Guest}/>
-            <AdminRoute path="/admin/guests/newguest" exact component={NewGuest}/>
-            <AdminRoute path="/admin/guests/updateguest" exact component={UpdateGuest}/>
-            <PrivateRoute path="/guests/updateguest" exact component={UpdateUser}/>
-            <PrivateRoute path="/guests/profile" exact component={ProfileUser}/>
-            <PrivateRoute path="/reservations" exact component={Reservation}/>
-            <PrivateRoute path="/reservations/newReservation" component={NewReservation}/>
-            <PrivateRoute path="/reservations/updateReservation" component={UpdateReservation}/>
-            <AdminRoute path="/rooms" exact component={Rooms}/>
-            <AdminRoute path="/rooms/newRoom" component={NewRoom}/>
-            <PrivateRoute path="/rooms/selectAvailableRooms" component={SelectAvailableRooms}/>
-            <PrivateRoute path="/rooms/updateSelectAvailableRooms" component={UpdateSelectAvailableRooms}/>
-            <PrivateRoute path="/payments/selectPayment" component={SelectPayment}/>
-            <PrivateRoute path="/payments/updateSelectPayment" component={UpdateSelectPayment}/>
+            <AdminRoute path="/admin/profile" exact component={ProfileAdmin}/>
+            <AdminRoute path="/admin/guests" exact component={User}/>
+            <AdminRoute path="/admin/guests/new-guest" exact component={NewUser}/>
+            <AdminRoute path="/admin/guests/update-guest" exact component={UpdateUser}/>
+            <AdminRoute path="/admin/reservations" exact component={Reservations}/>
+            <AdminRoute path="/admin/rooms" exact component={Rooms}/>
+            <AdminRoute path="/admin/rooms/new-room" component={NewRoom}/>
+            <PrivateRoute path="/guest/profile" exact component={Guest}/>
+            <PrivateRoute path="/guest/update" exact component={UpdateGuest}/>
+            <PrivateRoute path="/guest/new-reservation" component={NewReservation}/>
+            <PrivateRoute path="/guest/update-reservation" component={UpdateReservation}/>
+            <PrivateRoute path="/guest/select-available-rooms" component={SelectAvailableRooms}/>
+            <PrivateRoute path="/guest/update-selected-rooms" component={UpdateSelectAvailableRooms}/>
+            <PrivateRoute path="/guest/select-payment" component={SelectPayment}/>
+            <PrivateRoute path="/guest/update-selected-payment" component={UpdateSelectPayment}/>
         </Switch>
     </BrowserRouter>
 )

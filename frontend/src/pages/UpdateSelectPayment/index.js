@@ -139,7 +139,7 @@ export default function NewReservation() {
 
             <h1>Selecione a forma de pagamento</h1>
 
-            <Link className="back-link" to="/room/updateSelectAvailableRooms">
+            <Link className="back-link" to="/guest/select-available-rooms">
               <FiArrowLeft size={16} color="#E02041" />
               Voltar para quartos disponíveis
             </Link>

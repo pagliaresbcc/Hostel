@@ -55,7 +55,7 @@ export default function Profile() {
           <h1>Cadastrar novo quarto</h1>
           <p>Adicione mais uma acomadação especial para os clientes</p>
 
-          <Link className="back-link" to="/profileAdmin">
+          <Link className="back-link" to="/profile">
             <FiArrowLeft size={16} color="#E02041" />
             Voltar
           </Link>

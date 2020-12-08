@@ -55,7 +55,7 @@ export default function SelectAvailableRooms() {
 
       <div className="rooms-header-label">
         <h1>Quartos Disponiveis</h1>
-        <Link className="button" to="/payments/selectPayment">
+        <Link className="button" to="/guest/select-payment">
             Selecionar forma de pagamento
         </Link>
       </div>

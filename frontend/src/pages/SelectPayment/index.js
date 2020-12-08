@@ -95,7 +95,7 @@ export default function NewReservation() {
         headers: { Authorization: "Bearer " + token },
       });
 
-      history.push("/reservations");
+      history.push("/guest/profile");
     } catch (err) {
       console.log(data);
       alert("Erro nas informações, tente novamente");
@@ -133,7 +133,7 @@ export default function NewReservation() {
 
           <h1>Selecione a forma de pagamento</h1>
 
-          <Link className="back-link" to="/rooms/selectAvailableRooms">
+          <Link className="back-link" to="/guest/select-available-rooms">
             <FiArrowLeft size={16} color="#E02041" />
             Voltar para quartos disponíveis
           </Link>

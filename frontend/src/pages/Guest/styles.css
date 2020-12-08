@@ -5,8 +5,21 @@
     margin: 32px auto;
 }
 
+
 .profile-container header {
+    margin-top: -50px;
     display: flex;
+    align-items: center;
+}
+
+.profile-container .welcome-reservations-grid .button {
+    width: 30%;
+    margin-top: 50px;
+}
+
+.profile-container .welcome-reservations-grid {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -25,13 +38,15 @@
     margin-top: 0;
 }
 
-.profile-container header button {
-    height: 60px;
-    width: 60px;
-    border-radius: 4px;
+.profile-container .profile-grid .button {
+    width: 50%;
+    margin: auto;
+    display: flex;
+    align-content: center;
+    justify-content: center;
     border: 1px solid #dcdce6;
-    margin-left: 16px;
     transition: border-color 0.2s;
+    margin-top: 20px;
 }
 
 .profile-container header button:hover {
@@ -50,17 +65,19 @@
     list-style: none;
 }
 
-.profile-container ul li {
-    background: #FFF;
-    padding: 24px;
+.profile-container .reservations-grid ul li {
+    min-width: 200px;
+    background: #fff;
+    padding: 26px;
     border-radius: 8px;
     position: relative;
 }
 
-.profile-container ul li button {
+
+.profile-container ul li .editButton {
     position: absolute;
     background: transparent;
-    right: 24px;
+    right: 64px;
     top: 24px;
     border: 0;
 }

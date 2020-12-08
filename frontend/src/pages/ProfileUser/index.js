@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { FiPower, FiTrash2, FiEdit3 } from "react-icons/fi";
+import { FiPower, FiTrash2, FiEdit3, FiArrowLeft } from "react-icons/fi";
 
 import "./styles.css";
 
 import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 
-export default function Profile() {
-  const [reservations, setReservations] = useState([]);
-  const [guest, setGuest] = useState('');
+export default function Guest() {
+  const [guest, setGuest] = useState([]);
 
   const history = useHistory();
 
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
-    var guest_ID = sessionStorage.getItem("guest_ID");
     api
-      .get(`api/guests/${guest_ID}`, {
+      .get("api/guests", {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
@@ -26,34 +24,23 @@ export default function Profile() {
       });
   }, [token]);
 
-  // console.log(guest.reservations)
-  // useEffect(() => {
-  //   var guest_ID = sessionStorage.getItem("guest_ID");
-  //   api
-  //     .get(`api/reservations/${guest_ID}`, {
-  //       headers: { Authorization: "Bearer " + token },
-  //     })
-  //     .then((response) => {
-  //       setReservations(response.data);
-  //     });
-  // }, [token]);
+  function handleUpdateGuest(id) {
+    sessionStorage.setItem("guest_id", id);
 
-  async function handleUpdateReservation(id) {
-    sessionStorage.setItem("reservation_id", id);
-
-    history.push("/reservations/updateReservation");
+    history.push("/admin/guests/update-guest");
   }
 
-  async function handleDeleteReservation(id) {
-    if (window.confirm("Tem certeza de que quer deletar a reserva?")) {
+  async function handleDeleteGuest(id) {
+    if (window.confirm("Tem certeza que deseja deletar este usuário?")) {
       try {
-        api.delete(`api/reservations/${id}`, {
+        api.delete(`api/guests/${id}`, {
           headers: {
             Authorization: "Bearer " + token,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
           },
         });
+        alert("Usuário deletado com sucesso!");
         history.go(0);
       } catch (err) {
         alert("Erro ao deletar caso, tente novamente.");
@@ -61,86 +48,57 @@ export default function Profile() {
     }
   }
 
-  if (token === null) {
-    history.push("/");
-    return <div></div>;
-  } else {
-    return (
-      <div className="profile-container">
-        <header>
-          <img src={logoImg} alt="Logo" />
-          <span>Olá {guest.name}, bem-vindo ao Hostel!</span>
+  return (
+    <div className="profile-container">
+      <header>
+        <img src={logoImg} alt="Logo" />
+        <span>Bem vindo ao Hostel</span>
 
-          <Link className="button" to="/guests/updateguest">
-            Editar perfil
-          </Link>
-          <button type="button">
-            <FiPower size={18} color="#E02041" />
-          </button>
-        </header>
+        <Link className="button" to="/admin/guests/new-guest">
+          Cadastrar novo usuário
+        </Link>
+        <button type="button">
+          <FiPower size={18} color="#E02041" />
+        </button>
+      </header>
+      <h1>Usuários cadastrados</h1>
+      <ul>
+        {guest.map(({ id, title, name, lastName, email, address }, i) => (
+          <li key={id}>
+            <strong>
+              {title} {name} {lastName}
+            </strong>
+            <p>{email}</p>
 
-        {reservations.length === 0 ? (
-          <div className="welcome-reservations-grid">
-          <h1>Você ainda não cadastrou nenhuma reserva!</h1>
-          <Link className="button" to="/reservations/newReservation">
-            Cadastrar nova reserva
-          </Link>
-          </div>
-        ) : (
-          <div className="reservations-grid">
-            <h1>Suas reservas cadastradas</h1>
+            <strong>Endereço:</strong>
+            <p>Rua: {address.addressName}</p>
+            <p>Cep: {address.zipCode}</p>
+            <p>Cidade: {address.city}</p>
+            <p>Estado: {address.state}</p>
+            <p>Pais: {address.country}</p>
 
-            <ul>
-              {reservations.map(
-                ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
-                  <li key={id}>
-                    <strong>QUARTO(S) RESERVADO(S):</strong>
-                    {rooms.map((room, j) => (
-                      <div>
-                        <p>Número do quarto: {room.number}</p>
-                        <p>Descrição: {room.description}</p>
-                        <p>Diária: R$ {room.dailyRate.price},00</p>
-                        <br />
-                      </div>
-                    ))}
-                    <br />
-                    <strong>CHECKIN:</strong>
-                    <p>{checkinDate}</p>
+            <button
+              className="deleteButton"
+              onClick={() => handleDeleteGuest(id)}
+              type="button"
+            >
+              <FiTrash2 size={20} color="#a8a8b3" />
+            </button>
 
-                    <strong>CHECKOUT:</strong>
-                    <p>{checkoutDate}</p>
-
-                    <strong>VALOR TOTAL:</strong>
-                    <p>
-                      R${" "}
-                      {payments.type === "cash"
-                        ? payments.amountTendered
-                        : payments.amount}
-                      ,00
-                    </p>
-
-                    <button
-                      className="deleteButton"
-                      onClick={() => handleDeleteReservation(id)}
-                      type="button"
-                    >
-                      <FiTrash2 size={20} color="#a8a8b3" />
-                    </button>
-
-                    <button
-                      className="editButton"
-                      onClick={() => handleUpdateReservation(id)}
-                      type="button"
-                    >
-                      <FiEdit3 size={20} color="#a8a8b3" />
-                    </button>
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-        )}
-      </div>
-    );
-  }
+            <button
+              className="editButton"
+              onClick={() => handleUpdateGuest(id)}
+              type="button"
+            >
+              <FiEdit3 size={20} color="#a8a8b3" />
+            </button>
+          </li>
+        ))}
+      </ul>
+      <Link className="back-link" to="/admin/profile">
+        <FiArrowLeft size={16} color="#E02041" />
+        Voltar
+      </Link>
+    </div>
+  );
 }

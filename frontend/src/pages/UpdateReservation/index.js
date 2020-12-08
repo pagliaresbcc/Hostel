@@ -49,7 +49,7 @@ export default function UpdateReservation() {
         sessionStorage.setItem("checkoutDate", checkoutDate);
         sessionStorage.setItem("numberOfGuests", numberOfGuests);
 
-        history.push("/rooms/updateSelectAvailableRooms");
+        history.push("/guest/update-selected-rooms");
       })
       .catch(function (err) {
         err.errors.forEach((error) => {

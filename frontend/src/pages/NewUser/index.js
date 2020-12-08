@@ -47,11 +47,11 @@ export default function NewGuest() {
     };
 
     try {
-      await api.post("api/customers", data);
+      await api.post("api/guests", data);
 
       alert("Cadastrado");
 
-      history.push("/");
+      history.push("/admin/guests");
     } catch (err) {
       alert("Erro no cadastro, tente novamente");
     }
@@ -66,7 +66,7 @@ export default function NewGuest() {
           <h1>Cadastro</h1>
           <p>Faça um novo cadastro.</p>
 
-          <Link className="back-link" to="/customers">
+          <Link className="back-link" to="/admin/guests">
             <FiArrowLeft size={16} color="#E02041" />
             Voltar
           </Link>

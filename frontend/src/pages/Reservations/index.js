@@ -1,42 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { FiPower, FiTrash2, FiEdit3 } from "react-icons/fi";
+import { FiPower, FiTrash2, FiEdit3, FiArrowLeft } from "react-icons/fi";
 
 import logoImg from "../../assets/images/logo.png";
 import api from "../../services/api";
 import "./styles.css";
 
-export default function Reservation() {
+export default function Reservations() {
   const [reservations, setReservations] = useState([]);
 
   const history = useHistory();
 
   const token = sessionStorage.getItem("token");
 
-  const role = sessionStorage.getItem("role");
-  const customer_ID = sessionStorage.getItem("customer_ID");
-
   useEffect(() => {
-
-    if(role === "ROLE_ADMIN") {
-      api
+    api
       .get("api/reservations/", {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
         setReservations(response.data);
       });
-    } else {
-      api
-      .get(`api/customers/${customer_ID}/reservations`, {
-        headers: { Authorization: "Bearer " + token },
-      })
-      .then((response) => {
-        setReservations(response.data);
-      });
-    }
-    
-  }, [customer_ID, role, token]);
+  }, [token]);
 
   async function handleUpdateReservation(id) {
     console.log(id);
@@ -46,7 +31,7 @@ export default function Reservation() {
   }
 
   async function handleDeleteReservation(id) {
-    if (window.confirm("Tem certeza de que quer deletar a reserva?")) {
+    if (window.confirm("Tem certeza que deseja deletar esta reserva?")) {
       try {
         api.delete(`api/reservations/${id}`, {
           headers: {
@@ -55,6 +40,7 @@ export default function Reservation() {
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
           },
         });
+        alert("Reserva deletada com sucesso!");
         history.go(0);
       } catch (err) {
         alert("Erro ao deletar caso, tente novamente.");
@@ -81,7 +67,10 @@ export default function Reservation() {
 
         <ul>
           {reservations.map(
-            ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
+            (
+              { id, guest_ID, rooms, checkinDate, checkoutDate, payments },
+              i
+            ) => (
               <li key={id}>
                 <strong>QUARTO(S) RESERVADO(S):</strong>
                 {rooms.map((room, j) => (
@@ -127,6 +116,10 @@ export default function Reservation() {
             )
           )}
         </ul>
+        <Link className="back-link" to="/admin/profile">
+          <FiArrowLeft size={16} color="#E02041" />
+          Voltar
+        </Link>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FiPower, FiTrash2 } from "react-icons/fi";
+import { FiArrowLeft, FiPower, FiTrash2 } from "react-icons/fi";
 
 import "./styles.css";
 
@@ -43,7 +43,7 @@ export default function Rooms() {
         <img src={logoImg} alt="Logo" />
         <span>Bem vindos ao Hostel</span>
 
-        <Link className="button" to="/rooms/newRoom">
+        <Link className="button" to="/admin/rooms/new-room">
           Cadastrar novo quarto
         </Link>
         <button type="button">
@@ -72,7 +72,10 @@ export default function Rooms() {
           </li>
         ))}
       </ul>
+      <Link className="back-link" to="/admin/profile">
+        <FiArrowLeft size={16} color="#E02041" />
+        Voltar
+      </Link>
     </div>
   );
-  
 }
