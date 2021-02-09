@@ -1,7 +1,6 @@
-package br.com.hostel.tests.post;
+package br.com.hostel.tests.reservation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -28,9 +26,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.hostel.controller.dto.LoginDto;
 import br.com.hostel.controller.dto.ReservationDto;
-import br.com.hostel.controller.form.LoginForm;
 import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.model.CashPayment;
 import br.com.hostel.model.CheckPayment;
@@ -38,11 +34,12 @@ import br.com.hostel.model.CreditCardPayment;
 import br.com.hostel.repository.PaymentsRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
+import br.com.hostel.tests.initializer.ReservationInitializer;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class ReservationPostAndDeleteTests {
+public class CreateReservationsTest {
 
 	@Autowired
 	ReservationRepository reservationRepository;
@@ -61,7 +58,6 @@ public class ReservationPostAndDeleteTests {
 	
 	private URI uri;
 	private HttpHeaders headers = new HttpHeaders();
-	private LoginForm login = new LoginForm();
 	private ReservationForm reservationForm = new ReservationForm();
 	private CheckPayment checkPayment = new CheckPayment();
 	private CashPayment cashPayment = new CashPayment();
@@ -73,68 +69,7 @@ public class ReservationPostAndDeleteTests {
 		
 		uri = new URI("/api/reservations/");
 		
-		//setting login variables to autenticate
-		login.setEmail("admin@email.com");
-		login.setPassword("123456");
-
-		//posting on /auth to get token
-		MvcResult resultAuth = mockMvc
-				.perform(post("/auth")
-				.content(objectMapper.writeValueAsString(login)).contentType("application/json"))
-				.andReturn();	
-			
-		String contentAsString = resultAuth.getResponse().getContentAsString();
-
-		LoginDto loginObjResponse = objectMapper.readValue(contentAsString, LoginDto.class);
-		
-		// seting header to put on post and delete request parameters
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
-		
-		//setting reservation object
-		reservationForm.setCheckinDate(LocalDate.of(2021, 04, 01));
-		reservationForm.setCheckoutDate(LocalDate.of(2021, 04, 04));
-		reservationForm.setNumberOfGuests(2);
-		reservationForm.setGuest_ID(1L);
-		
-		checkPayment.setAmount(3000);
-		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2020, 01, 25), LocalTime.of(21, 31)));
-		checkPayment.setBankId("01");
-		checkPayment.setBankName("Banco do Brasil");
-		checkPayment.setBranchNumber("1234-5");
-		
-		reservationForm.setPayment(checkPayment);
-		
-		rooms_ID.add(2L);
-		reservationForm.setRooms_ID(rooms_ID);
-	}
-	
-	@Test
-	public void shouldReturnNotFoundStatusWhenDeletingByNonExistentReservationID() throws Exception {
-
-		paymentsRepository.save(reservationForm.getPayment());
-		reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
-
-		mockMvc
-			.perform(delete(uri + "0")
-			.headers(headers))
-			.andDo(print())
-			.andExpect(status().isNotFound())
-			.andReturn();	
-	}
-	
-	@Test
-	public void shouldAutenticateAndDeleteOneReservationWithId1() throws Exception {
-
-		paymentsRepository.save(reservationForm.getPayment());
-		reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
-
-		mockMvc
-			.perform(delete(uri + "1")
-			.headers(headers))
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andReturn();	
+		ReservationInitializer.initialize(headers, reservationForm, checkPayment, rooms_ID, mockMvc, objectMapper);
 	}
 	
 	@Test

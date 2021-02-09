@@ -13,10 +13,8 @@ import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-/**
- * Entity implementation class for Entity: Guest
- *
- */
+import br.com.hostel.model.helper.Role;
+
 @Entity
 //UserDetails serve para dizer ao Sring qual será a classe de usuário
 //para autenticação no sistema

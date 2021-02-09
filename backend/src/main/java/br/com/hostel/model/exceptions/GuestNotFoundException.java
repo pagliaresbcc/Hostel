@@ -1,17 +1,17 @@
 package br.com.hostel.model.exceptions;
 
- public class GuestNotFoundException extends Exception{
-	 
+public class GuestNotFoundException extends Exception {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private String name;
-	 private String lastName;
-		
-	 public GuestNotFoundException(String message, String name, String lastName) {
-			super(message);
-			this.name = name;
-			this.lastName = lastName;
-	 }
+	private String lastName;
+
+	public GuestNotFoundException(String message, String name, String lastName) {
+		super(message);
+		this.name = name;
+		this.lastName = lastName;
+	}
 
 	public String getName() {
 		return name;

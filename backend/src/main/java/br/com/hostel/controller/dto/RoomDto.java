@@ -16,6 +16,7 @@ public class RoomDto {
 	private DailyRate dailyRate;
 
 	public RoomDto() {
+		
 	}
 
 	public RoomDto(Room room) {
@@ -63,5 +64,4 @@ public class RoomDto {
 
 		return roomsDtoList;
 	}
-
 }

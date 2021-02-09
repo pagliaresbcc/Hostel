@@ -13,7 +13,7 @@ import org.openqa.selenium.WebDriver;
 
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
-import br.com.hostel.model.Role;
+import br.com.hostel.model.helper.Role;
 
 @RunWith(JUnitPlatform.class)
 public class RegisterTest {

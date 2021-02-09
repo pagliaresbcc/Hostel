@@ -28,7 +28,4 @@ public class ReservationNotFoundException extends Exception{
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
-	
-	
 }

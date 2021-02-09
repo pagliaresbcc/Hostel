@@ -22,7 +22,7 @@ import br.com.hostel.security.TokenService;
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins ="*", allowedHeaders = "*")
-public class AutenticationController {
+public class AuthenticationController {
 
 	@Autowired
 	private AuthenticationManager authManager;
@@ -31,13 +31,18 @@ public class AutenticationController {
 	private TokenService tokenService;
 
 	@PostMapping
-	//LoginForm recebe um json contendo email e senha
 	public ResponseEntity<LoginDto> autenticate(@RequestBody @Valid LoginForm form){
+		
 		UsernamePasswordAuthenticationToken loginData = form.convert();
+		
 		try {
+			
 			Authentication authentication = authManager.authenticate(loginData);
+			
 			String token = tokenService.generateToken(authentication); 
+			
 			Guest loggedGuest = (Guest) authentication.getPrincipal();
+			
 			return ResponseEntity.ok(new LoginDto(token, "Bearer", loggedGuest.getId(), loggedGuest.getRole()));
 		} catch (AuthenticationException e) { 
 			return ResponseEntity.badRequest().build();

@@ -1,6 +1,6 @@
 package br.com.hostel.controller.dto;
 
-import br.com.hostel.model.Role;
+import br.com.hostel.model.helper.Role;
 
 public class LoginDto {
 
@@ -31,5 +31,4 @@ public class LoginDto {
 	public Role getRole() {
 		return role;
 	}	
-	
 }

@@ -18,5 +18,4 @@ public class RoomNotFoundException extends Exception {
 	public void setNumber(int number) {
 		this.number = number;
 	}
-
 }

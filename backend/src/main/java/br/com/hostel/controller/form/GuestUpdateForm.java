@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
-import br.com.hostel.model.Role;
+import br.com.hostel.model.helper.Role;
 import br.com.hostel.repository.GuestRepository;
 
 public class GuestUpdateForm {
@@ -69,11 +69,11 @@ public class GuestUpdateForm {
 	}
 
 	public Guest updateGuestForm(Long id, Guest guest, GuestRepository guestRepository) {
-		verifyIfParamIsNotNull(guest, guestRepository);
+		setParamIfIsNotNull(guest, guestRepository);
 		return guest;
 	}
 	
-	private void verifyIfParamIsNotNull(Guest guest, GuestRepository guestRepository) {
+	private void setParamIfIsNotNull(Guest guest, GuestRepository guestRepository) {
 		
 		if (title != null)
 			guest.setTitle(title);
@@ -94,5 +94,4 @@ public class GuestUpdateForm {
 			guest.setRole(role);
 		
 	}
-	
 }

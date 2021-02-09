@@ -33,7 +33,7 @@ public class Hostel {
 	@OneToMany
 	private Set<Room> rooms;
 
-	public Hostel() { // Creator - Hostel aggregates reservations, guests and rooms
+	public Hostel() { 
 		reservations = new HashSet<>();
 		guests = new HashSet<>();
 		rooms = new HashSet<>();

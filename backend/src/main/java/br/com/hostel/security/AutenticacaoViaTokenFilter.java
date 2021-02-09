@@ -20,7 +20,6 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
 	private GuestRepository repository;
 
-	// necessario criar construtor pois em Filters não da pra injetar dependencias
 	public AutenticacaoViaTokenFilter(TokenService tokenService, GuestRepository repository) {
 		this.tokenService = tokenService;
 		this.repository = repository;
@@ -31,10 +30,11 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 		String token = recuperarToken(request);
-		boolean valido = tokenService.isTokenValido(token);
+		boolean isValid = tokenService.isTokenValido(token);
 
-		if (valido)
+		if (isValid)
 			autenticarCliente(token);
+		
 		filterChain.doFilter(request, response);
 	}
 
@@ -42,13 +42,17 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 		Long idUsuario = tokenService.getIdUsuario(token);
 
 		Guest guest = repository.findById(idUsuario).get();
+		
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(guest, null,
 				guest.getAuthorities());
+		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
 	private String recuperarToken(HttpServletRequest request) {
+		
 		String token = request.getHeader("Authorization");
+		
 		if (token == null || token.isEmpty() || !token.startsWith("Bearer "))
 			return null;
 		else

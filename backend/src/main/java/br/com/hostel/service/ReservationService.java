@@ -44,18 +44,23 @@ public class ReservationService {
 	private GuestRepository guestRepository;
 
 	public ResponseEntity<?> registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) {
+		
 		Reservation reservation = form.returnReservation(paymentsRepository, roomRepository);
 		Optional<Guest> guestOp = guestRepository.findById(reservation.getGuest_ID());
 
 		if (guestOp.isPresent()) {
+			
 			if (reservation.getRooms().isEmpty())
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rooms list cannot be empty");
+			
 			else if (reservation.getCheckinDate().isAfter(LocalDate.now())
 					&& reservation.getCheckoutDate().isAfter(reservation.getCheckinDate())) {
+				
 				Guest guest = guestOp.get();
 
 				paymentsRepository.save(reservation.getPayment());
 				reservationRepository.save(reservation);
+				
 				guest.addReservation(reservation);
 				guestRepository.save(guest);
 
@@ -66,7 +71,7 @@ public class ReservationService {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Verify your checkin/checkout date");
 			}
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Guest ID didn't found");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Guest ID haven't found");
 	}
 
 	public ResponseEntity<List<ReservationDto>> listAllReservations(String name, Pageable pagination) {
@@ -74,7 +79,7 @@ public class ReservationService {
 		List<ReservationDto> response = new ArrayList<>();
 
 		if (name == null)
-			response = ReservationDto.converter(reservationRepository.findAll());
+			response = ReservationDto.convert(reservationRepository.findAll());
 		else {
 			
 			List<Guest> guestList = guestRepository.findByName(name);
@@ -84,7 +89,7 @@ public class ReservationService {
 				List<Reservation> reservations = guestList.get(0).getReservations().stream()
 						.collect(Collectors.toList());
 		
-				response = ReservationDto.converter(reservations);
+				response = ReservationDto.convert(reservations);
 			}
 		}
 

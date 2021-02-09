@@ -46,12 +46,12 @@ public class RoomUpdateForm {
 	}
 	
 	public Room updateRoomForm(Long id, Room room, RoomRepository roomRepository) {
-		verifyIfParamIsNotNull(room, roomRepository);
+		setParamIfIsNotNull(room, roomRepository);
 		
 		return room;
 	}
 	
-	private void verifyIfParamIsNotNull(Room room, RoomRepository roomRepository) {
+	private void setParamIfIsNotNull(Room room, RoomRepository roomRepository) {
 		
 		if (description != null)
 			room.setDescription(description);

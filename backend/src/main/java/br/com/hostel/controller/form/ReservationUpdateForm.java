@@ -74,12 +74,12 @@ public class ReservationUpdateForm {
 
 	public Reservation updateReservationForm(Long id, Reservation reservation, 
 			PaymentsRepository paymentsRepository, RoomRepository roomRepository) {
-		verifyIfParamIsNotNull(reservation, roomRepository);
+		setParamIfIsNotNull(reservation, roomRepository);
 		
 		return reservation;
 	}
 	
-	private void verifyIfParamIsNotNull(Reservation reservation, RoomRepository roomRepository) {
+	private void setParamIfIsNotNull(Reservation reservation, RoomRepository roomRepository) {
 		
 		if (numberOfGuests != 0)
 			reservation.setNumberOfGuests(numberOfGuests);
@@ -100,7 +100,6 @@ public class ReservationUpdateForm {
 
 			reservation.setRooms(roomsList);
 		}
-			
 		
 		if (payment != null) {
 			payment.setDate(LocalDateTime.now());

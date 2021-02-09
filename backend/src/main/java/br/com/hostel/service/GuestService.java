@@ -45,7 +45,7 @@ public class GuestService {
 			URI uri = uriBuilder.path("/guests/{id}").buildAndExpand(guest.getId()).toUri();
 			return ResponseEntity.created(uri).body(new GuestDto(guest));
 		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There already exists a guest with e-mail = " + form.getEmail());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is already a guest with e-mail = " + form.getEmail());
 		}
 	}
 
@@ -79,7 +79,7 @@ public class GuestService {
 			
 			Collections.sort(reservations);
 			
-			List<ReservationDto> response = ReservationDto.converter(reservations);
+			List<ReservationDto> response = ReservationDto.convert(reservations);
 	
 			return ResponseEntity.ok(response);
 		} else

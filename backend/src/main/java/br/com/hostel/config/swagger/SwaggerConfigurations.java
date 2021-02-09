@@ -26,14 +26,16 @@ public class SwaggerConfigurations {
                 .paths(PathSelectors.ant("/**"))
                 .build()
                 .ignoredParameterTypes(Guest.class)
-                .globalOperationParameters(Arrays.asList(
+                .globalOperationParameters(
+                		Arrays.asList(
                                 new ParameterBuilder()
                                     .name("Authorization")
                                     .description("Header para Token JWT")
                                     .modelRef(new ModelRef("string"))
                                     .parameterType("header")
                                     .required(false)
-                                    .build()));
+                                    .build()
+                				)
+                );
     }
-
 }

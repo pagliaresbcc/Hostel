@@ -10,9 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 @Entity
 public class Perfil implements GrantedAuthority{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -41,6 +38,4 @@ public class Perfil implements GrantedAuthority{
 	public String getAuthority() {
 		return nome;
 	}
-	
-	
 }

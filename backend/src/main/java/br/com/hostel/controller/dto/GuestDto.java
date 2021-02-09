@@ -8,7 +8,7 @@ import java.util.Set;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
-import br.com.hostel.model.Role;
+import br.com.hostel.model.helper.Role;
 
 public class GuestDto {
 
@@ -24,6 +24,7 @@ public class GuestDto {
 	private Set<Reservation> reservations;
 
 	public GuestDto() {
+		
 	}
 
 	public GuestDto(Guest guest) {

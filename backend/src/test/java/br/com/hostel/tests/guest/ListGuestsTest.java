@@ -1,4 +1,4 @@
-package br.com.hostel.tests.get;
+package br.com.hostel.tests.guest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,7 +34,7 @@ import br.com.hostel.repository.GuestRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class GuestGetTests {
+public class ListGuestsTest {
 
 	@Autowired 
 	private MockMvc mockMvc;

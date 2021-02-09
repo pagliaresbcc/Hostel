@@ -15,5 +15,4 @@ public interface GuestRepository extends JpaRepository<Guest, Long>{
 	Optional<Guest> findByEmail(String email);
 	
 	Address findByAddressId(Long id);	
-	
 }

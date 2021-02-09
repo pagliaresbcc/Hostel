@@ -49,7 +49,7 @@ public class RoomService {
 		Optional<Room> roomOp = roomRepository.findByNumber(room.getNumber());
 
 		if (roomOp.isPresent()) 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There already exists a room with number = " + room.getNumber());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is already a room with number = " + room.getNumber());
 	    else {
 			roomRepository.save(room);
 

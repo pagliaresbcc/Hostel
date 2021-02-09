@@ -86,13 +86,12 @@ public class CreditCardPayment extends Payments {
 	
 	public String toString() {
 		String result = "Payment with credit card...: " +  "\n" +  
-								super.toString() + "\n" +
-								"Issuer...: "+ this.issuer + "\n" +
-				                 "Credit card number...: " + this.cardNumber + "\n" +
-				                 "Name on card...: " + this.nameOnCard + "\n" +
-				                 "Expiration date...: " + this.expirationDate + "\n" +
-				                 "Security code...: " + this.securityCode;
+						super.toString() + "\n" +
+						"Issuer...: "+ this.issuer + "\n" +
+		                "Credit card number...: " + this.cardNumber + "\n" +
+		                "Name on card...: " + this.nameOnCard + "\n" +
+		                "Expiration date...: " + this.expirationDate + "\n" +
+		                "Security code...: " + this.securityCode;
 		return result;
 	}
-	
 }

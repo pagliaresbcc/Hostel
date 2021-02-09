@@ -46,6 +46,7 @@ public class Address implements Serializable {
 	public void setId(Long addressID) {
 		this.id = addressID;
 	}   
+	
 	public String getAddressName() {
 		return this.addressName;
 	}
@@ -53,6 +54,7 @@ public class Address implements Serializable {
 	public void setAddressName(String addressName) {
 		this.addressName = addressName;
 	}   
+	
 	public String getZipCode() {
 		return this.zipCode;
 	}
@@ -60,6 +62,7 @@ public class Address implements Serializable {
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
 	}   
+	
 	public String getCity() {
 		return this.city;
 	}
@@ -67,6 +70,7 @@ public class Address implements Serializable {
 	public void setCity(String city) {
 		this.city = city;
 	}   
+	
 	public String getState() {
 		return this.state;
 	}

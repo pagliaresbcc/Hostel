@@ -14,21 +14,23 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class TokenService {
 
-	@Value("${forum.jwt.expiration}") //@value serve para pegar a propriedade do application.properties
+	@Value("${forum.jwt.expiration}") 
 	private String expiration;
 	
 	@Value("${forum.jwt.secret}")
 	private String secret;
 	
 	public String generateToken(Authentication authentication) {
-		Guest logado = (Guest) authentication.getPrincipal(); //pegando o usuario logado
-		Date hoje = new Date();
-		Date dataExpiracao = new Date(hoje.getTime() + Long.parseLong(expiration));
+		
+		Guest loggedUser = (Guest) authentication.getPrincipal();
+		Date todayDate = new Date();
+		Date expirationDate = new Date(todayDate.getTime() + Long.parseLong(expiration));
+		
 		return Jwts.builder()
 				.setIssuer("API do Albergue") //quem fez a geração do token
-				.setSubject(logado.getId().toString()) //usuario a quem esse token pertence
-				.setIssuedAt(hoje) //data de geração
-				.setExpiration(dataExpiracao) //data de expiração
+				.setSubject(loggedUser.getId().toString()) //usuario a quem esse token pertence
+				.setIssuedAt(todayDate) //data de geração
+				.setExpiration(expirationDate) //data de expiração
 				.signWith(SignatureAlgorithm.HS256, secret) //usar a senha do application.properties / algoritmo de criptografia
 				.compact();
 	}
@@ -36,7 +38,9 @@ public class TokenService {
 	public boolean isTokenValido(String token) {
 		//parser() descriptografa o token e verifica se está ok
 		try {
+			
 			Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token);
+			
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -44,8 +48,10 @@ public class TokenService {
 	}
 
 	public Long getIdUsuario(String token) {
+		
 		Claims claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
-		return Long.parseLong(claims.getSubject()); //no metodo gerarToken é setado Subject, que é usado nesse método de volta, para pegar o id
+		
+		return Long.parseLong(claims.getSubject()); 
 		
 	}
 }

@@ -21,6 +21,7 @@ public class ReservationDto {
 	private Set<Room> rooms;
 	
 	public ReservationDto() {
+		
 	}
 	
 	public ReservationDto(Reservation reservation) {
@@ -61,7 +62,7 @@ public class ReservationDto {
 		return numberOfGuests;
 	}
 	
-	public static List<ReservationDto> converter(List<Reservation> reservationsList) {
+	public static List<ReservationDto> convert(List<Reservation> reservationsList) {
 	
 		List<ReservationDto> reservationDtoList = new ArrayList<>();
 		
