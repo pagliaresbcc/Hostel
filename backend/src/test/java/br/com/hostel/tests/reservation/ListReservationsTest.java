@@ -60,6 +60,7 @@ public class ListReservationsTest {
 	private static List<Room> reservation2RoomsList;
 	private static List<Long> rooms_ID = new ArrayList<>();
 	private static Set<Reservation> reservationsList = new HashSet<>();
+	
 	@BeforeAll
     public static void beforeAll(@Autowired ReservationRepository reservationRepository, 
     		@Autowired PaymentsRepository paymentsRepository, @Autowired GuestRepository guestRepository, 
