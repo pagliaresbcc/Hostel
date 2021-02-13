@@ -72,8 +72,7 @@ public class DeleteReservationsTest {
 			.perform(delete(uri + "0")
 			.headers(headers))
 			.andDo(print())
-			.andExpect(status().isNotFound())
-			.andReturn();	
+			.andExpect(status().isNotFound());	
 	}
 	
 	@Test
@@ -86,7 +85,6 @@ public class DeleteReservationsTest {
 			.perform(delete(uri + "1")
 			.headers(headers))
 			.andDo(print())
-			.andExpect(status().isOk())
-			.andReturn();	
+			.andExpect(status().isOk());	
 	}
 }

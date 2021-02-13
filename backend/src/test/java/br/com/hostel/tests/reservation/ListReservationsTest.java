@@ -123,7 +123,7 @@ public class ListReservationsTest {
 		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
 
 		/// Verify request succeed
-//		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
+		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
 		assertEquals(reservation2.getCheckoutDate(), reservationObjResponse[1].getCheckoutDate());
 		assertEquals(reservation2RoomsList.get(0).getNumber(), reservationObjResponse[1].getRooms().stream()
 																						.collect(Collectors.toList())

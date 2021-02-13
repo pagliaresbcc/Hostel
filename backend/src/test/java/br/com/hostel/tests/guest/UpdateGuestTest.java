@@ -69,12 +69,13 @@ public class UpdateGuestTest {
 		guestToUpdate.setLastName("Silva");
 		guestToUpdate.setTitle("Sir");
 		
-		MvcResult result = mockMvc.perform(put(uri + guest.getId().toString())
-				.headers(headers)
-				.content(objectMapper.writeValueAsString(guestToUpdate)))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andReturn();
+		MvcResult result = 
+				mockMvc.perform(put(uri + guest.getId().toString())
+						.headers(headers)
+						.content(objectMapper.writeValueAsString(guestToUpdate)))
+						.andDo(print())
+						.andExpect(status().isOk())
+						.andReturn();
 
 		String contentAsString = result.getResponse().getContentAsString();
 		

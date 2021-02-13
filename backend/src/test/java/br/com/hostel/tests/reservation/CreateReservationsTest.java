@@ -81,8 +81,7 @@ public class CreateReservationsTest {
 				.headers(headers)
 				.content(objectMapper.writeValueAsString(reservationForm)))
 				.andDo(print())
-				.andExpect(status().isNotFound())
-				.andReturn();
+				.andExpect(status().isNotFound());
 	}
 	
 	@Test
@@ -94,8 +93,7 @@ public class CreateReservationsTest {
 				.headers(headers)
 				.content(objectMapper.writeValueAsString(reservationForm)))
 				.andDo(print())
-				.andExpect(status().isBadRequest())
-				.andReturn();
+				.andExpect(status().isBadRequest());
 	}
 	
 	@Test
@@ -108,8 +106,7 @@ public class CreateReservationsTest {
 				.headers(headers)
 				.content(objectMapper.writeValueAsString(reservationForm)))
 				.andDo(print())
-				.andExpect(status().isBadRequest())
-				.andReturn();
+				.andExpect(status().isBadRequest());
 	}
 	
 	@Test
@@ -123,6 +120,7 @@ public class CreateReservationsTest {
 					.andDo(print())
 					.andExpect(status().isCreated())
 					.andReturn();
+		
 		String contentAsString = result.getResponse().getContentAsString();
 
 		ReservationDto reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto.class);
@@ -184,11 +182,11 @@ public class CreateReservationsTest {
 		MvcResult result = 
 				mockMvc
 				.perform(post(uri)
-						.headers(headers)
-						.content(objectMapper.writeValueAsString(reservationForm)))
-				.andDo(print())
-				.andExpect(status().isCreated())
-				.andReturn();
+					.headers(headers)
+					.content(objectMapper.writeValueAsString(reservationForm)))
+					.andDo(print())
+					.andExpect(status().isCreated())
+					.andReturn();
 		
 		String contentAsString = result.getResponse().getContentAsString();
 		

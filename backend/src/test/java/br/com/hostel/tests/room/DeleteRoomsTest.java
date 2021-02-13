@@ -59,10 +59,9 @@ public class DeleteRoomsTest {
 		roomRepository.save(room);
 		
 		mockMvc.perform(delete(uri + "0")
-			.headers(headers))
-			.andDo(print())
-            .andExpect(status().isNotFound())
-            .andReturn();
+				.headers(headers))
+				.andDo(print())
+	            .andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -71,9 +70,8 @@ public class DeleteRoomsTest {
 		roomRepository.save(room);
 		
 		mockMvc.perform(delete(uri + room.getId().toString())
-			.headers(headers))
-			.andDo(print())
-            .andExpect(status().isOk())
-            .andReturn();
+				.headers(headers))
+				.andDo(print())
+	            .andExpect(status().isOk());
 	}
 }

@@ -57,11 +57,10 @@ public class DeleteGuestsTest {
 	public void shouldReturnNotFoundStatusWhenDeletingByNonExistentGuestID() throws Exception {
 		
 		mockMvc
-		.perform(delete(uri + "0")
+			.perform(delete(uri + "0")
 				.headers(headers))
 				.andDo(print())
-				.andExpect(status().isNotFound())
-				.andReturn();	
+				.andExpect(status().isNotFound());	
 	}
 	
 	@Test
@@ -71,7 +70,6 @@ public class DeleteGuestsTest {
 			.perform(delete(uri + guest.getId().toString())
 			.headers(headers))
 			.andDo(print())
-			.andExpect(status().isOk())
-			.andReturn();	
+			.andExpect(status().isOk());	
 	}
 }
