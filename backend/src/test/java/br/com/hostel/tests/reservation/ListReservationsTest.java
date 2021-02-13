@@ -54,19 +54,17 @@ public class ListReservationsTest {
 	private static URI uri;
 	private static HttpHeaders headers = new HttpHeaders();
 	private static Reservation reservation1, reservation2;
+	private static CheckPayment checkPayment = new CheckPayment();
+	private static ReservationForm reservationForm = new ReservationForm();
+	private static Guest guest = new Guest();
 	private static List<Room> reservation2RoomsList;
-	
+	private static List<Long> rooms_ID = new ArrayList<>();
+	private static Set<Reservation> reservationsList = new HashSet<>();
 	@BeforeAll
     public static void beforeAll(@Autowired ReservationRepository reservationRepository, 
     		@Autowired PaymentsRepository paymentsRepository, @Autowired GuestRepository guestRepository, 
     		@Autowired RoomRepository roomRepository, @Autowired MockMvc mockMvc, 
     		@Autowired ObjectMapper objectMapper) throws JsonProcessingException, Exception {
-		
-		CheckPayment checkPayment = new CheckPayment();
-		ReservationForm reservationForm = new ReservationForm();
-		List<Long> rooms_ID = new ArrayList<>();
-		Guest guest = new Guest();
-		Set<Reservation> reservationsList = new HashSet<>();
 		
 		uri = new URI("/api/reservations/");
 		
