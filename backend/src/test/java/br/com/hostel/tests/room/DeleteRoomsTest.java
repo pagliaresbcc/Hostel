@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.net.URI;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.hostel.initializer.RoomInitializer;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
 import br.com.hostel.repository.RoomRepository;
-import br.com.hostel.tests.initializer.RoomInitializer;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -39,13 +39,13 @@ public class DeleteRoomsTest {
 	@Autowired 
 	private MockMvc mockMvc;
 
-	private static URI uri;
-	private static HttpHeaders headers = new HttpHeaders();
-	private static Room room = new Room();
-	private static DailyRate dailyRate = new DailyRate(400);
+	private URI uri;
+	private HttpHeaders headers = new HttpHeaders();
+	private Room room = new Room();
+	private DailyRate dailyRate = new DailyRate();
 
-	@BeforeAll
-	public static void beforeAll(@Autowired ObjectMapper objectMapper, 
+	@BeforeEach
+	public void beforeEach(@Autowired ObjectMapper objectMapper, 
 			@Autowired MockMvc mockMvc) throws JsonProcessingException, Exception {
 		
 		uri = new URI("/api/rooms/");
@@ -54,7 +54,7 @@ public class DeleteRoomsTest {
 	}
 
 	@Test
-	public void shouldReturnNotFoundStatusWhenDeletingByNonExistentRoomID() throws Exception {
+	public void shouldReturnNotFoundStatusWhenDeletingARoomWithNonExistentID() throws Exception {
 		dailyRateRepository.save(dailyRate);
 		roomRepository.save(room);
 		

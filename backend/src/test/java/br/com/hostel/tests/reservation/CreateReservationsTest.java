@@ -28,13 +28,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.ReservationForm;
+import br.com.hostel.initializer.ReservationInitializer;
 import br.com.hostel.model.CashPayment;
 import br.com.hostel.model.CheckPayment;
 import br.com.hostel.model.CreditCardPayment;
 import br.com.hostel.repository.PaymentsRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
-import br.com.hostel.tests.initializer.ReservationInitializer;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -99,8 +99,8 @@ public class CreateReservationsTest {
 	@Test
 	public void shouldReturnBadRequestStatusWithReservationCheckoutDateOlderThanCheckinDate() throws Exception {
 		
-		reservationForm.setCheckinDate(LocalDate.of(2021, 04, 01));
-		reservationForm.setCheckoutDate(LocalDate.of(2021, 03, 01));
+		reservationForm.setCheckinDate(LocalDate.of(2025, 04, 01));
+		reservationForm.setCheckoutDate(LocalDate.of(2025, 03, 01));
 		
 		mockMvc.perform(post(uri)
 				.headers(headers)
@@ -110,7 +110,7 @@ public class CreateReservationsTest {
 	}
 	
 	@Test
-	public void shouldAutenticateAndCreateOneReservationByCheckPaymentAndReturnStatusCreated() throws Exception {
+	public void shouldAutenticateAndCreateOneReservationUsingCheckPaymentAndReturnStatusCreated() throws Exception {
 
 		MvcResult result = 
 				mockMvc
@@ -127,16 +127,16 @@ public class CreateReservationsTest {
 		
 		CheckPayment checkObjResponse = (CheckPayment) reservationObjResponse.getPayments();
 
-		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2021, 04, 01));
+		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2025, 04, 01));
 		assertEquals(reservationObjResponse.getPayments().getAmount(), 3000);
 		assertEquals(checkObjResponse.getBankName(), "Banco do Brasil");
 	}
 	
 	@Test
-	public void shouldAutenticateAndCreateOneReservationByCashPaymentAndReturnStatusCreated() throws Exception {
+	public void shouldAutenticateAndCreateOneReservationUsingCashPaymentAndReturnStatusCreated() throws Exception {
 		cashPayment.setAmount(4000);
 		cashPayment.setAmountTendered(10000);
-		cashPayment.setDate(LocalDateTime.of(LocalDate.of(2020,01,25), LocalTime.of(21, 32)));
+		cashPayment.setDate(LocalDateTime.of(LocalDate.of(2025,01,25), LocalTime.of(21, 32)));
 		
 		reservationForm.setPayment(cashPayment);
 		
@@ -158,19 +158,19 @@ public class CreateReservationsTest {
 		
 		CashPayment cashObjResponse = (CashPayment) reservationObjResponse.getPayments();
 
-		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2021, 04, 01));
+		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2025, 04, 01));
 		assertEquals(reservationObjResponse.getPayments().getAmount(), 4000);
 		assertEquals(cashObjResponse.getAmountTendered(), 10000);
 	}
 	
 	@Test
-	public void shouldAutenticateAndCreateOneReservationByCreditCardPaymentAndReturnStatusCreated() throws Exception {
+	public void shouldAutenticateAndCreateOneReservationUsingCreditCardPaymentAndReturnStatusCreated() throws Exception {
 		creditCardPayment.setAmount(5000);
-		creditCardPayment.setDate(LocalDateTime.of(LocalDate.of(2020,01,25), LocalTime.of(21, 33)));
+		creditCardPayment.setDate(LocalDateTime.of(LocalDate.of(2025,01,25), LocalTime.of(21, 33)));
 		creditCardPayment.setIssuer("VISA");
 		creditCardPayment.setNameOnCard("WASHINGTON A SILVA");
 		creditCardPayment.setCardNumber("1234 5678 9101 1121");
-		creditCardPayment.setExpirationDate(LocalDate.of(2020, 05, 01));
+		creditCardPayment.setExpirationDate(LocalDate.of(2048, 05, 01));
 		creditCardPayment.setSecurityCode("123");
 		
 		reservationForm.setPayment(creditCardPayment);
@@ -194,7 +194,7 @@ public class CreateReservationsTest {
 		
 		CreditCardPayment creditCardObjResponse = (CreditCardPayment) reservationObjResponse.getPayments();
 		
-		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2021, 04, 01));
+		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2025, 04, 01));
 		assertEquals(reservationObjResponse.getPayments().getAmount(), 5000);
 		assertEquals(creditCardObjResponse.getNameOnCard(), "WASHINGTON A SILVA");
 	}

@@ -1,4 +1,4 @@
-package br.com.hostel.tests.initializer;
+package br.com.hostel.initializer;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -51,13 +51,13 @@ public class ReservationInitializer {
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
 
 		// setting reservation object
-		reservationForm.setCheckinDate(LocalDate.of(2021, 04, 01));
-		reservationForm.setCheckoutDate(LocalDate.of(2021, 04, 04));
+		reservationForm.setCheckinDate(LocalDate.of(2025, 04, 01));
+		reservationForm.setCheckoutDate(LocalDate.of(2025, 04, 04));
 		reservationForm.setNumberOfGuests(2);
 		reservationForm.setGuest_ID(1L);
 
 		checkPayment.setAmount(3000);
-		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2020, 01, 25), LocalTime.of(21, 31)));
+		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2025, 01, 25), LocalTime.of(21, 31)));
 		checkPayment.setBankId("01");
 		checkPayment.setBankName("Banco do Brasil");
 		checkPayment.setBranchNumber("1234-5");

@@ -122,7 +122,7 @@ public class RoomService {
 
 			return ResponseEntity.ok().build();
 		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a room with that ID");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a room with id = " + id);
 	}
 	
 	private void verifyValidRooms(RoomFilter roomFilter, List<Room> unavailableRooms, List<Room> availableRooms) {

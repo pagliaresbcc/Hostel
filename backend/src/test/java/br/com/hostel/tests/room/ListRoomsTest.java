@@ -78,13 +78,13 @@ public class ListRoomsTest {
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
 		
 		//setting reservation object
-		reservationForm.setCheckinDate(LocalDate.of(2021, 4, 10));
-		reservationForm.setCheckoutDate(LocalDate.of(2021, 4, 17));
+		reservationForm.setCheckinDate(LocalDate.of(2025, 4, 10));
+		reservationForm.setCheckoutDate(LocalDate.of(2025, 4, 17));
 		reservationForm.setNumberOfGuests(2);
 		reservationForm.setGuest_ID(1L);
 		
 		checkPayment.setAmount(3000);
-		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2020, 01, 25), LocalTime.of(21, 31)));
+		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2025, 01, 25), LocalTime.of(21, 31)));
 		checkPayment.setBankId("01");
 		checkPayment.setBankName("Banco do Brasil");
 		checkPayment.setBranchNumber("1234-5");
@@ -104,8 +104,8 @@ public class ListRoomsTest {
 	public void shouldShowOnlyAvailableRoomsWithReservationCheckinAndCheckoutDateBefore() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("checkinDate","2021-04-01")
-						.param("checkoutDate","2021-04-09")
+						.param("checkinDate","2025-04-01")
+						.param("checkoutDate","2025-04-09")
 						.param("numberOfGuests","2")
 						.headers(headers))
 						.andDo(print())
@@ -123,8 +123,8 @@ public class ListRoomsTest {
 	public void shouldShowOnlyAvailableRoomsWithReservationCheckinAndCheckoutDateAfter() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("checkinDate","2021-04-18")
-						.param("checkoutDate","2021-04-25")
+						.param("checkinDate","2025-04-18")
+						.param("checkoutDate","2025-04-25")
 						.param("numberOfGuests","2")
 						.headers(headers))
 						.andDo(print())
@@ -142,8 +142,8 @@ public class ListRoomsTest {
 	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateBeforeAndCheckoutDateBetween() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("checkinDate","2021-04-05")
-						.param("checkoutDate","2021-04-15")
+						.param("checkinDate","2025-04-05")
+						.param("checkoutDate","2025-04-15")
 						.param("numberOfGuests","2")
 						.headers(headers))
 						.andDo(print())
@@ -161,8 +161,8 @@ public class ListRoomsTest {
 	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateBetweenAndCheckoutDateAfter() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("checkinDate","2021-04-15")
-						.param("checkoutDate","2021-04-20")
+						.param("checkinDate","2025-04-15")
+						.param("checkoutDate","2025-04-20")
 						.param("numberOfGuests","2")
 						.headers(headers))
 						.andDo(print())
@@ -180,8 +180,8 @@ public class ListRoomsTest {
 	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateBeforeAndCheckoutDateAfter() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("checkinDate","2021-04-05")
-						.param("checkoutDate","2021-04-20")
+						.param("checkinDate","2025-04-05")
+						.param("checkoutDate","2025-04-20")
 						.param("numberOfGuests","2")
 						.headers(headers))
 						.andDo(print())
@@ -199,8 +199,8 @@ public class ListRoomsTest {
 	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateAndCheckoutDateBetween() throws Exception {
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("checkinDate","2021-04-13")
-						.param("checkoutDate","2021-04-16")
+						.param("checkinDate","2025-04-13")
+						.param("checkoutDate","2025-04-16")
 						.param("numberOfGuests","2")
 						.headers(headers))
 						.andDo(print())
@@ -228,7 +228,6 @@ public class ListRoomsTest {
 		
 		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
 
-		/// Verify request succeed
 		assertEquals(5, roomObjResponse.length);
 		assertEquals(13, roomObjResponse[0].getNumber());
 		assertEquals(250, roomObjResponse[1].getDimension());
@@ -248,8 +247,17 @@ public class ListRoomsTest {
 		
 		RoomDto roomObjResponse = objectMapper.readValue(contentAsString, RoomDto.class);
 		
-		/// Verify request succeed
 		assertEquals(13, roomObjResponse.getNumber());
 		assertEquals(500, roomObjResponse.getDimension());
+	}
+	
+	@Test
+	public void shouldReturnNotFoundStatusByUsingWrongParam() throws Exception {
+
+		mockMvc
+			.perform(get(uri + "9999")
+				.headers(headers))
+				.andDo(print())
+				.andExpect(status().isNotFound());
 	}
 }

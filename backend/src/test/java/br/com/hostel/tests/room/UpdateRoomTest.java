@@ -24,11 +24,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.RoomUpdateForm;
+import br.com.hostel.initializer.RoomInitializer;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
 import br.com.hostel.repository.RoomRepository;
-import br.com.hostel.tests.initializer.RoomInitializer;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -44,7 +44,7 @@ public class UpdateRoomTest {
 	private static URI uri;
 	private static HttpHeaders headers = new HttpHeaders();
 	private static Room room = new Room();
-	private static DailyRate dailyRate = new DailyRate(400);
+	private static DailyRate dailyRate = new DailyRate();
 
 	@BeforeAll
 	public static void beforeAll(@Autowired RoomRepository roomRepository,
@@ -60,7 +60,7 @@ public class UpdateRoomTest {
 	}
 	
 	@Test
-	public void shouldAutenticateAndDeleteOneRoomWithId2() throws Exception {
+	public void shouldAutenticateAndUpdateRoomDescriptionAndDailyRate() throws Exception {
 		
 		RoomUpdateForm roomToUpdate = new RoomUpdateForm();
 		roomToUpdate.setDescription("test update method");
@@ -81,5 +81,22 @@ public class UpdateRoomTest {
 		assertEquals(roomObjResponse.getNumber(), room.getNumber());
 		assertEquals(roomObjResponse.getDailyRate().getPrice(), roomToUpdate.getDailyRate().getPrice());
 		assertTrue(roomObjResponse.getDescription().compareTo(room.getDescription()) != 0);
+	}
+	
+	@Test
+	public void shouldReturnBadRequestStatusWhenUpdatingARoomWithNonExistentId() throws Exception {
+		
+		RoomUpdateForm roomToUpdate = new RoomUpdateForm();
+		roomToUpdate.setDescription("test update method");
+		roomToUpdate.setDailyRate(room.getDailyRate());
+		roomToUpdate.getDailyRate().setPrice(1500.0);
+		
+		mockMvc
+			.perform(put(uri + "999")
+				.headers(headers)
+				.content(objectMapper.writeValueAsString(roomToUpdate)))
+				.andDo(print())
+				.andExpect(status().isNotFound())
+				.andReturn();
 	}
 }

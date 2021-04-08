@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.ReservationForm;
+import br.com.hostel.initializer.ReservationInitializer;
 import br.com.hostel.model.CheckPayment;
 import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
@@ -38,7 +39,6 @@ import br.com.hostel.repository.GuestRepository;
 import br.com.hostel.repository.PaymentsRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
-import br.com.hostel.tests.initializer.ReservationInitializer;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -76,8 +76,8 @@ public class ListReservationsTest {
 		reservation1 = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
 		reservationsList.add(reservation1);
 
-		reservationForm.setCheckinDate(LocalDate.of(2021, 05, 01));
-		reservationForm.setCheckoutDate(LocalDate.of(2021, 05, 04));
+		reservationForm.setCheckinDate(LocalDate.of(2025, 05, 01));
+		reservationForm.setCheckoutDate(LocalDate.of(2025, 05, 04));
 		rooms_ID.remove(2L);
 		rooms_ID.add(3L);
 		reservation2 = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
@@ -104,7 +104,6 @@ public class ListReservationsTest {
 
 		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
 
-		/// Verify request succeed
 		assertTrue(reservationObjResponse.length > 1);
 	}
 	
@@ -122,7 +121,6 @@ public class ListReservationsTest {
 
 		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
 
-		/// Verify request succeed
 		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
 		assertEquals(reservation2.getCheckoutDate(), reservationObjResponse[1].getCheckoutDate());
 		assertEquals(reservation2RoomsList.get(0).getNumber(), reservationObjResponse[1].getRooms().stream()
@@ -132,7 +130,7 @@ public class ListReservationsTest {
 	}
 
 	@Test
-	public void shouldReturnNotFoundStatusAndNullBodyByWrongParam() throws Exception {
+	public void shouldReturnNotFoundStatusAndNullBodyByUsingWrongParam() throws Exception {
 
 		MvcResult result = 
 				mockMvc.perform(get(uri)

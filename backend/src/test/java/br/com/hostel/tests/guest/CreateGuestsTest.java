@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.net.URI;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.hostel.controller.dto.GuestDto;
+import br.com.hostel.initializer.GuestsInitializer;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
 import br.com.hostel.repository.AddressRepository;
 import br.com.hostel.repository.GuestRepository;
-import br.com.hostel.tests.initializer.GuestsInitializer;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -50,8 +50,8 @@ public class CreateGuestsTest {
 	private static Address address = new Address();
 	private static Guest guest = new Guest();
 	
-	@BeforeAll
-	public static void beforeAll(@Autowired MockMvc mockMvc, @Autowired ObjectMapper objectMapper)
+	@BeforeEach
+	public void beforeAll(@Autowired MockMvc mockMvc, @Autowired ObjectMapper objectMapper)
 			throws JsonProcessingException, Exception {
 		uri = new URI("/api/guests/");
 		
@@ -77,5 +77,30 @@ public class CreateGuestsTest {
 		assertEquals(guestObjResponse.getName(), "Washington");
 		assertEquals(guestObjResponse.getAddress().getCity(), "Amparo");
 	}
-
+	
+	@Test
+	public void shouldReturnBadRequestStatusWhenCreateAGuestWithAddressNull() throws Exception {
+		
+		guest.setAddress(null);
+		
+		mockMvc
+			.perform(post(uri)
+				.headers(headers)
+				.content(objectMapper.writeValueAsString(guest)))
+				.andDo(print())
+				.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void shouldReturnBadRequestStatusWhenCreateAGuestWithExistentEmail() throws Exception {
+		
+		guest.setEmail("admin@email.com");
+		
+		mockMvc
+			.perform(post(uri)
+				.headers(headers)
+				.content(objectMapper.writeValueAsString(guest)))
+				.andDo(print())
+				.andExpect(status().isBadRequest());
+	}
 }

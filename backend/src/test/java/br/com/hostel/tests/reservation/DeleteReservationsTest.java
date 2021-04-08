@@ -22,11 +22,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.hostel.controller.form.ReservationForm;
+import br.com.hostel.initializer.ReservationInitializer;
 import br.com.hostel.model.CheckPayment;
 import br.com.hostel.repository.PaymentsRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
-import br.com.hostel.tests.initializer.ReservationInitializer;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -63,7 +63,7 @@ public class DeleteReservationsTest {
 	}
 	
 	@Test
-	public void shouldReturnNotFoundStatusWhenDeletingByNonExistentReservationID() throws Exception {
+	public void shouldReturnNotFoundStatusWhenDeletingAReservationWithNonExistentID() throws Exception {
 
 		paymentsRepository.save(reservationForm.getPayment());
 		reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));

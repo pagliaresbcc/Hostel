@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.net.URI;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.hostel.controller.dto.RoomDto;
+import br.com.hostel.initializer.RoomInitializer;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
-import br.com.hostel.tests.initializer.RoomInitializer;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -37,13 +37,13 @@ public class CreateRoomsTest {
 	@Autowired 
 	private MockMvc mockMvc;
 
-	private static URI uri;
-	private static HttpHeaders headers = new HttpHeaders();
-	private static Room room = new Room();
-	private static DailyRate dailyRate = new DailyRate(400);
+	private URI uri;
+	private HttpHeaders headers = new HttpHeaders();
+	private Room room = new Room();
+	private DailyRate dailyRate = new DailyRate();
 
-	@BeforeAll
-	public static void beforeAll(@Autowired ObjectMapper objectMapper, 
+	@BeforeEach
+	public void beforeAll(@Autowired ObjectMapper objectMapper, 
 			@Autowired MockMvc mockMvc) throws JsonProcessingException, Exception {
 		
 		uri = new URI("/api/rooms/");
@@ -67,5 +67,19 @@ public class CreateRoomsTest {
 
 		assertEquals(room.getNumber(), roomObjResponse.getNumber());
 		assertEquals(room.getDimension(), roomObjResponse.getDimension(), 230);
+	}
+	
+	@Test
+	public void shouldReturnBadRequestStatusWhenCreatingARoomWithExistentNumber() throws Exception {
+
+		room.setNumber(13);
+		
+		mockMvc
+			.perform(post(uri)
+					.headers(headers)
+					.content(objectMapper.writeValueAsString(room)))
+					.andDo(print())
+					.andExpect(status().isBadRequest())
+					.andReturn();
 	}
 }

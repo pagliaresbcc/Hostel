@@ -1,6 +1,8 @@
-package br.com.hostel.tests.initializer;
+package br.com.hostel.initializer;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,17 +17,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.hostel.controller.dto.LoginDto;
 import br.com.hostel.controller.form.LoginForm;
-import br.com.hostel.model.DailyRate;
-import br.com.hostel.model.Room;
+import br.com.hostel.model.Address;
+import br.com.hostel.model.Guest;
+import br.com.hostel.model.helper.Role;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class RoomInitializer {
-
-	public static void initialize(HttpHeaders headers, Room room, DailyRate dailyRate, 
-			MockMvc mockMvc, ObjectMapper objectMapper) throws Exception {
-
+public class GuestsInitializer {
+	
+	public static void initialize(HttpHeaders headers, Address address, Guest guest, MockMvc mockMvc, ObjectMapper objectMapper) throws Exception {
+		
 		LoginForm login = new LoginForm();
 
 		//setting login variables to autenticate
@@ -46,10 +48,21 @@ public class RoomInitializer {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
 		
-		room.setDescription("room test");
-		room.setNumber(34);
-		room.setDimension(230.0);
-		room.setMaxNumberOfGuests(4);
-		room.setDailyRate(dailyRate);
+		// setting address to put into the guest paramseters
+		address.setAddressName("rua x");
+		address.setCity("Amparo");
+		address.setCountry("Brasil");
+		address.setState("SP");
+		address.setZipCode("13900-000");
+		
+		// setting guest
+		guest.setAddress(address);
+		guest.setBirthday(LocalDate.of(1900, 12, 12));
+		guest.setEmail("washington2@orkut.com");
+		guest.setName("Washington");
+		guest.setLastName("Ferrolho");
+		guest.setTitle("MRS.");
+		guest.setPassword("1234567");
+		guest.setRole(Role.ROLE_USER);
 	}
 }

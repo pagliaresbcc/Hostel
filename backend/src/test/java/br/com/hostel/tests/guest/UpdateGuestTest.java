@@ -23,11 +23,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.hostel.controller.dto.GuestDto;
 import br.com.hostel.controller.form.GuestUpdateForm;
+import br.com.hostel.initializer.GuestsInitializer;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
 import br.com.hostel.repository.AddressRepository;
 import br.com.hostel.repository.GuestRepository;
-import br.com.hostel.tests.initializer.GuestsInitializer;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -63,7 +63,7 @@ public class UpdateGuestTest {
 	}
 	
 	@Test
-	public void shouldAutenticateAndDeleteOneRoomWithId2() throws Exception {
+	public void shouldAutenticateAndUpdateGuestLastNameAndTitle() throws Exception {
 		
 		GuestUpdateForm guestToUpdate = new GuestUpdateForm();
 		guestToUpdate.setLastName("Silva");
@@ -83,5 +83,20 @@ public class UpdateGuestTest {
 		
 		assertEquals(roomObjResponse.getLastName(), guestToUpdate.getLastname());
 		assertEquals(roomObjResponse.getTitle(), guestToUpdate.getTitle());
+	}
+	
+	@Test
+	public void shouldReturnNotFoundStatusWhenUpdatingAGuestWithNonExistentID() throws Exception {
+		
+		GuestUpdateForm guestToUpdate = new GuestUpdateForm();
+		guestToUpdate.setLastName("Silva");
+		guestToUpdate.setTitle("Sir");
+		
+		mockMvc.perform(put(uri + "999")
+				.headers(headers)
+				.content(objectMapper.writeValueAsString(guestToUpdate)))
+				.andDo(print())
+				.andExpect(status().isNotFound())
+				.andReturn();
 	}
 }

@@ -19,11 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.hostel.initializer.GuestsInitializer;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
 import br.com.hostel.repository.AddressRepository;
 import br.com.hostel.repository.GuestRepository;
-import br.com.hostel.tests.initializer.GuestsInitializer;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -54,7 +54,7 @@ public class DeleteGuestsTest {
 	}
 
 	@Test
-	public void shouldReturnNotFoundStatusWhenDeletingByNonExistentGuestID() throws Exception {
+	public void shouldReturnNotFoundStatusWhenDeletingAGuestWithNonExistentID() throws Exception {
 		
 		mockMvc
 			.perform(delete(uri + "0")
