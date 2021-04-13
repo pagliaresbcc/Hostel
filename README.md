@@ -8,7 +8,7 @@
   To run both frontend and backend you need to execute the following steps:
   
  ### Frontend directory
-  - You need to have **npm 15+** installed in your computer and execute `npm install` to install all of dependencies and then execute `npm start`
+  - You need to have **node 15+** installed in your computer and execute `npm install` to install all of dependencies and then execute `npm start`
  
  ### Backend directory
   - You need to have **Java 8+** installed in your computer, open the backend directory on your IDE and run the application
