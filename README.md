@@ -19,7 +19,8 @@
     - `create database teste;`
   
 ### Backend directory
-  - You just need to open the backend directory on your IDE and run the application.
+  - You just need to open and configure the backend directory on your IDE (open as maven project, download dependencies, etc) 
+    and run the application.
   
 ### Frontend directory
   - You need to execute `npm install` to install all of dependencies and then execute `npm start`.
