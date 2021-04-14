@@ -95,10 +95,10 @@ public class ListGuestsTest {
 		
 		when(guestRepository.findByName(guest2.getName())).thenReturn(n);
 		
-		List<Guest> listAllGuests = guestService.listAllGuests(guest2.getName(), null);
+		List<Guest> justOneGuestList = guestService.listAllGuests(guest2.getName(), null);
 		
-		assertEquals(1, listAllGuests.size());
-		assertEquals(guest2.getLastName(), listAllGuests.get(0).getLastName());
+		assertEquals(1, justOneGuestList.size());
+		assertEquals(guest2.getLastName(), justOneGuestList.get(0).getLastName());
 	}
 	
 	@Test
