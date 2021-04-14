@@ -19,7 +19,7 @@
     - `create database teste;`
   
 ### Backend directory
-  - You just need to open and configure the backend directory on your IDE (open as maven project, download dependencies, etc) 
+  - You just need to open and configure the backend directory on your IDE (open as maven project, download dependencies, etc)  
     and run the application.
   
 ### Frontend directory
