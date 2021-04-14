@@ -108,9 +108,9 @@ public class ListGuestsTest {
 		
 		when(guestRepository.findByName(any())).thenReturn(emptyList);
 		
-		List<Guest> listAllGuests = guestService.listAllGuests("nonexistent name", null);
+		List<Guest> reqEmptyList = guestService.listAllGuests("nonexistent name", null);
 		
-		assertEquals(0, listAllGuests.size());
+		assertEquals(emptyList.size(), reqEmptyList.size());
 	}
 	
 	@Test
