@@ -9,11 +9,12 @@
   To run both frontend and backend you need to execute the following steps:
   
  ### Frontend directory
-  - You need to have **Node 15+** installed in your computer and execute `npm install` to install all of dependencies 
-  and then execute `npm start`
+  - You need to have **Node 15+** installed in your computer;
+  - Execute `npm install` to install all of dependencies and then execute `npm start`.
  
  ### Backend directory
-  - You need to have **Java 11+** installed in your computer, open the backend directory on your IDE and run the application
+  - You need to have **Java 11+** installed in your computer;
+  - Open the backend directory on your IDE and run the application.
 
 ### Database
   - You need to have installed **MySQL 5.7+** in your computer and execute the following commands:
