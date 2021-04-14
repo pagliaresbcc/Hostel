@@ -1,4 +1,4 @@
-package br.com.hostel.tests.reservation;
+package br.com.hostel.tests.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

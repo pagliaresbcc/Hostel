@@ -2,7 +2,7 @@ insert into address(address_name, zip_code, city, state, country)
 	values ('Rua Duque de Caxias', '13900-000', 'Amparo', 'SP', 'Brasil');
 	
 INSERT INTO guest(title, name, last_Name, birthday, address_ID, email, password, role) 
-	VALUES ('Mrs.', 'Admin', 'Hostel', DATE('2020-09-01'), 1, 'admin@email.com', '$2a$10$ztYTBinS/LitQOno2jjwf.x7aNLRPs0iO1pIQ9ITqtNwTMybwV/MW', 'ROLE_ADMIN');
+	VALUES ('Mr.', 'Admin', 'Hostel', DATE('2020-09-01'), 1, 'admin@email.com', '$2a$10$ztYTBinS/LitQOno2jjwf.x7aNLRPs0iO1pIQ9ITqtNwTMybwV/MW', 'ROLE_ADMIN');
 
 insert into daily_rate(price) values (500), (200), (300), (350), (150);
 
