@@ -16,6 +16,6 @@
   - You need to have **Java 11+** installed in your computer, open the backend directory on your IDE and run the application
 
 ### Database
-  - You need to have installed **MySQL 5.7+** in your computer and create the following commands:
+  - You need to have installed **MySQL 5.7+** in your computer and execute the following commands:
     - `create database hostel;`
     - `create database teste;`
