@@ -47,7 +47,7 @@ public class ReservationController {
 	
 			return ResponseEntity.created(uri).body(new ReservationDto(reservation));
 		} catch(BaseException be) {
-			return ResponseEntity.status(be.getStatusCode()).body(be.getMessage());
+			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
 		}
 	}
 
@@ -69,7 +69,7 @@ public class ReservationController {
 			
 			return ResponseEntity.ok(new ReservationDto(reservation));
 		} catch(BaseException be) {
-			return ResponseEntity.status(be.getStatusCode()).body(be.getMessage());
+			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
 		}
 	}
 
@@ -83,7 +83,7 @@ public class ReservationController {
 			
 			return ResponseEntity.ok(new ReservationDto(reservation));
 		} catch(BaseException be) {
-			return ResponseEntity.status(be.getStatusCode()).body(be.getMessage());
+			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
 		}
 	}
 	
@@ -96,7 +96,7 @@ public class ReservationController {
 			
 			return ResponseEntity.ok().build();
 		} catch(BaseException be) {
-			return ResponseEntity.status(be.getStatusCode()).body(be.getMessage());
+			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
 		}
 	}
 
@@ -109,7 +109,7 @@ public class ReservationController {
 			
 			return ResponseEntity.ok().build();
 		} catch(BaseException be) {
-			return ResponseEntity.status(be.getStatusCode()).body(be.getMessage());
+			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
 		}
 	}
 }

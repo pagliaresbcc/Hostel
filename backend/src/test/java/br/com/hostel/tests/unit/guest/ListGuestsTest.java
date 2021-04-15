@@ -1,6 +1,7 @@
 package br.com.hostel.tests.unit.guest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -15,8 +16,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
 import br.com.hostel.model.helper.Role;
@@ -126,5 +129,54 @@ public class ListGuestsTest {
 		assertEquals(opGuest.get().getAddress().getCity(), reqGuest.getAddress().getCity());
 
 	}
+	
+	@Test
+	public void shouldThrowExceptionByFindAGuestWithNonexistentID() throws Exception {
+
+		Optional<Guest> opGuest = Optional.empty();
+		
+		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
+
+		BaseException thrown = 
+				assertThrows(BaseException.class, 
+					() -> guestService.listOneGuest(guest.getId()),
+					"Expected listOneGuest() to throw, but it didn't");
+
+		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
+
+	}
+	
+	@Test
+	public void shouldThrowExceptionByFindGuestReservationsWithNonexistentID() throws Exception {
+		
+		Optional<Guest> opGuest = Optional.empty();
+		
+		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
+		
+		BaseException thrown = 
+				assertThrows(BaseException.class, 
+						() -> guestService.listGuestReservations(guest.getId()),
+						"Expected listGuestReservations() to throw, but it didn't");
+		
+		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
+		
+	}
+	
+//	@Test
+//	public void shouldReturnAllGuestReservations() {
+//		Reservation r1 = Mockito.mock(Reservation.class);
+//		Reservation r2 = Mockito.mock(Reservation.class);
+//		Reservation r3 = Mockito.mock(Reservation.class);
+//		
+//		List<Reservation> reservationsList = new ArrayList<>();
+//		
+//		reservationsList.add(r1);
+//    	reservationsList.add(r2);
+//    	reservationsList.add(r3);
+//    	
+//		Optional<Guest> opGuest = Optional.of(guest);
+//    	
+//		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
+//	}
 	
 }

@@ -1,6 +1,7 @@
 package br.com.hostel.tests.unit.guest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -13,10 +14,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.form.GuestForm;
+import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
 import br.com.hostel.model.helper.Role;
@@ -90,8 +93,12 @@ public class CreateGuestsTest {
 		
 		when(guestRepository.findByEmail(any())).thenReturn(opGuest);
 		
-		Guest reqGuest = guestService.createGuest(guestForm, uriBuilder);
+		BaseException thrown = 
+				assertThrows(BaseException.class, 
+					() -> guestService.createGuest(guestForm, uriBuilder),
+					"Expected createGuest() to throw, but it didn't");
+
+		assertEquals(HttpStatus.BAD_REQUEST, thrown.getHttpStatus());
 		
-		assertEquals(null, reqGuest);
 	}
 }

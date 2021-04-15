@@ -1,6 +1,7 @@
 package br.com.hostel.tests.unit.guest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -12,9 +13,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import br.com.hostel.controller.form.GuestUpdateForm;
+import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
 import br.com.hostel.model.helper.Role;
@@ -88,8 +91,11 @@ public class UpdateGuestsTestMock {
 		
 		when(guestRepository.findById(guest.getId())).thenReturn(nonexistentGuest);
 		
-		Guest reqGuest = guestService.updateGuest(guest.getId(), guestUpdateForm);
-		
-		assertEquals(null, reqGuest);
+		BaseException thrown = 
+				assertThrows(BaseException.class, 
+					() -> guestService.updateGuest(guest.getId(), guestUpdateForm),
+					"Expected updateGuest() to throw, but it didn't");
+
+		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}
 }

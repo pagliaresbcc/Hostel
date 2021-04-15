@@ -7,12 +7,12 @@ public class BaseException extends Exception {
 	private static final long serialVersionUID = 1L;
 	
 	private String message;
-	private HttpStatus statusCode;
+	private HttpStatus httpStatus;
 	
-	public BaseException(String message, HttpStatus statusCode) {
+	public BaseException(String message, HttpStatus httpStatus) {
 		super();
 		this.message = message;
-		this.statusCode = statusCode;
+		this.httpStatus = httpStatus;
 	}
 
 	public String getMessage() {
@@ -23,11 +23,11 @@ public class BaseException extends Exception {
 		this.message = message;
 	}
 	
-	public HttpStatus getStatusCode() {
-		return statusCode;
+	public HttpStatus getHttpStatus() {
+		return httpStatus;
 	}
 	
-	public void setStatusCode(HttpStatus statusCode) {
-		this.statusCode = statusCode;
+	public void setHttpStatus(HttpStatus httpStatus) {
+		this.httpStatus = httpStatus;
 	}
 }
