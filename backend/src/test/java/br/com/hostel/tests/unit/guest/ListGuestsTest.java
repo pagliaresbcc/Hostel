@@ -141,11 +141,10 @@ public class ListGuestsTest {
 		Optional<Guest> opGuest = Optional.empty();
 		
 		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
-		when(opGuest.get().getId()).thenReturn(guest.getId());
 
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
-					() -> guestService.listOneGuest(opGuest.get().getId()),
+					() -> guestService.listOneGuest(guest.getId()),
 					"Expected listOneGuest() to throw, but it didn't");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
@@ -158,11 +157,10 @@ public class ListGuestsTest {
 		Optional<Guest> opGuest = Optional.empty();
 		
 		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
-		when(opGuest.get().getId()).thenReturn(guest.getId());
 		
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
-						() -> guestService.listGuestReservations(opGuest.get().getId()),
+						() -> guestService.listGuestReservations(guest.getId()),
 						"Expected listGuestReservations() to throw, but it didn't");
 		
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
