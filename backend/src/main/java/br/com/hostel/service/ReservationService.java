@@ -1,6 +1,5 @@
 package br.com.hostel.service;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +11,14 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.controller.form.ReservationUpdateForm;
+import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.repository.GuestRepository;
@@ -43,112 +41,101 @@ public class ReservationService {
 	@Autowired
 	private GuestRepository guestRepository;
 
-	public ResponseEntity<?> registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) {
-		
+	public Reservation registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) throws BaseException {
+
 		Reservation reservation = form.returnReservation(paymentsRepository, roomRepository);
 		Optional<Guest> guestOp = guestRepository.findById(reservation.getGuest_ID());
 
-		if (guestOp.isPresent()) {
-			
-			if (reservation.getRooms().isEmpty())
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rooms list cannot be empty");
-			
-			else if (reservation.getCheckinDate().isAfter(LocalDate.now())
-					&& reservation.getCheckoutDate().isAfter(reservation.getCheckinDate())) {
-				
-				Guest guest = guestOp.get();
+		if (!guestOp.isPresent())
+			throw new BaseException("Guest ID haven't found", HttpStatus.NOT_FOUND);
 
-				paymentsRepository.save(reservation.getPayment());
-				reservationRepository.save(reservation);
-				
-				guest.addReservation(reservation);
-				guestRepository.save(guest);
+		if (reservation.getRooms().isEmpty())
+			throw new BaseException("Rooms list cannot be empty", HttpStatus.BAD_REQUEST);
 
-				URI uri = uriBuilder.path("/reservations/{id}").buildAndExpand(guest.getId()).toUri();
+		if (reservation.getCheckinDate().isBefore(LocalDate.now())
+				|| reservation.getCheckoutDate().isBefore(reservation.getCheckinDate()))
+			throw new BaseException("Verify your checkin/checkout date", HttpStatus.BAD_REQUEST);
 
-				return ResponseEntity.created(uri).body(new ReservationDto(reservation));
-			} else {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Verify your checkin/checkout date");
-			}
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Guest ID haven't found");
+		Guest guest = guestOp.get();
+
+		paymentsRepository.save(reservation.getPayment());
+		reservationRepository.save(reservation);
+
+		guest.addReservation(reservation);
+		guestRepository.save(guest);
+
+		return reservation;
 	}
 
-	public ResponseEntity<List<ReservationDto>> listAllReservations(String name, Pageable pagination) {
+	public List<Reservation> listAllReservations(String name, Pageable pagination) {
 
-		List<ReservationDto> response = new ArrayList<>();
+		List<Reservation> response = new ArrayList<>();
 
 		if (name == null)
-			response = ReservationDto.convert(reservationRepository.findAll());
+			response = reservationRepository.findAll();
 		else {
-			
 			List<Guest> guestList = guestRepository.findByName(name);
-			
-			if(guestList.size() > 0) {
 
-				List<Reservation> reservations = guestList.get(0).getReservations().stream()
-						.collect(Collectors.toList());
-		
-				response = ReservationDto.convert(reservations);
+			if (guestList.size() > 0) {
+
+				response = guestList.get(0).getReservations().stream().collect(Collectors.toList());
 			}
 		}
 
-		return ResponseEntity.ok(response);
-	}
-	
-	public ResponseEntity<?> listOneReservation(Long id) {
-		
-		Optional<Reservation> reservation = reservationRepository.findById(id);
-		
-		if (reservation.isPresent()) return ResponseEntity.ok(new ReservationDto(reservation.get()));
-		
-		else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with id = " + id);
+		return response;
 	}
 
-	public ResponseEntity<?> updateReservation(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form) {
+	public Reservation listOneReservation(Long id) throws BaseException {
+
+		Optional<Reservation> reservation = reservationRepository.findById(id);
+
+		if (!reservation.isPresent())
+			throw new BaseException("There isn't a reservation with id = " + id, HttpStatus.NOT_FOUND);
+
+		return reservation.get();
+
+	}
+
+	public Reservation updateReservation(@PathVariable Long id, @RequestBody @Valid ReservationUpdateForm form)
+			throws BaseException {
 
 		Optional<Reservation> reservationOp = reservationRepository.findById(id);
 
-		if (reservationOp.isPresent()) {
+		if (!reservationOp.isPresent())
+			throw new BaseException("There isn't a reservation with id = " + id, HttpStatus.NOT_FOUND);
 
-			Reservation reservation = form.updateReservationForm(id, reservationOp.get(), paymentsRepository,
-					roomRepository);
+		Reservation reservation = form.updateReservationForm(id, reservationOp.get(), paymentsRepository,
+				roomRepository);
 
-			if (reservation.getRooms().isEmpty())
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reservation rooms list cannot be empty");
-			else
-				reservation.getRooms().forEach(room -> roomRepository.save(room));
+		if (reservation.getRooms().isEmpty())
+			throw new BaseException("Reservation rooms list cannot be empty", HttpStatus.BAD_REQUEST);
 
-			paymentsRepository.save(reservation.getPayment());
+		reservation.getRooms().forEach(room -> roomRepository.save(room));
 
-			return ResponseEntity.ok(new ReservationDto(reservation));
-		} else 
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with id = " + id);
-	}
-	
-	public ResponseEntity<?> deleteRoomsReservation(Long id) {
-		
-		Optional<Reservation> reservation = reservationRepository.findById(id);
+		paymentsRepository.save(reservation.getPayment());
 
-		if (reservation.isPresent()) {
-			
-			reservation.get().setRooms(null);
-			reservationRepository.save(reservation.get());
-			
-			return ResponseEntity.ok().build();
-		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with id = " + id);
+		return reservation;
 	}
 
-	public ResponseEntity<?> deleteReservation(Long id) {
+	public void deleteRoomsReservation(Long id) throws BaseException {
 
 		Optional<Reservation> reservation = reservationRepository.findById(id);
 
-		if (reservation.isPresent()) {
-			reservationRepository.deleteById(id);
+		if (!reservation.isPresent())
+			throw new BaseException("There isn't a reservation with id = " + id, HttpStatus.NOT_FOUND);
 
-			return ResponseEntity.ok().build();
-		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a reservation with id = " + id);
+		reservation.get().setRooms(null);
+		reservationRepository.save(reservation.get());
+	}
+
+	public void deleteReservation(Long id) throws BaseException {
+
+		Optional<Reservation> reservation = reservationRepository.findById(id);
+
+		if (!reservation.isPresent())
+			throw new BaseException("There isn't a reservation with id = " + id, HttpStatus.NOT_FOUND);
+			
+		reservationRepository.deleteById(id);
+
 	}
 }
