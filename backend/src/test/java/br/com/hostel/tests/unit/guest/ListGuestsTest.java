@@ -7,12 +7,15 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
+import br.com.hostel.model.Reservation;
 import br.com.hostel.model.helper.Role;
 import br.com.hostel.repository.AddressRepository;
 import br.com.hostel.repository.GuestRepository;
@@ -57,6 +61,7 @@ public class ListGuestsTest {
 		
 		// setting guest
 		guest.setAddress(address);
+		guest.setId(14L);
 		guest.setBirthday(LocalDate.of(1900, 12, 12));
 		guest.setEmail("washington2@orkut.com");
 		guest.setName("Washington");
@@ -136,10 +141,11 @@ public class ListGuestsTest {
 		Optional<Guest> opGuest = Optional.empty();
 		
 		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
+		when(opGuest.get().getId()).thenReturn(guest.getId());
 
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
-					() -> guestService.listOneGuest(guest.getId()),
+					() -> guestService.listOneGuest(opGuest.get().getId()),
 					"Expected listOneGuest() to throw, but it didn't");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
@@ -152,31 +158,36 @@ public class ListGuestsTest {
 		Optional<Guest> opGuest = Optional.empty();
 		
 		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
+		when(opGuest.get().getId()).thenReturn(guest.getId());
 		
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
-						() -> guestService.listGuestReservations(guest.getId()),
+						() -> guestService.listGuestReservations(opGuest.get().getId()),
 						"Expected listGuestReservations() to throw, but it didn't");
 		
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 		
 	}
 	
-//	@Test
-//	public void shouldReturnAllGuestReservations() {
-//		Reservation r1 = Mockito.mock(Reservation.class);
-//		Reservation r2 = Mockito.mock(Reservation.class);
-//		Reservation r3 = Mockito.mock(Reservation.class);
-//		
-//		List<Reservation> reservationsList = new ArrayList<>();
-//		
-//		reservationsList.add(r1);
-//    	reservationsList.add(r2);
-//    	reservationsList.add(r3);
-//    	
-//		Optional<Guest> opGuest = Optional.of(guest);
-//    	
-//		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
-//	}
+	@Test
+	public void shouldReturnAllGuestReservations() throws BaseException {
+		Reservation r1 = Mockito.mock(Reservation.class);
+		Reservation r2 = Mockito.mock(Reservation.class);
+		Reservation r3 = Mockito.mock(Reservation.class);
+		
+		Set<Reservation> reservationsList = new HashSet<>();
+		
+		reservationsList.add(r1);
+    	reservationsList.add(r2);
+    	reservationsList.add(r3);
+    	
+    	guest.setReservations(reservationsList);
+    	
+		when(guestRepository.findById(guest.getId())).thenReturn(Optional.of(guest));
+		
+		List<Reservation> reqReservationsList = guestService.listGuestReservations(guest.getId());
+		
+		assertEquals(3, reqReservationsList.size());
+	}
 	
 }
