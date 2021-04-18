@@ -1,6 +1,5 @@
 package br.com.hostel.service;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -14,16 +13,15 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.controller.form.RoomUpdateForm;
 import br.com.hostel.controller.helper.RoomFilter;
+import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
@@ -42,25 +40,22 @@ public class RoomService {
 	@Autowired
 	private ReservationRepository reservationRepository;
 
-	public ResponseEntity<?> registerRoom(RoomForm form, UriComponentsBuilder uriBuilder) {
-		
-		Room room = form.returnRoom(dailyRateRepository);
+	public Room registerRoom(RoomForm form, UriComponentsBuilder uriBuilder) throws BaseException {
 
+		Room room = form.returnRoom(dailyRateRepository);
 		Optional<Room> roomOp = roomRepository.findByNumber(room.getNumber());
 
-		if (roomOp.isPresent()) 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is already a room with number = " + room.getNumber());
-	    else {
-			roomRepository.save(room);
-
-			URI uri = uriBuilder.path("/rooms/{id}").buildAndExpand(room.getId()).toUri();
-			return ResponseEntity.created(uri).body(new RoomDto(room));
+		if (roomOp.isPresent()) {
+			throw new 
+			BaseException("There is already a room with number = " + room.getNumber(),
+					HttpStatus.BAD_REQUEST);
 		}
+
+		return roomRepository.save(room);
 	}
 
-	public ResponseEntity<List<RoomDto>> listAllRooms(RoomFilter roomFilter, Pageable pagination) {
+	public List<Room> listAllRooms(RoomFilter roomFilter, Pageable pagination) {
 
-		List<RoomDto> response = new ArrayList<>();
 		List<Room> unavailableRooms = new ArrayList<>();
 		List<Room> availableRooms = roomRepository.findAll();
 
@@ -80,51 +75,48 @@ public class RoomService {
 
 			unavailableRooms.forEach(room -> availableRooms.remove(room));
 		}
-		response = RoomDto.convert(availableRooms);
 
-		return ResponseEntity.ok(response);
+		return availableRooms;
 	}
 
-	public ResponseEntity<?> listOneRoom(Long id) {
-		
+	public Room listOneRoom(Long id) throws BaseException {
+
 		Optional<Room> room = roomRepository.findById(id);
-		
-		if (room.isPresent()) {
-			return ResponseEntity.ok(new RoomDto(room.get()));
-		} else 
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a room with id = " + id);
+
+		if (!room.isPresent())
+			throw new BaseException("Room ID haven't found", HttpStatus.NOT_FOUND);
+
+		return room.get();
+
 	}
 
-	public ResponseEntity<?> updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
-			UriComponentsBuilder uriBuilder) {
+	public Room updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
+			UriComponentsBuilder uriBuilder) throws BaseException {
 
 		Optional<Room> roomOp = roomRepository.findById(id);
-		
-		if (roomOp.isPresent()) {
 
-			Room room = form.updateRoomForm(id, roomOp.get(), roomRepository);
-	
-			dailyRateRepository.save(room.getDailyRate());
-	
-			roomRepository.save(room);
-	
-			return ResponseEntity.ok(new RoomDto(room));
-		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a room with id = " + id);
+		if (!roomOp.isPresent())
+			throw new BaseException("Room ID haven't found", HttpStatus.NOT_FOUND);
+
+		Room room = form.updateRoomForm(id, roomOp.get(), roomRepository);
+
+		dailyRateRepository.save(room.getDailyRate());
+
+		roomRepository.save(room);
+		
+		return room;
 	}
 
-	public ResponseEntity<?> deleteRoom(Long id) {
-		
+	public void deleteRoom(Long id) throws BaseException {
+
 		Optional<Room> room = roomRepository.findById(id);
 
-		if (room.isPresent()) {
-			roomRepository.deleteById(id);
+		if (!room.isPresent())
+			throw new BaseException("Room ID haven't found", HttpStatus.NOT_FOUND);
 
-			return ResponseEntity.ok().build();
-		} else
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There isn't a room with id = " + id);
+		roomRepository.deleteById(id);
 	}
-	
+
 	private void verifyValidRooms(RoomFilter roomFilter, List<Room> unavailableRooms, List<Room> availableRooms) {
 
 		if (roomFilter.getMinDailyRate() != null) {
@@ -158,8 +150,8 @@ public class RoomService {
 		unavailableRooms.forEach(room -> availableRooms.remove(room));
 	}
 
-	private void verifyValidRoomsWithinAPeriod(List<Room> unavailableRooms, LocalDate checkinDate, LocalDate checkoutDate,
-			Reservation reservation) {
+	private void verifyValidRoomsWithinAPeriod(List<Room> unavailableRooms, LocalDate checkinDate,
+			LocalDate checkoutDate, Reservation reservation) {
 		long numOfDays = ChronoUnit.DAYS.between(reservation.getCheckinDate(), reservation.getCheckoutDate());
 
 		List<LocalDate> dates = Stream.iterate(reservation.getCheckinDate(), date -> date.plusDays(1)).limit(numOfDays)

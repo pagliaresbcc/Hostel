@@ -1,6 +1,9 @@
 package br.com.hostel.tests.unit.room;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -11,15 +14,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,232 +41,130 @@ import br.com.hostel.controller.dto.LoginDto;
 import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.LoginForm;
 import br.com.hostel.controller.form.ReservationForm;
+import br.com.hostel.controller.helper.RoomFilter;
+import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.CheckPayment;
+import br.com.hostel.model.DailyRate;
+import br.com.hostel.model.Guest;
+import br.com.hostel.model.Reservation;
+import br.com.hostel.model.Room;
+import br.com.hostel.repository.DailyRateRepository;
+import br.com.hostel.repository.ReservationRepository;
+import br.com.hostel.repository.RoomRepository;
+import br.com.hostel.service.RoomService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 public class ListRoomsTest {
-	
+
+	@MockBean
+	RoomRepository roomRepository;
+
+	@MockBean
+	DailyRateRepository dailyRepository;
+
+	@MockBean
+	ReservationRepository reservationRepository;
+
 	@Autowired
-	private MockMvc mockMvc;
+	RoomService service;
+
+	private static Room firstRoom = new Room();
+	private static Room secondRoom = new Room();
+	private static DailyRate dailyRate = new DailyRate();
+	private static List<Room> roomsList = new ArrayList<>();
 	
-	@Autowired
-	ObjectMapper objectMapper;
-	
-	private static URI uri;
-	private static HttpHeaders headers = new HttpHeaders();
-	
+	private static RoomFilter filter = new RoomFilter();
+
 	@BeforeAll
-	public static void beforeAll(@Autowired MockMvc mockMvc, @Autowired ObjectMapper objectMapper)
-			throws JsonProcessingException, Exception {
-		
-		ReservationForm reservationForm = new ReservationForm();
-		CheckPayment checkPayment = new CheckPayment();
-		List<Long> rooms_ID = new ArrayList<>();
-		LoginForm login = new LoginForm();
+	public static void beforeAll() {
+		// setting daily rate to put into the room parameters
+		dailyRate.setPrice(400);
 
-		uri = new URI("/api/rooms/");
+		// setting first room
+		firstRoom.setDailyRate(dailyRate);
+		firstRoom.setDescription("Room first test");
+		firstRoom.setDimension(230.0);
+		firstRoom.setMaxNumberOfGuests(4);
+		firstRoom.setNumber(666);
 
-		//setting login variables to autenticate
-		login.setEmail("admin@email.com");
-		login.setPassword("123456");
+		// setting second room
+		secondRoom.setDailyRate(dailyRate);
+		secondRoom.setDescription("Room second test");
+		secondRoom.setDimension(460.0);
+		secondRoom.setMaxNumberOfGuests(8);
+		secondRoom.setNumber(777);
 
-		//posting on /auth to get token
-		MvcResult resultAuth = mockMvc
-				.perform(post("/auth")
-				.content(objectMapper.writeValueAsString(login)).contentType("application/json"))
-				.andReturn();	
-			
-		String contentAsString = resultAuth.getResponse().getContentAsString();
+		roomsList.add(firstRoom);
+		roomsList.add(secondRoom);
+	}
 
-		LoginDto loginObjResponse = objectMapper.readValue(contentAsString, LoginDto.class);
-		
-		// seting header to put on post and delete request parameters
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
-		
-		//setting reservation object
-		reservationForm.setCheckinDate(LocalDate.of(2025, 4, 10));
-		reservationForm.setCheckoutDate(LocalDate.of(2025, 4, 17));
-		reservationForm.setNumberOfGuests(2);
-		reservationForm.setGuest_ID(1L);
-		
-		checkPayment.setAmount(3000);
-		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2025, 01, 25), LocalTime.of(21, 31)));
-		checkPayment.setBankId("01");
-		checkPayment.setBankName("Banco do Brasil");
-		checkPayment.setBranchNumber("1234-5");
-		
-		reservationForm.setPayment(checkPayment);
-		
-		rooms_ID.add(1L);
-		rooms_ID.add(2L);
-		reservationForm.setRooms_ID(rooms_ID);
+	@Test
+	public void shouldReturnAllRoomsWithoutParamAndStatusOk() throws Exception {
 
-		mockMvc.perform(post("/api/reservations/")
-				.headers(headers)
-				.content(objectMapper.writeValueAsString(reservationForm)));
+		when(roomRepository.findAll()).thenReturn(roomsList);
+		
+		List<Room> listAllRooms = service.listAllRooms(filter, null);
+		
+		assertEquals(roomsList.size(), listAllRooms.size());
 	}
 	
 	@Test
-	public void shouldShowOnlyAvailableRoomsWithReservationCheckinAndCheckoutDateBefore() throws Exception {
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.param("checkinDate","2025-04-01")
-						.param("checkoutDate","2025-04-09")
-						.param("numberOfGuests","2")
-						.headers(headers))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
+	public void shouldReturnOneRoomAndStatusOkByParam() throws Exception {
 
-		String contentAsString = result.getResponse().getContentAsString();
+		List<Room> rooms = new ArrayList<>();
+		rooms.add(secondRoom);
 		
-		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
+		when(roomRepository.findAll()).thenReturn(rooms);
 		
-		assertEquals(5, roomObjResponse.length);
+		List<Room> justOneRoomList = service.listAllRooms(filter, null);
+		
+		assertEquals(1, justOneRoomList.size());
+		assertEquals(secondRoom.getNumber(), justOneRoomList.get(0).getNumber());
 	}
 	
 	@Test
-	public void shouldShowOnlyAvailableRoomsWithReservationCheckinAndCheckoutDateAfter() throws Exception {
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.param("checkinDate","2025-04-18")
-						.param("checkoutDate","2025-04-25")
-						.param("numberOfGuests","2")
-						.headers(headers))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
+	public void shouldReturnEmptyListByUsingFilterByNumberOfGuests() throws Exception {
 		
-		String contentAsString = result.getResponse().getContentAsString();
+		List<Room> emptyList = new ArrayList<>();
 		
-		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
+		when(roomRepository.findAll()).thenReturn(roomsList);
 		
-		assertEquals(5, roomObjResponse.length);
+		RoomFilter newFilter = new RoomFilter();
+		
+		newFilter.setNumberOfGuests(10);
+		
+		List<Room> reqEmptyList = service.listAllRooms(newFilter, null);
+		
+		assertEquals(emptyList.size(), reqEmptyList.size());
 	}
 	
 	@Test
-	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateBeforeAndCheckoutDateBetween() throws Exception {
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.param("checkinDate","2025-04-05")
-						.param("checkoutDate","2025-04-15")
-						.param("numberOfGuests","2")
-						.headers(headers))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
-				
-		String contentAsString = result.getResponse().getContentAsString();
-		
-		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
-		
-		assertEquals(3, roomObjResponse.length);
-	}
-	
-	@Test
-	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateBetweenAndCheckoutDateAfter() throws Exception {
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.param("checkinDate","2025-04-15")
-						.param("checkoutDate","2025-04-20")
-						.param("numberOfGuests","2")
-						.headers(headers))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
-		
-		String contentAsString = result.getResponse().getContentAsString();
-		
-		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
-		
-		assertEquals(3, roomObjResponse.length);
-	}
-	
-	@Test
-	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateBeforeAndCheckoutDateAfter() throws Exception {
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.param("checkinDate","2025-04-05")
-						.param("checkoutDate","2025-04-20")
-						.param("numberOfGuests","2")
-						.headers(headers))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
-		
-		String contentAsString = result.getResponse().getContentAsString();
-		
-		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
-		
-		assertEquals(3, roomObjResponse.length);
-	}
-	
-	@Test
-	public void shouldShowOnlyAvailableRoomsWithReservationCheckinDateAndCheckoutDateBetween() throws Exception {
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.param("checkinDate","2025-04-13")
-						.param("checkoutDate","2025-04-16")
-						.param("numberOfGuests","2")
-						.headers(headers))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
-		
-		String contentAsString = result.getResponse().getContentAsString();
-		
-		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
-		
-		assertEquals(3, roomObjResponse.length);
-	}
-	
-	@Test
-	public void shouldReturnAllRoomsAndStatusOkWithoutParam() throws Exception {
+	public void shouldReturnOneRoomAndStatusOkByID() throws Exception {
 
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.headers(headers))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
-
-		String contentAsString = result.getResponse().getContentAsString();
+		Optional<Room> opRoom = Optional.of(firstRoom);
 		
-		RoomDto[] roomObjResponse = objectMapper.readValue(contentAsString, RoomDto[].class);
+		when(roomRepository.findById(firstRoom.getId())).thenReturn(opRoom);
 
-		assertEquals(5, roomObjResponse.length);
-		assertEquals(13, roomObjResponse[0].getNumber());
-		assertEquals(250, roomObjResponse[1].getDimension());
+		Room reqRoom = service.listOneRoom(opRoom.get().getId());
+
+		assertEquals(opRoom.get().getNumber(), reqRoom.getNumber());
+		assertEquals(opRoom.get().getMaxNumberOfGuests(), reqRoom.getMaxNumberOfGuests());
 	}
 	
 	@Test
-	public void shouldReturnOneRoomAndStatusOkById() throws Exception {
-		
-		MvcResult result = 
-				mockMvc.perform(get(uri + "1")
-						.headers(headers))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
+	public void shouldThrowExceptionByFindARoomWithNonexistentID() throws Exception {
 
-		String contentAsString = result.getResponse().getContentAsString();
+		Optional<Room> opRoom = Optional.empty();
 		
-		RoomDto roomObjResponse = objectMapper.readValue(contentAsString, RoomDto.class);
-		
-		assertEquals(13, roomObjResponse.getNumber());
-		assertEquals(500, roomObjResponse.getDimension());
-	}
-	
-	@Test
-	public void shouldReturnNotFoundStatusByUsingWrongParam() throws Exception {
+		when(roomRepository.findById(firstRoom.getId())).thenReturn(opRoom);
 
-		mockMvc
-			.perform(get(uri + "9999")
-				.headers(headers))
-				.andDo(print())
-				.andExpect(status().isNotFound());
+		BaseException thrown = 
+				assertThrows(BaseException.class, 
+					() -> service.listOneRoom(firstRoom.getId()),
+					"Expected listOneRoom() to throw, but it didn't");
+
+		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}
 }

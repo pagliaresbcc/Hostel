@@ -1,12 +1,15 @@
 package br.com.hostel.tests.unit.room;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,89 +17,100 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.hostel.controller.dto.RoomDto;
+import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.controller.form.RoomUpdateForm;
+import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.initializer.RoomInitializer;
 import br.com.hostel.model.DailyRate;
+import br.com.hostel.model.Guest;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
+import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
+import br.com.hostel.service.RoomService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 public class UpdateRoomTest {
-	
-	@Autowired
-	private MockMvc mockMvc;
-	
-	@Autowired
-	ObjectMapper objectMapper;
 
-	private static URI uri;
-	private static HttpHeaders headers = new HttpHeaders();
+	@MockBean
+	RoomRepository roomRepository;
+	
+	@MockBean
+	DailyRateRepository dailyRepository;
+	
+	@MockBean
+	ReservationRepository reservationRepository;
+
+	@MockBean
+	RoomUpdateForm form;
+
+	@MockBean
+	UriComponentsBuilder uriBuilder;
+
+	@Autowired
+	RoomService service;
+
 	private static Room room = new Room();
 	private static DailyRate dailyRate = new DailyRate();
 
 	@BeforeAll
-	public static void beforeAll(@Autowired RoomRepository roomRepository,
-			@Autowired DailyRateRepository dailyRateRepository, @Autowired MockMvc mockMvc, 
-			@Autowired ObjectMapper objectMapper) throws JsonProcessingException, Exception {
-		
-		uri = new URI("/api/rooms/");
-		
-		RoomInitializer.initialize(headers, room, dailyRate, mockMvc, objectMapper);
-		
-		dailyRateRepository.save(dailyRate);
-		roomRepository.save(room);
-	}
-	
-	@Test
-	public void shouldAutenticateAndUpdateRoomDescriptionAndDailyRate() throws Exception {
-		
-		RoomUpdateForm roomToUpdate = new RoomUpdateForm();
-		roomToUpdate.setDescription("test update method");
-		roomToUpdate.setDailyRate(room.getDailyRate());
-		roomToUpdate.getDailyRate().setPrice(1500.0);
-		
-		MvcResult result = mockMvc.perform(put(uri + room.getId().toString())
-				.headers(headers)
-				.content(objectMapper.writeValueAsString(roomToUpdate)))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andReturn();
+	public static void beforeAll() {
+		// setting daily rate to put into the room parameters
+		dailyRate.setPrice(400);
 
-		String contentAsString = result.getResponse().getContentAsString();
+		// setting room
+		room.setId(13L);
+		room.setDailyRate(dailyRate);
+		room.setDescription("Room test");
+		room.setDimension(230.0);
+		room.setMaxNumberOfGuests(4);
+		room.setNumber(666);
+	}
+
+	@Test
+	public void shouldUpdateRoomNumberAndDescription() throws Exception {
+
+		Optional<Room> opRoom = Optional.of(room);
 		
-		RoomDto roomObjResponse = objectMapper.readValue(contentAsString, RoomDto.class);
+		opRoom.get().setNumber(13);
+		opRoom.get().setDescription("Room updated");
+
+		when(roomRepository.findById(room.getId())).thenReturn(opRoom);
+		when(form.updateRoomForm(room.getId(), room, roomRepository)).thenReturn(room);
+		when(dailyRepository.save(room.getDailyRate())).thenReturn(dailyRate);
 		
-		assertEquals(roomObjResponse.getNumber(), room.getNumber());
-		assertEquals(roomObjResponse.getDailyRate().getPrice(), roomToUpdate.getDailyRate().getPrice());
-		assertTrue(roomObjResponse.getDescription().compareTo(room.getDescription()) != 0);
+		Room reqRoom = service.updateRoom(room.getId(), form, uriBuilder);
+		
+		assertEquals(opRoom.get().getNumber(), reqRoom.getNumber());
+		assertEquals(opRoom.get().getDescription(), reqRoom.getDescription());
 	}
 	
 	@Test
-	public void shouldReturnBadRequestStatusWhenUpdatingARoomWithNonExistentId() throws Exception {
+	public void shouldNotUpdateRoomWithNonexistenteID() throws Exception {
 		
-		RoomUpdateForm roomToUpdate = new RoomUpdateForm();
-		roomToUpdate.setDescription("test update method");
-		roomToUpdate.setDailyRate(room.getDailyRate());
-		roomToUpdate.getDailyRate().setPrice(1500.0);
+		Optional<Room> nonexistentRoom = Optional.empty();
 		
-		mockMvc
-			.perform(put(uri + "999")
-				.headers(headers)
-				.content(objectMapper.writeValueAsString(roomToUpdate)))
-				.andDo(print())
-				.andExpect(status().isNotFound())
-				.andReturn();
+		when(roomRepository.findById(room.getId())).thenReturn(nonexistentRoom);
+		
+		BaseException thrown = 
+				assertThrows(BaseException.class, 
+					() -> service.updateRoom(room.getId(), form, uriBuilder),
+					"Expected updateRoom() to throw, but it didn't");
+
+		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}
 }

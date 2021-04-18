@@ -7,6 +7,10 @@ public class RoomFilter {
 	private Integer numberOfGuests;
 	private Double minDailyRate;
 	private Double maxDailyRate;
+	
+	public RoomFilter() {
+		
+	}
 
 	public RoomFilter(String checkinDate, String checkoutDate, Integer numberOfGuests, Double minDailyRate,
 			Double maxDailyRate) {

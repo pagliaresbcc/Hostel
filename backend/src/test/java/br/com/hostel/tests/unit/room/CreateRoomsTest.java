@@ -1,85 +1,96 @@
 package br.com.hostel.tests.unit.room;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.net.URI;
-
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.hostel.controller.dto.RoomDto;
-import br.com.hostel.initializer.RoomInitializer;
+import org.springframework.web.util.UriComponentsBuilder;
+import br.com.hostel.controller.form.RoomForm;
+import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.DailyRate;
+import br.com.hostel.model.Guest;
 import br.com.hostel.model.Room;
+import br.com.hostel.repository.DailyRateRepository;
+import br.com.hostel.repository.ReservationRepository;
+import br.com.hostel.repository.RoomRepository;
+import br.com.hostel.service.RoomService;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@AutoConfigureMockMvc
+@SpringBootTest(classes = RoomService.class)
 public class CreateRoomsTest {
+
+	@MockBean
+	RoomRepository roomRepository;
 	
+	@MockBean
+	DailyRateRepository dailyRepository;
+	
+	@MockBean
+	ReservationRepository reservationRepository;
+
+	@MockBean
+	RoomForm form;
+
+	@MockBean
+	UriComponentsBuilder uriBuilder;
+
 	@Autowired
-	private ObjectMapper objectMapper;
-	
-	@Autowired 
-	private MockMvc mockMvc;
+	RoomService service;
 
-	private URI uri;
-	private HttpHeaders headers = new HttpHeaders();
-	private Room room = new Room();
-	private DailyRate dailyRate = new DailyRate();
+	private static Room room = new Room();
+	private static DailyRate dailyRate = new DailyRate();
 
-	@BeforeEach
-	public void beforeAll(@Autowired ObjectMapper objectMapper, 
-			@Autowired MockMvc mockMvc) throws JsonProcessingException, Exception {
-		
-		uri = new URI("/api/rooms/");
+	@BeforeAll
+	public static void beforeAll() {
+		// setting daily rate to put into the room parameters
+		dailyRate.setPrice(400);
 
-		RoomInitializer.initialize(headers, room, dailyRate, mockMvc, objectMapper);
+		// setting room
+		room.setDailyRate(dailyRate);
+		room.setDescription("Room test");
+		room.setDimension(230.0);
+		room.setMaxNumberOfGuests(4);
+		room.setNumber(666);
 	}
 
 	@Test
-	public void shouldAutenticateAndCreateOneRoomAndReturnStatusCreated() throws Exception {
+	public void shouldCreateOneRoomAndReturnStatusCreated() throws BaseException {
 
-		MvcResult result = mockMvc.perform(post(uri)
-						.headers(headers)
-						.content(objectMapper.writeValueAsString(room)))
-						.andDo(print())
-						.andExpect(status().isCreated())
-						.andReturn();
+		Optional<Room> nonexistentRoom = Optional.empty();
 		
-		String contentAsString = result.getResponse().getContentAsString();
+		when(form.returnRoom(any())).thenReturn(room);
+		when(roomRepository.findByNumber(any())).thenReturn(nonexistentRoom);
+		when(roomRepository.save(any())).thenReturn(room);
 
-		RoomDto roomObjResponse = objectMapper.readValue(contentAsString, RoomDto.class);
+		Room reqRoom = service.registerRoom(form, uriBuilder);
 
-		assertEquals(room.getNumber(), roomObjResponse.getNumber());
-		assertEquals(room.getDimension(), roomObjResponse.getDimension(), 230);
+		assertEquals(room.getDescription(), reqRoom.getDescription());
+		assertEquals(room.getDimension(), reqRoom.getDimension());
+
 	}
 	
 	@Test
-	public void shouldReturnBadRequestStatusWhenCreatingARoomWithExistentNumber() throws Exception {
-
-		room.setNumber(13);
+	public void shouldReturnNullWithExistentRoomNumber() throws BaseException {
 		
-		mockMvc
-			.perform(post(uri)
-					.headers(headers)
-					.content(objectMapper.writeValueAsString(room)))
-					.andDo(print())
-					.andExpect(status().isBadRequest())
-					.andReturn();
+		Optional<Room> opRoom = Optional.of(room);
+
+		when(form.returnRoom(any())).thenReturn(room);
+		when(roomRepository.findByNumber(any())).thenReturn(opRoom);
+		
+		BaseException thrown = 
+				assertThrows(BaseException.class, 
+					() -> service.registerRoom(form, uriBuilder),
+					"Expected registerRoom() to throw, but it didn't");
+
+		assertEquals(HttpStatus.BAD_REQUEST, thrown.getHttpStatus());
 	}
 }

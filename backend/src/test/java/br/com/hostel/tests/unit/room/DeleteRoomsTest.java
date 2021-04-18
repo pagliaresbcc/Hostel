@@ -1,77 +1,70 @@
 package br.com.hostel.tests.unit.room;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-import java.net.URI;
+import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.hostel.initializer.RoomInitializer;
-import br.com.hostel.model.DailyRate;
+import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
+import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
+import br.com.hostel.service.RoomService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 public class DeleteRoomsTest {
 	
+	@MockBean
+	RoomRepository roomRepository;
+	
+	@MockBean
+	DailyRateRepository dailyRepository;
+	
+	@MockBean
+	ReservationRepository reservationRepository;
+
+	@MockBean
+	Room room;
+
 	@Autowired
-	private RoomRepository roomRepository;
-	
-	@Autowired 
-	private DailyRateRepository dailyRateRepository;
-	
-	@Autowired 
-	private MockMvc mockMvc;
+	RoomService service;
 
-	private URI uri;
-	private HttpHeaders headers = new HttpHeaders();
-	private Room room = new Room();
-	private DailyRate dailyRate = new DailyRate();
+	@Test
+	public void shouldReturnTrueWhenDeletingARoomWithExistentID() throws Exception {
 
-	@BeforeEach
-	public void beforeEach(@Autowired ObjectMapper objectMapper, 
-			@Autowired MockMvc mockMvc) throws JsonProcessingException, Exception {
-		
-		uri = new URI("/api/rooms/");
+		Optional<Room> opRoom = Optional.of(room);
 
-		RoomInitializer.initialize(headers, room, dailyRate, mockMvc, objectMapper);
+		when(roomRepository.findById(any())).thenReturn(opRoom);
+
+		service.deleteRoom(room.getId());
 	}
 
 	@Test
-	public void shouldReturnNotFoundStatusWhenDeletingARoomWithNonExistentID() throws Exception {
-		dailyRateRepository.save(dailyRate);
-		roomRepository.save(room);
-		
-		mockMvc.perform(delete(uri + "0")
-				.headers(headers))
-				.andDo(print())
-	            .andExpect(status().isNotFound());
-	}
+	public void shouldReturnFalseWhenDeletingARoomWithNonExistentID() throws Exception {
 
-	@Test
-	public void shouldAutenticateAndDeleteOneRoomWithId2() throws Exception {
-		dailyRateRepository.save(dailyRate);
-		roomRepository.save(room);
-		
-		mockMvc.perform(delete(uri + room.getId().toString())
-				.headers(headers))
-				.andDo(print())
-	            .andExpect(status().isOk());
+		Optional<Room> nonexistentRoom = Optional.empty();
+
+		when(roomRepository.findById(any())).thenReturn(nonexistentRoom);
+
+		BaseException thrown = 
+				assertThrows(BaseException.class, 
+					() -> service.deleteRoom(room.getId()),
+					"Expected deleteRoom() to throw, but it didn't");
+
+		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}
 }
