@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +16,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.DailyRate;
-import br.com.hostel.model.Guest;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
 import br.com.hostel.repository.ReservationRepository;

@@ -2,13 +2,8 @@ package br.com.hostel.tests.unit.room;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.net.URI;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -18,23 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.hostel.controller.dto.RoomDto;
-import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.controller.form.RoomUpdateForm;
 import br.com.hostel.exceptions.BaseException;
-import br.com.hostel.initializer.RoomInitializer;
 import br.com.hostel.model.DailyRate;
-import br.com.hostel.model.Guest;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
 import br.com.hostel.repository.ReservationRepository;
