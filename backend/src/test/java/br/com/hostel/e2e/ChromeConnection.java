@@ -13,7 +13,7 @@ public class ChromeConnection {
 	}
 
 	public WebDriver Connection() {
-		File file = new File("C:\\Users\\danda/Desktop\\chromedriver.exe");
+		File file = new File("./chromedriver.exe");
 		System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 		ChromeOptions options = new ChromeOptions();
 		WebDriver driver = new ChromeDriver(options);
