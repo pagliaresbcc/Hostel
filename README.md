@@ -15,7 +15,7 @@
   To run both frontend and backend you need to execute the following steps:
   
 ### Database
-  - You need to execute the following commands:
+  - Open the cmd (or any program that you use to work with database **using MySQL**) and execute the following commands:
     - `create database hostel;`
     - `create database teste;`
   
