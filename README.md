@@ -13,12 +13,7 @@
 ## Execution steps
 
   To run both frontend and backend you need to execute the following steps:
-  
-### Database
-  - Open the cmd (or any program that you use to work with database **using MySQL**) and execute the following commands:
-    - `create database hostel;`
-    - `create database teste;`
-  
+
 ### Backend directory
   - You just need to open and configure the backend directory on your IDE (open as maven project, <br>
     download dependencies, etc) and run the application.
