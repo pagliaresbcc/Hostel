@@ -100,9 +100,6 @@ export default function NewReservation() {
 
       history.push("/guest/profile");
     } catch (err) {
-      console.log(rooms_ID);
-      console.log(reservation_ID);
-      console.log(data);
       alert("Erro nas informações, tente novamente");
     }
   }
