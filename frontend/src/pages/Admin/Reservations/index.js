@@ -24,7 +24,6 @@ export default function Reservations() {
   }, [token]);
 
   async function handleUpdateReservation(id) {
-    console.log(id);
     sessionStorage.setItem("reservation_id", id);
 
     history.push("/reservations/updateReservation");

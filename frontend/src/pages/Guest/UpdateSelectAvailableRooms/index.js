@@ -27,8 +27,6 @@ export default function UpdateSelectAvailableRooms() {
       },
     });
 
-    console.log(checkinDate)
-    console.log(checkoutDate)
     api
       .get("api/rooms", {
         headers: { Authorization: "Bearer " + token },
