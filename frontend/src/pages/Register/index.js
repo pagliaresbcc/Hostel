@@ -25,7 +25,7 @@ export default function Register() {
   async function handleRegister(e) {
     e.preventDefault();
 
-    var role = 'ROLE_USER'
+    var role = "ROLE_USER";
 
     const address = {
       addressName,
@@ -45,8 +45,6 @@ export default function Register() {
       password,
       role,
     };
-
-    console.log(role)
 
     try {
       await api.post("api/guests", data);
@@ -81,7 +79,7 @@ export default function Register() {
             onChange={(e) => setTitle(e.target.value)}
           />
 
-          <div className="input-group">
+          <div className="input-group" style={{ marginBottom: "10px" }}>
             <input
               placeholder="Nome"
               value={name}
@@ -95,7 +93,9 @@ export default function Register() {
             />
           </div>
 
-          <label>Data de nascimento</label>
+          <label style={{ color: "#737380", marginTop: "10px" }}>
+            Data de nascimento
+          </label>
           <input
             required="true"
             id="birthday"

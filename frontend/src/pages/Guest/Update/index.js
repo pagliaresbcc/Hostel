@@ -6,7 +6,6 @@ import logoImg from "../../../assets/images/logo.png";
 import api from "../../../services/api";
 
 export default function UpdateGuest() {
-
   const history = useHistory();
 
   const [title, setTitle] = useState();
@@ -57,8 +56,8 @@ export default function UpdateGuest() {
       zipCode,
       city,
       state,
-      country
-    }
+      country,
+    };
 
     var data = {
       title,
@@ -72,7 +71,7 @@ export default function UpdateGuest() {
       headers: { Authorization: "Bearer " + token },
     });
 
-    history.push('/admin/guests');
+    history.push("/admin/guests");
   }
 
   return (
@@ -97,7 +96,7 @@ export default function UpdateGuest() {
             onChange={(e) => setTitle(e.target.value)}
           />
 
-          <div className="input-group">
+          <div className="input-group" style={{ marginBottom: "10px" }}>
             <input
               required="true"
               placeholder="Nome"
@@ -113,7 +112,9 @@ export default function UpdateGuest() {
             />
           </div>
 
-          <label>Data de nascimento</label>
+          <label style={{ color: "#737380", marginTop: "10px" }}>
+            Data de nascimento
+          </label>
           <input
             required="true"
             id="birthday"

@@ -27,7 +27,6 @@ export default function GuestProfile() {
       });
   }, [token]);
 
-  // console.log(guest.reservations)
   useEffect(() => {
     api
       .get(`api/guests/${guest_ID}/reservations`, {
@@ -80,7 +79,13 @@ export default function GuestProfile() {
           >
             Editar perfil
           </Link>
-          <button type="button">
+          <button
+            type="button"
+            onClick={() => {
+              sessionStorage.clear();
+              window.location.reload();
+            }}
+          >
             <FiPower size={18} color="#E02041" />
           </button>
         </header>
@@ -94,7 +99,6 @@ export default function GuestProfile() {
           </div>
         ) : (
           <div className="reservations-grid">
-
             <div className="rooms-header-label">
               <h1>Suas reservas cadastradas</h1>
               <Link className="button" to="/guest/new-reservation">
