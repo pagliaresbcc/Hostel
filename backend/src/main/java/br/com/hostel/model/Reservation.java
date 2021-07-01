@@ -38,9 +38,9 @@ public class Reservation implements Comparable<Reservation>{
 	
 	@OneToOne(cascade=CascadeType.REMOVE)
 	@JoinColumn(name = "payment_ID", nullable = false)
-	private Payments payment;
+	private Payment payment;
 	
-	public Reservation(Long guest_ID, int numberOfGuests,LocalDate reservationDate, LocalDate checkinDate, LocalDate checkoutDate, Set<Room> rooms, Payments payment) {
+	public Reservation(Long guest_ID, int numberOfGuests,LocalDate reservationDate, LocalDate checkinDate, LocalDate checkoutDate, Set<Room> rooms, Payment payment) {
 		this.guest_ID = guest_ID;
 		this.numberOfGuests = numberOfGuests;
 		this.reservationDate = reservationDate;
@@ -101,11 +101,11 @@ public class Reservation implements Comparable<Reservation>{
 		this.numberOfGuests = numberOfGuests;
 	}
 
-	public Payments getPayment() {
+	public Payment getPayment() {
 		return payment;
 	}
 
-	public void setPayment(Payments payment) {
+	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
 

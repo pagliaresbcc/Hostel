@@ -36,7 +36,7 @@ import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.GuestRepository;
-import br.com.hostel.repository.PaymentsRepository;
+import br.com.hostel.repository.PaymentRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
 
@@ -63,7 +63,7 @@ public class ListReservationsTest {
 	
 	@BeforeAll
     public static void beforeAll(@Autowired ReservationRepository reservationRepository, 
-    		@Autowired PaymentsRepository paymentsRepository, @Autowired GuestRepository guestRepository, 
+    		@Autowired PaymentRepository paymentsRepository, @Autowired GuestRepository guestRepository, 
     		@Autowired RoomRepository roomRepository, @Autowired MockMvc mockMvc, 
     		@Autowired ObjectMapper objectMapper) throws JsonProcessingException, Exception {
 		

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 
 @Entity
 @DiscriminatorValue("1")
-public class CashPayment extends Payments {
+public class CashPayment extends Payment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

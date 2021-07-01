@@ -10,7 +10,7 @@ import javax.persistence.Id;
 
 @Entity
 @DiscriminatorValue("3")
-public class CreditCardPayment extends Payments {
+public class CreditCardPayment extends Payment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

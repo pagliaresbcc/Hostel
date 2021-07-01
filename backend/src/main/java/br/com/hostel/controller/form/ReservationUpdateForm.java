@@ -7,10 +7,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import br.com.hostel.model.Payments;
+import br.com.hostel.model.Payment;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
-import br.com.hostel.repository.PaymentsRepository;
+import br.com.hostel.repository.PaymentRepository;
 import br.com.hostel.repository.RoomRepository;
 
 public class ReservationUpdateForm {
@@ -22,7 +22,7 @@ public class ReservationUpdateForm {
 	
 	private List<Long> rooms_ID = new ArrayList<>();	
 	
-	private Payments payment;
+	private Payment payment;
 	
 	public int getNumberOfGuests() {
 		return numberOfGuests;
@@ -64,16 +64,16 @@ public class ReservationUpdateForm {
 		this.rooms_ID = rooms_ID;
 	}
 
-	public Payments getPayment() {
+	public Payment getPayment() {
 		return payment;
 	}
 
-	public void setPayment(Payments payment) {
+	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
 
 	public Reservation updateReservationForm(Long id, Reservation reservation, 
-			PaymentsRepository paymentsRepository, RoomRepository roomRepository) {
+			PaymentRepository paymentsRepository, RoomRepository roomRepository) {
 		setParamIfIsNotNull(reservation, roomRepository);
 		
 		return reservation;

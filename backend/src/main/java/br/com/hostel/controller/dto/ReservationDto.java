@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import br.com.hostel.model.Payments;
+import br.com.hostel.model.Payment;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
 
@@ -17,7 +17,7 @@ public class ReservationDto {
 	private LocalDate checkinDate;
 	private LocalDate checkoutDate;
 	private int numberOfGuests;
-	private Payments payments;
+	private Payment payments;
 	private Set<Room> rooms;
 	
 	public ReservationDto() {
@@ -50,7 +50,7 @@ public class ReservationDto {
 		return checkoutDate;
 	}
 	
-	public Payments getPayments() {
+	public Payment getPayments() {
 		return payments;
 	}
 	

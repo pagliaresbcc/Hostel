@@ -22,7 +22,7 @@ import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.repository.GuestRepository;
-import br.com.hostel.repository.PaymentsRepository;
+import br.com.hostel.repository.PaymentRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
 
@@ -33,7 +33,7 @@ public class ReservationService {
 	private ReservationRepository reservationRepository;
 
 	@Autowired
-	private PaymentsRepository paymentsRepository;
+	private PaymentRepository paymentsRepository;
 
 	@Autowired
 	private RoomRepository roomRepository;

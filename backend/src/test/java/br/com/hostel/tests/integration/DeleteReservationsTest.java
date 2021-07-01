@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.initializer.ReservationInitializer;
 import br.com.hostel.model.CheckPayment;
-import br.com.hostel.repository.PaymentsRepository;
+import br.com.hostel.repository.PaymentRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
 
@@ -37,7 +37,7 @@ public class DeleteReservationsTest {
 	ReservationRepository reservationRepository;
 	
 	@Autowired
-	PaymentsRepository paymentsRepository;
+	PaymentRepository paymentsRepository;
 	
 	@Autowired
 	RoomRepository roomRepository;

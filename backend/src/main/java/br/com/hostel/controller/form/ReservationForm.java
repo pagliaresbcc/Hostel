@@ -9,10 +9,10 @@ import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
-import br.com.hostel.model.Payments;
+import br.com.hostel.model.Payment;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
-import br.com.hostel.repository.PaymentsRepository;
+import br.com.hostel.repository.PaymentRepository;
 import br.com.hostel.repository.RoomRepository;
 
 public class ReservationForm {
@@ -28,7 +28,7 @@ public class ReservationForm {
 	@NotNull
 	private List<Long> rooms_ID = new ArrayList<>();
 	@NotNull
-	private Payments payment;
+	private Payment payment;
 
 	public Long getGuest_ID() {
 		return guest_ID;
@@ -70,16 +70,16 @@ public class ReservationForm {
 		this.rooms_ID = rooms_ID;
 	}
 
-	public Payments getPayment() {
+	public Payment getPayment() {
 		return payment;
 	}
 
-	public void setPayment(Payments payment) {
+	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
 	
 
-	public Reservation returnReservation(PaymentsRepository paymentsRepository, RoomRepository roomRepository) {
+	public Reservation returnReservation(PaymentRepository paymentsRepository, RoomRepository roomRepository) {
 		
 		payment.setDate(LocalDateTime.now());
 		
