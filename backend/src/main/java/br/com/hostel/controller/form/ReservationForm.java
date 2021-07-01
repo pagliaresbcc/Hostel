@@ -79,7 +79,7 @@ public class ReservationForm {
 	}
 	
 
-	public Reservation returnReservation(PaymentRepository paymentsRepository, RoomRepository roomRepository) {
+	public Reservation returnReservation(PaymentRepository paymentRepository, RoomRepository roomRepository) {
 		
 		payment.setDate(LocalDateTime.now());
 		

@@ -37,7 +37,7 @@ public class DeleteReservationsTest {
 	ReservationRepository reservationRepository;
 	
 	@Autowired
-	PaymentRepository paymentsRepository;
+	PaymentRepository paymentRepository;
 	
 	@Autowired
 	RoomRepository roomRepository;
@@ -65,8 +65,8 @@ public class DeleteReservationsTest {
 	@Test
 	public void shouldReturnNotFoundStatusWhenDeletingAReservationWithNonExistentID() throws Exception {
 
-		paymentsRepository.save(reservationForm.getPayment());
-		reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
+		paymentRepository.save(reservationForm.getPayment());
+		reservationRepository.save(reservationForm.returnReservation(paymentRepository, roomRepository));
 
 		mockMvc
 			.perform(delete(uri + "0")
@@ -78,8 +78,8 @@ public class DeleteReservationsTest {
 	@Test
 	public void shouldAutenticateAndDeleteOneReservationWithId1() throws Exception {
 
-		paymentsRepository.save(reservationForm.getPayment());
-		reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
+		paymentRepository.save(reservationForm.getPayment());
+		reservationRepository.save(reservationForm.returnReservation(paymentRepository, roomRepository));
 
 		mockMvc
 			.perform(delete(uri + "1")

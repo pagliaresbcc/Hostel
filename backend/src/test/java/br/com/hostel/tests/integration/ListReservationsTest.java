@@ -63,7 +63,7 @@ public class ListReservationsTest {
 	
 	@BeforeAll
     public static void beforeAll(@Autowired ReservationRepository reservationRepository, 
-    		@Autowired PaymentRepository paymentsRepository, @Autowired GuestRepository guestRepository, 
+    		@Autowired PaymentRepository paymentRepository, @Autowired GuestRepository guestRepository, 
     		@Autowired RoomRepository roomRepository, @Autowired MockMvc mockMvc, 
     		@Autowired ObjectMapper objectMapper) throws JsonProcessingException, Exception {
 		
@@ -71,16 +71,16 @@ public class ListReservationsTest {
 		
 		ReservationInitializer.initialize(headers, reservationForm, checkPayment, rooms_ID, mockMvc, objectMapper);
 		
-		paymentsRepository.save(reservationForm.getPayment());
+		paymentRepository.save(reservationForm.getPayment());
 		
-		reservation1 = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
+		reservation1 = reservationRepository.save(reservationForm.returnReservation(paymentRepository, roomRepository));
 		reservationsList.add(reservation1);
 
 		reservationForm.setCheckinDate(LocalDate.of(2025, 05, 01));
 		reservationForm.setCheckoutDate(LocalDate.of(2025, 05, 04));
 		rooms_ID.remove(2L);
 		rooms_ID.add(3L);
-		reservation2 = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
+		reservation2 = reservationRepository.save(reservationForm.returnReservation(paymentRepository, roomRepository));
 		reservationsList.add(reservation2);
 		
 		guest = guestRepository.findById(reservationForm.getGuest_ID()).get();

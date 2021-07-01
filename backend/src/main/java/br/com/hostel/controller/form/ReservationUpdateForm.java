@@ -73,7 +73,7 @@ public class ReservationUpdateForm {
 	}
 
 	public Reservation updateReservationForm(Long id, Reservation reservation, 
-			PaymentRepository paymentsRepository, RoomRepository roomRepository) {
+			PaymentRepository paymentRepository, RoomRepository roomRepository) {
 		setParamIfIsNotNull(reservation, roomRepository);
 		
 		return reservation;

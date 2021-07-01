@@ -17,7 +17,7 @@ public class ReservationDto {
 	private LocalDate checkinDate;
 	private LocalDate checkoutDate;
 	private int numberOfGuests;
-	private Payment payments;
+	private Payment payment;
 	private Set<Room> rooms;
 	
 	public ReservationDto() {
@@ -29,7 +29,7 @@ public class ReservationDto {
 		this.reservationDate = reservation.getReservationDate();
 		this.checkinDate =  reservation.getCheckinDate();
 		this.checkoutDate = reservation.getCheckoutDate();
-		this.payments = reservation.getPayment();
+		this.payment = reservation.getPayment();
 		this.rooms = reservation.getRooms();
 		this.numberOfGuests = reservation.getNumberOfGuests();
 	}
@@ -50,8 +50,8 @@ public class ReservationDto {
 		return checkoutDate;
 	}
 	
-	public Payment getPayments() {
-		return payments;
+	public Payment getPayment() {
+		return payment;
 	}
 	
 	public Set<Room> getRooms() {

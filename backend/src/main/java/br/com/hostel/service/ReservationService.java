@@ -33,7 +33,7 @@ public class ReservationService {
 	private ReservationRepository reservationRepository;
 
 	@Autowired
-	private PaymentRepository paymentsRepository;
+	private PaymentRepository paymentRepository;
 
 	@Autowired
 	private RoomRepository roomRepository;
@@ -43,7 +43,7 @@ public class ReservationService {
 
 	public Reservation registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) throws BaseException {
 
-		Reservation reservation = form.returnReservation(paymentsRepository, roomRepository);
+		Reservation reservation = form.returnReservation(paymentRepository, roomRepository);
 		Optional<Guest> guestOp = guestRepository.findById(reservation.getGuest_ID());
 
 		if (!guestOp.isPresent())
@@ -58,7 +58,7 @@ public class ReservationService {
 
 		Guest guest = guestOp.get();
 
-		paymentsRepository.save(reservation.getPayment());
+		paymentRepository.save(reservation.getPayment());
 		reservationRepository.save(reservation);
 
 		guest.addReservation(reservation);
@@ -104,7 +104,7 @@ public class ReservationService {
 		if (!reservationOp.isPresent())
 			throw new BaseException("There isn't a reservation with id = " + id, HttpStatus.NOT_FOUND);
 
-		Reservation reservation = form.updateReservationForm(id, reservationOp.get(), paymentsRepository,
+		Reservation reservation = form.updateReservationForm(id, reservationOp.get(), paymentRepository,
 				roomRepository);
 
 		if (reservation.getRooms().isEmpty())
@@ -112,7 +112,7 @@ public class ReservationService {
 
 		reservation.getRooms().forEach(room -> roomRepository.save(room));
 
-		paymentsRepository.save(reservation.getPayment());
+		paymentRepository.save(reservation.getPayment());
 
 		return reservation;
 	}

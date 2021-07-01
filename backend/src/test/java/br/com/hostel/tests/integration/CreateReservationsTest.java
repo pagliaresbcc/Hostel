@@ -45,7 +45,7 @@ public class CreateReservationsTest {
 	ReservationRepository reservationRepository;
 	
 	@Autowired
-	PaymentRepository paymentsRepository;
+	PaymentRepository paymentRepository;
 	
 	@Autowired
 	RoomRepository roomRepository;
@@ -125,10 +125,10 @@ public class CreateReservationsTest {
 
 		ReservationDto reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto.class);
 		
-		CheckPayment checkObjResponse = (CheckPayment) reservationObjResponse.getPayments();
+		CheckPayment checkObjResponse = (CheckPayment) reservationObjResponse.getPayment();
 
 		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2025, 04, 01));
-		assertEquals(reservationObjResponse.getPayments().getAmount(), 3000);
+		assertEquals(reservationObjResponse.getPayment().getAmount(), 3000);
 		assertEquals(checkObjResponse.getBankName(), "Banco do Brasil");
 	}
 	
@@ -156,10 +156,10 @@ public class CreateReservationsTest {
 
 		ReservationDto reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto.class);
 		
-		CashPayment cashObjResponse = (CashPayment) reservationObjResponse.getPayments();
+		CashPayment cashObjResponse = (CashPayment) reservationObjResponse.getPayment();
 
 		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2025, 04, 01));
-		assertEquals(reservationObjResponse.getPayments().getAmount(), 4000);
+		assertEquals(reservationObjResponse.getPayment().getAmount(), 4000);
 		assertEquals(cashObjResponse.getAmountTendered(), 10000);
 	}
 	
@@ -192,10 +192,10 @@ public class CreateReservationsTest {
 		
 		ReservationDto reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto.class);
 		
-		CreditCardPayment creditCardObjResponse = (CreditCardPayment) reservationObjResponse.getPayments();
+		CreditCardPayment creditCardObjResponse = (CreditCardPayment) reservationObjResponse.getPayment();
 		
 		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2025, 04, 01));
-		assertEquals(reservationObjResponse.getPayments().getAmount(), 5000);
+		assertEquals(reservationObjResponse.getPayment().getAmount(), 5000);
 		assertEquals(creditCardObjResponse.getNameOnCard(), "WASHINGTON A SILVA");
 	}
 }

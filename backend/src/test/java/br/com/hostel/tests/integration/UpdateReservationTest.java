@@ -43,7 +43,7 @@ public class UpdateReservationTest {
 	ReservationRepository reservationRepository;
 	
 	@Autowired
-	PaymentRepository paymentsRepository;
+	PaymentRepository paymentRepository;
 	
 	@Autowired
 	RoomRepository roomRepository;
@@ -68,8 +68,8 @@ public class UpdateReservationTest {
 		
 		ReservationInitializer.initialize(headers, reservationForm, checkPayment, rooms_ID, mockMvc, objectMapper);
 		
-		paymentsRepository.save(checkPayment);
-		reservation = reservationRepository.save(reservationForm.returnReservation(paymentsRepository, roomRepository));
+		paymentRepository.save(checkPayment);
+		reservation = reservationRepository.save(reservationForm.returnReservation(paymentRepository, roomRepository));
 	}
 	
 	@Test
@@ -95,7 +95,7 @@ public class UpdateReservationTest {
 		ReservationDto reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto.class);
 		
 		assertEquals(reservationObjResponse.getCheckinDate(), reservation.getCheckinDate());
-		assertEquals(reservationObjResponse.getPayments().getAmount(), rsvToUpdate.getPayment().getAmount());
+		assertEquals(reservationObjResponse.getPayment().getAmount(), rsvToUpdate.getPayment().getAmount());
 		assertEquals(rsvToUpdate.getRooms_ID().size(), reservationObjResponse.getRooms().size());
 		assertTrue(reservationObjResponse.getNumberOfGuests() != reservation.getNumberOfGuests());
 	}
