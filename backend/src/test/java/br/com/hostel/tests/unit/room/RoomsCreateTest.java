@@ -28,7 +28,7 @@ import br.com.hostel.service.RoomService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = RoomService.class)
-public class CreateRoomsTest {
+public class RoomsCreateTest {
 
 	@MockBean
 	RoomRepository roomRepository;

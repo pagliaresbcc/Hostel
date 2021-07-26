@@ -1,4 +1,4 @@
-package br.com.hostel.tests.integration;
+package br.com.hostel.tests.integration.reservation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,7 +39,7 @@ import br.com.hostel.repository.RoomRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class CreateReservationsTest {
+public class ReservationsCreateTest {
 
 	@Autowired
 	ReservationRepository reservationRepository;

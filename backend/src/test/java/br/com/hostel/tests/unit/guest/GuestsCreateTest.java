@@ -29,7 +29,7 @@ import br.com.hostel.service.GuestService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = GuestService.class)
-public class CreateGuestsTest {
+public class GuestsCreateTest {
 
 	@MockBean
 	GuestRepository guestRepository;

@@ -1,4 +1,4 @@
-package br.com.hostel.tests.integration.delete;
+package br.com.hostel.tests.integration.reservation.delete;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,7 +31,7 @@ import br.com.hostel.repository.RoomRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class DeleteReservationsTest {
+public class ReservationsDeleteTest {
 
 	@Autowired
 	ReservationRepository reservationRepository;
