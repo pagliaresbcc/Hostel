@@ -69,11 +69,11 @@ public class GuestUpdateForm {
 	}
 
 	public Guest updateGuestForm(Long id, Guest guest, GuestRepository guestRepository) {
-		setParamIfIsNotNull(guest, guestRepository);
-		return guest;
+		setParamIfIsNotNull(guest);
+		return guestRepository.save(guest);
 	}
 	
-	private void setParamIfIsNotNull(Guest guest, GuestRepository guestRepository) {
+	private void setParamIfIsNotNull(Guest guest) {
 		
 		if (title != null)
 			guest.setTitle(title);

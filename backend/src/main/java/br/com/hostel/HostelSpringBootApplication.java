@@ -10,10 +10,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-public class AlbergueSpringBootApplication {
+public class HostelSpringBootApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AlbergueSpringBootApplication.class, args);
+		SpringApplication.run(HostelSpringBootApplication.class, args);
 	}
 	
 	@Bean

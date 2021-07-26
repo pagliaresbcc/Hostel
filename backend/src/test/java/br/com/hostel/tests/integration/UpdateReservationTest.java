@@ -1,7 +1,6 @@
 package br.com.hostel.tests.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -97,7 +96,6 @@ public class UpdateReservationTest {
 		assertEquals(reservationObjResponse.getCheckinDate(), reservation.getCheckinDate());
 		assertEquals(reservationObjResponse.getPayment().getAmount(), rsvToUpdate.getPayment().getAmount());
 		assertEquals(rsvToUpdate.getRooms_ID().size(), reservationObjResponse.getRooms().size());
-		assertTrue(reservationObjResponse.getNumberOfGuests() != reservation.getNumberOfGuests());
 	}
 	
 	@Test

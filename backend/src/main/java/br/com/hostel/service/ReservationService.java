@@ -117,17 +117,6 @@ public class ReservationService {
 		return reservation;
 	}
 
-	public void deleteRoomsReservation(Long id) throws BaseException {
-
-		Optional<Reservation> reservation = reservationRepository.findById(id);
-
-		if (!reservation.isPresent())
-			throw new BaseException("There isn't a reservation with id = " + id, HttpStatus.NOT_FOUND);
-
-		reservation.get().setRooms(null);
-		reservationRepository.save(reservation.get());
-	}
-
 	public void deleteReservation(Long id) throws BaseException {
 
 		Optional<Reservation> reservation = reservationRepository.findById(id);

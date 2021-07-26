@@ -91,6 +91,24 @@ public class ListReservationsTest {
 	}
 	
 	@Test
+	public void shouldReturnOneReservationsById() throws Exception {
+
+		MvcResult result = 
+				mockMvc.perform(get(uri  + "1")
+						.headers(headers))
+						.andDo(print())
+						.andExpect(status().isOk())
+						.andReturn();
+
+		String contentAsString = result.getResponse().getContentAsString();
+
+		ReservationDto reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto.class);
+		
+		assertEquals(reservation1.getCheckinDate(), reservationObjResponse.getCheckinDate());
+		assertEquals(reservation1.getCheckoutDate(), reservationObjResponse.getCheckoutDate());
+	}
+	
+	@Test
 	public void shouldReturnAllReservationsWithoutParam() throws Exception {
 
 		MvcResult result = 
@@ -105,6 +123,16 @@ public class ListReservationsTest {
 		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
 
 		assertTrue(reservationObjResponse.length > 1);
+	}
+	
+	@Test
+	public void shouldReturnNotFoundStatusWithNonExistentReservationsId() throws Exception {
+
+		mockMvc.perform(get(uri  + "0")
+				.headers(headers))
+				.andDo(print())
+				.andExpect(status().isNotFound())
+				.andReturn();
 	}
 	
 	@Test

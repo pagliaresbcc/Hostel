@@ -1,4 +1,4 @@
-package br.com.hostel.tests.integration;
+package br.com.hostel.tests.integration.delete;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

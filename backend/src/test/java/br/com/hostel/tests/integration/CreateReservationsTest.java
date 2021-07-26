@@ -110,6 +110,18 @@ public class CreateReservationsTest {
 	}
 	
 	@Test
+	public void shouldReturnBadRequestStatusWithReservationRoomsListEmpty() throws Exception {
+
+		reservationForm.setRooms_ID(new ArrayList<>());
+		
+		mockMvc.perform(post(uri)
+				.headers(headers)
+				.content(objectMapper.writeValueAsString(reservationForm)))
+				.andDo(print())
+				.andExpect(status().isBadRequest());
+	}
+	
+	@Test
 	public void shouldAutenticateAndCreateOneReservationUsingCheckPaymentAndReturnStatusCreated() throws Exception {
 
 		MvcResult result = 

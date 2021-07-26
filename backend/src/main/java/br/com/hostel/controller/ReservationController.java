@@ -87,19 +87,6 @@ public class ReservationController {
 		}
 	}
 	
-	@DeleteMapping("/deleteRoomsReservation/{id}")
-	@Transactional
-	public ResponseEntity<?> deleteRoomsReservation(@PathVariable Long id) {
-		
-		try {
-			reservationService.deleteRoomsReservation(id);
-			
-			return ResponseEntity.ok().build();
-		} catch(BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
-	}
-
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
