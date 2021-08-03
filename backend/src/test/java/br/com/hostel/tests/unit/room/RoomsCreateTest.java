@@ -91,7 +91,7 @@ public class RoomsCreateTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> service.registerRoom(form, uriBuilder),
-					"Expected registerRoom() to throw, but it didn't");
+					"Expect that registerRoom() throw an exception due to trying to create a room with an existing number");
 
 		assertEquals(HttpStatus.BAD_REQUEST, thrown.getHttpStatus());
 	}
