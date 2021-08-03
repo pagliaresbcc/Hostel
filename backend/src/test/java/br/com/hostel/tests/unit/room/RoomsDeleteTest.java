@@ -61,7 +61,7 @@ public class RoomsDeleteTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> service.deleteRoom(room.getId()),
-					"Expected deleteRoom() to throw, but it didn't");
+					"Expect that deleteRoom() throw an exception due to a nonexistent ID");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}
