@@ -145,7 +145,7 @@ public class GuestsListTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> guestService.listOneGuest(guest.getId()),
-					"Expect that listGuestReservations() throw an exception due to trying to find a guest with an nonexistent ID");
+					"Expect that listOneGuest() throw an exception due to trying to find a guest with an nonexistent ID");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 
