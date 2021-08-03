@@ -47,7 +47,8 @@ public class GuestsDeleteTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> guestService.deleteGuest(guest.getId()),
-					"Expect that deleteGuest() throw an exception due to trying to delete a guest with an nonexistent ID");
+					"It was expected that deleteGuest() thrown an exception, "+
+					"due to trying to delete a guest with an nonexistent ID");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}

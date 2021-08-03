@@ -92,7 +92,8 @@ public class RoomUpdateTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> service.updateRoom(room.getId(), form, uriBuilder),
-					"Expect that updateRoom() throw an exception due to trying to update a room with an nonexistent number");
+					"It was expected that updateRoom() thrown an exception, " +
+					"due to trying to update a room with an nonexistent number");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}

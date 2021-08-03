@@ -96,7 +96,8 @@ public class GuestsCreateTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> guestService.createGuest(guestForm, uriBuilder),
-					"Expect that createGuest() throw an exception due to trying to create a guest with an existent email");
+					"It was expected that createGuest() thrown an exception, " +
+					"due to trying to create a guest with an existent email");
 
 		assertEquals(HttpStatus.BAD_REQUEST, thrown.getHttpStatus());
 		
