@@ -94,7 +94,7 @@ public class GuestsUpdateTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> guestService.updateGuest(guest.getId(), guestUpdateForm),
-					"Expected updateGuest() to throw, but it didn't");
+					"Expect that updateGuest() throw an exception due to trying to update a guest with an nonexistent ID");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}
