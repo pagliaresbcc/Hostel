@@ -197,7 +197,7 @@ public class RoomsListTest {
 		when(roomRepository.findById(firstRoom.getId())).thenReturn(opRoom);
 
 		BaseException thrown = assertThrows(BaseException.class, () -> service.listOneRoom(firstRoom.getId()),
-				"Expected listOneRoom() to throw, but it didn't");
+				"Expect that listOneRoom() throw an exception due to a nonexistent ID");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}
