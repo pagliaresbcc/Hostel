@@ -31,7 +31,7 @@ import br.com.hostel.repository.RoomRepository;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class ReservationsDeleteTest {
+public class DeleteReservationsTest {
 
 	@Autowired
 	ReservationRepository reservationRepository;

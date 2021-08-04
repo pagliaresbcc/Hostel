@@ -23,7 +23,7 @@ import br.com.hostel.service.GuestService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class GuestsDeleteTest {
+public class DeleteGuestsTest {
 
 	@MockBean
 	GuestRepository guestRepository;

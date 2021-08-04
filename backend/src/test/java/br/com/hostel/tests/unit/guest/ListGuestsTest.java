@@ -33,7 +33,7 @@ import br.com.hostel.service.GuestService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = GuestService.class)
-public class GuestsListTest {
+public class ListGuestsTest {
 
 	@MockBean
 	GuestRepository guestRepository;

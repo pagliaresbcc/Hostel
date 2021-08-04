@@ -27,7 +27,7 @@ import br.com.hostel.service.GuestService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = GuestService.class)
-public class GuestsUpdateTest {
+public class UpdateGuestsTest {
 
 	@MockBean
 	GuestRepository guestRepository;
