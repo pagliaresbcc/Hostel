@@ -65,7 +65,7 @@ export default function SelectAvailableRooms() {
 
       <div className="rooms-header-label">
         <h1>Quartos Disponiveis</h1>
-        <Link className="button" to="/guest/select-payment">
+        <Link className="button" to="/reservations/select-payment">
           Selecionar forma de pagamento
         </Link>
       </div>
@@ -100,7 +100,7 @@ export default function SelectAvailableRooms() {
         ))}
         {sessionStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}
       </ul>
-      <Link className="back-link" to="/guest/profile">
+      <Link className="back-link" to="/reservations/newReservation">
         <FiArrowLeft size={16} color="#E02041" />
         Voltar
       </Link>

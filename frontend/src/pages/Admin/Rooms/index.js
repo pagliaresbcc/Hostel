@@ -46,7 +46,12 @@ export default function Rooms() {
         <Link className="button" to="/admin/rooms/new-room">
           Cadastrar novo quarto
         </Link>
-        <button type="button">
+        <button type="button"
+          onClick={() => {
+            sessionStorage.clear();
+            window.location.reload();
+          }}
+        >
           <FiPower size={18} color="#E02041" />
         </button>
       </header>

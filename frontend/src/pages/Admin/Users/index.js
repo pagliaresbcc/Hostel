@@ -57,7 +57,12 @@ export default function Guest() {
         <Link className="button" to="/admin/guests/new-guest">
           Cadastrar novo usuário
         </Link>
-        <button type="button">
+        <button type="button"
+          onClick={() => {
+            sessionStorage.clear();
+            window.location.reload();
+          }}
+        >
           <FiPower size={18} color="#E02041" />
         </button>
       </header>

@@ -26,7 +26,7 @@ export default function Reservations() {
   async function handleUpdateReservation(id) {
     sessionStorage.setItem("reservation_id", id);
 
-    history.push("/reservations/updateReservation");
+    history.push("/reservations/update-reservation");
   }
 
   async function handleDeleteReservation(id) {
@@ -56,7 +56,12 @@ export default function Reservations() {
         <Link className="button" to="/reservations/newReservation">
           Cadastrar nova reserva
         </Link>
-        <button type="button">
+        <button type="button"
+          onClick={() => {
+            sessionStorage.clear();
+            window.location.reload();
+          }}
+        >
           <FiPower size={18} color="#E02041" />
         </button>
       </header>
@@ -67,7 +72,7 @@ export default function Reservations() {
         <ul>
           {reservations.map(
             (
-              { id, guest_ID, rooms, checkinDate, checkoutDate, payments },
+              { id, guest_ID, rooms, checkinDate, checkoutDate, payment },
               i
             ) => (
               <li key={id}>
@@ -90,9 +95,9 @@ export default function Reservations() {
                 <strong>VALOR TOTAL:</strong>
                 <p>
                   R${" "}
-                  {payments.type === "cash"
-                    ? payments.amountTendered
-                    : payments.amount}
+                  {payment.type === "cash"
+                    ? payment.amountTendered
+                    : payment.amount}
                   ,00
                 </p>
 

@@ -58,12 +58,12 @@ const Routes = () => (
             <AdminRoute path="/admin/rooms/new-room" component={NewRoom}/>
             <PrivateRoute path="/guest/profile" exact component={GuestProfile}/>
             <PrivateRoute path="/guest/update" exact component={UpdateGuest}/>
-            <PrivateRoute path="/guest/new-reservation" component={NewReservation}/>
-            <PrivateRoute path="/guest/update-reservation" component={UpdateReservation}/>
-            <PrivateRoute path="/guest/select-available-rooms" component={SelectAvailableRooms}/>
-            <PrivateRoute path="/guest/update-selected-rooms" component={UpdateSelectAvailableRooms}/>
-            <PrivateRoute path="/guest/select-payment" component={SelectPayment}/>
-            <PrivateRoute path="/guest/update-selected-payment" component={UpdateSelectPayment}/>
+            <PrivateRoute path="/reservations/newReservation" component={NewReservation}/>
+            <PrivateRoute path="/reservations/update-reservation" component={UpdateReservation}/>
+            <PrivateRoute path="/reservations/select-available-rooms" component={SelectAvailableRooms}/>
+            <PrivateRoute path="/reservations/update-selected-rooms" component={UpdateSelectAvailableRooms}/>
+            <PrivateRoute path="/reservations/select-payment" component={SelectPayment}/>
+            <PrivateRoute path="/reservations/update-selected-payment" component={UpdateSelectPayment}/>
         </Switch>
     </BrowserRouter>
 )

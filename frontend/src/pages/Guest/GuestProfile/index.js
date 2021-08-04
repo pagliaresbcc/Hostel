@@ -40,7 +40,7 @@ export default function GuestProfile() {
   async function handleUpdateReservation(id) {
     sessionStorage.setItem("reservation_ID", id);
 
-    history.push("/guest/update-reservation");
+    history.push("/reservations/update-reservation");
   }
 
   async function handleDeleteReservation(id) {
@@ -93,7 +93,7 @@ export default function GuestProfile() {
         {reservations.length === 0 ? (
           <div className="welcome-reservations-grid">
             <h1>Você ainda não cadastrou nenhuma reserva!</h1>
-            <Link className="button" to="/guest/new-reservation">
+            <Link className="button" to="/reservations/newReservation">
               Cadastrar nova reserva
             </Link>
           </div>
@@ -101,13 +101,13 @@ export default function GuestProfile() {
           <div className="reservations-grid">
             <div className="rooms-header-label">
               <h1>Suas reservas cadastradas</h1>
-              <Link className="button" to="/guest/new-reservation">
+              <Link className="button" to="/reservations/newReservation">
                 Cadastrar nova reserva
               </Link>
             </div>
             <ul>
               {reservations.map(
-                ({ id, rooms, checkinDate, checkoutDate, payments }, i) => (
+                ({ id, rooms, checkinDate, checkoutDate, payment }, i) => (
                   <li key={id}>
                     <strong>QUARTO(S) RESERVADO(S):</strong>
                     {rooms.map((room, j) => (
@@ -128,9 +128,9 @@ export default function GuestProfile() {
                     <strong>VALOR TOTAL:</strong>
                     <p>
                       R${" "}
-                      {payments.type === "cash"
-                        ? payments.amountTendered
-                        : payments.amount}
+                      {payment.type === "cash"
+                        ? payment.amountTendered
+                        : payment.amount}
                       ,00
                     </p>
 

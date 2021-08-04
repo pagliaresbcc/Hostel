@@ -47,7 +47,7 @@ export default function NewReservation() {
         sessionStorage.setItem("checkoutDate", checkoutDate);
         sessionStorage.setItem("numberOfGuests", numberOfGuests);
 
-        history.push("/guest/select-available-rooms");
+        history.push("/reservations/select-available-rooms");
       })
       .catch(function (err) {
         err.errors.forEach((error) => {
@@ -65,7 +65,7 @@ export default function NewReservation() {
           <h1>Cadastrar nova reserva</h1>
           <p>Agende sua nova reserva para a data mais próxima</p>
 
-          <Link className="back-link" to="/guest/profile">
+          <Link className="back-link" to="/admin/guests">
             <FiArrowLeft size={16} color="#E02041" />
             Voltar
           </Link>

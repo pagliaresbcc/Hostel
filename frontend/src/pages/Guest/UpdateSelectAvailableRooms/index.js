@@ -66,7 +66,7 @@ export default function UpdateSelectAvailableRooms() {
 
       <div className="rooms-header-label">
         <h1>Quartos Disponiveis</h1>
-        <Link className="button" to="/guest/update-selected-payment">
+        <Link className="button" to="/reservations/update-selected-payment">
           Selecionar forma de pagamento
         </Link>
       </div>
@@ -102,7 +102,7 @@ export default function UpdateSelectAvailableRooms() {
         ))}
         {sessionStorage.setItem("rooms_ID", JSON.stringify(selectedItems))}
       </ul>
-      <Link className="back-link" to="/guest/update-reservation">
+      <Link className="back-link" to="/reservations/update-reservation">
         <FiArrowLeft size={16} color="#E02041" />
         Voltar
       </Link>

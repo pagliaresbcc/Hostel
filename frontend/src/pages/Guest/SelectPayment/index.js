@@ -99,7 +99,7 @@ export default function NewReservation() {
         headers: { Authorization: "Bearer " + token },
       });
 
-      history.push("/guest/profile");
+      history.push("/admin/guests");
     } catch (err) {
       alert("Erro nas informações, tente novamente");
     }
