@@ -23,7 +23,7 @@ import br.com.hostel.service.GuestService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class GuestsDeleteTest {
+public class DeleteGuestsTest {
 
 	@MockBean
 	GuestRepository guestRepository;
@@ -47,7 +47,8 @@ public class GuestsDeleteTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> guestService.deleteGuest(guest.getId()),
-					"Expected deleteGuest() to throw, but it didn't");
+					"It was expected that deleteGuest() thrown an exception, "+
+					"due to trying to delete a guest with an nonexistent ID");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}

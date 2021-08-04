@@ -28,7 +28,7 @@ import br.com.hostel.service.RoomService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = RoomService.class)
-public class RoomsCreateTest {
+public class CreateRoomsTest {
 
 	@MockBean
 	RoomRepository roomRepository;
@@ -91,7 +91,8 @@ public class RoomsCreateTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> service.registerRoom(form, uriBuilder),
-					"Expected registerRoom() to throw, but it didn't");
+					"It was expected that registerRoom() thrown an exception, " +
+					"due to trying to create a room with an existing number");
 
 		assertEquals(HttpStatus.BAD_REQUEST, thrown.getHttpStatus());
 	}

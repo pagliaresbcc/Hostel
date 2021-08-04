@@ -2,7 +2,6 @@ package br.com.hostel.tests.unit.guest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -16,9 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.hostel.controller.form.GuestForm;
+import br.com.hostel.controller.form.GuestUpdateForm;
 import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
@@ -29,7 +27,7 @@ import br.com.hostel.service.GuestService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = GuestService.class)
-public class GuestsCreateTest {
+public class UpdateGuestsTest {
 
 	@MockBean
 	GuestRepository guestRepository;
@@ -38,10 +36,7 @@ public class GuestsCreateTest {
 	AddressRepository addressRepository;
 	
 	@MockBean
-	GuestForm guestForm;
-	
-	@MockBean
-	UriComponentsBuilder uriBuilder;
+	GuestUpdateForm guestUpdateForm;
 	
 	@Autowired
 	GuestService guestService;
@@ -72,33 +67,36 @@ public class GuestsCreateTest {
 	}
 
 	@Test
-	public void shouldCreateAGuestAndReturn() throws Exception {
-		
-		Optional<Guest> nonexistentGuest = Optional.empty();
+	public void shouldUpdateGuestNameAndLastName() throws Exception {
 
-		when(guestRepository.findByEmail(any())).thenReturn(nonexistentGuest);
-		when(guestForm.returnGuest(any())).thenReturn(guest);
-		when(guestRepository.save(any())).thenReturn(guest);
+		Optional<Guest> opGuest = Optional.of(guest);
 		
-		Guest reqGuest = guestService.createGuest(guestForm, uriBuilder);
+		opGuest.get().setName("Francisco");
+		opGuest.get().setLastName("Neto");
+
+		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
+		when(guestUpdateForm.updateGuestForm(guest.getId(), guest, guestRepository)).thenReturn(guest);
+		when(addressRepository.save(guest.getAddress())).thenReturn(address);
 		
-		assertEquals(guest.getName(), reqGuest.getName());
-		assertEquals(guest.getLastName(), reqGuest.getLastName());
+		Guest reqGuest = guestService.updateGuest(guest.getId(), guestUpdateForm);
+		
+		assertEquals(opGuest.get().getName(), reqGuest.getName());
+		assertEquals(opGuest.get().getLastName(), reqGuest.getLastName());
 	}
 	
 	@Test
-	public void shouldReturnNullWithExistentGuestEmail() throws Exception {
+	public void shouldNotUpdateGuestWithNonexistenteID() throws Exception {
 		
-		Optional<Guest> opGuest = Optional.of(guest);
+		Optional<Guest> nonexistentGuest = Optional.empty();
 		
-		when(guestRepository.findByEmail(any())).thenReturn(opGuest);
+		when(guestRepository.findById(guest.getId())).thenReturn(nonexistentGuest);
 		
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
-					() -> guestService.createGuest(guestForm, uriBuilder),
-					"Expected createGuest() to throw, but it didn't");
+					() -> guestService.updateGuest(guest.getId(), guestUpdateForm),
+					"it was expected that updateGuest() thrown an exception, " +
+					"due to trying to update a guest with an nonexistent ID");
 
-		assertEquals(HttpStatus.BAD_REQUEST, thrown.getHttpStatus());
-		
+		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}
 }

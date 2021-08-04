@@ -33,7 +33,7 @@ import br.com.hostel.service.GuestService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = GuestService.class)
-public class GuestsListTest {
+public class ListGuestsTest {
 
 	@MockBean
 	GuestRepository guestRepository;
@@ -145,7 +145,8 @@ public class GuestsListTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> guestService.listOneGuest(guest.getId()),
-					"Expected listOneGuest() to throw, but it didn't");
+					"It was expected that listOneGuest() thrown an exception, " +
+					"due to trying to find a guest with an nonexistent ID");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 
@@ -161,7 +162,8 @@ public class GuestsListTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 						() -> guestService.listGuestReservations(guest.getId()),
-						"Expected listGuestReservations() to throw, but it didn't");
+						"It was expected that listGuestReservations() thrown an exception, " +
+						"due to trying to find a guest reservations with an nonexistent reservation ID");
 		
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 		

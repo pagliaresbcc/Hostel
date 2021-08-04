@@ -32,7 +32,7 @@ import br.com.hostel.service.RoomService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class RoomsListTest {
+public class ListRoomsTest {
 
 	@MockBean
 	RoomRepository roomRepository;
@@ -196,8 +196,10 @@ public class RoomsListTest {
 
 		when(roomRepository.findById(firstRoom.getId())).thenReturn(opRoom);
 
-		BaseException thrown = assertThrows(BaseException.class, () -> service.listOneRoom(firstRoom.getId()),
-				"Expected listOneRoom() to throw, but it didn't");
+		BaseException thrown = assertThrows(BaseException.class, 
+				() -> service.listOneRoom(firstRoom.getId()),
+				"It was expected that listOneRoom() thrown an exception, " + 
+				"due to a nonexistent ID");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}

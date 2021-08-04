@@ -27,7 +27,7 @@ import br.com.hostel.service.RoomService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class RoomUpdateTest {
+public class UpdateRoomsTest {
 
 	@MockBean
 	RoomRepository roomRepository;
@@ -92,7 +92,8 @@ public class RoomUpdateTest {
 		BaseException thrown = 
 				assertThrows(BaseException.class, 
 					() -> service.updateRoom(room.getId(), form, uriBuilder),
-					"Expected updateRoom() to throw, but it didn't");
+					"It was expected that updateRoom() thrown an exception, " +
+					"due to trying to update a room with an nonexistent number");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}
