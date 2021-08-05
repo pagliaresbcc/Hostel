@@ -92,7 +92,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-chrome-driver</artifactId>
-			</dependency>
+		</dependency>
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			</dependency>
+		</dependency>
 
 
 	</dependencies>
