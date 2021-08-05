@@ -46,7 +46,7 @@ public class RoomController {
 
 			URI uri = uriBuilder.path("/rooms/{id}").buildAndExpand(room.getId()).toUri();
 
-			return ResponseEntity.created(uri).body(new RoomDto(roomService.registerRoom(form, uriBuilder)));
+			return ResponseEntity.created(uri).body(new RoomDto(room));
 
 		} catch (BaseException be) {
 			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());

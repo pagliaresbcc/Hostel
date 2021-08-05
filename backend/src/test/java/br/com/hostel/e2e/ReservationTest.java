@@ -33,7 +33,7 @@ public class ReservationTest {
 	}
 
 	@Test
-	public void registerANonExistentGuest() throws InterruptedException {
+	public void registerANewReservation() throws InterruptedException {
 
 		driver.findElement(By.xpath("//*[@id=\"check-in\"]")).sendKeys("24102025");
 		Thread.sleep(1000);

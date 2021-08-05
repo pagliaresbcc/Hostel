@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft, FiPower, FiTrash2 } from "react-icons/fi";
 
 import "./styles.css";
@@ -10,6 +10,7 @@ import api from "../../../services/api";
 export default function Rooms() {
   const [rooms, setRoom] = useState([]);
 
+  const history = useHistory();
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
@@ -23,17 +24,20 @@ export default function Rooms() {
   }, [token]);
 
   async function handleDeleteRoom(id) {
-    try {
-      alert("Deletou");
-      api.delete(`api/rooms/${id}`, {
-        headers: {
-          Authorization: "Bearer " + token,
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-        },
-      });
-    } catch (err) {
-      alert("Erro ao deletar caso, tente novamente.");
+    if (window.confirm("Tem certeza que deseja deletar este quarto?")) {
+      try {
+        api.delete(`api/rooms/${id}`, {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        });
+        alert("Deletou");
+        history.go(0);
+      } catch (err) {
+        alert("Erro ao deletar caso, tente novamente.");
+      }
     }
   }
 

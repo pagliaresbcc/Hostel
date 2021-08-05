@@ -40,7 +40,7 @@ export default function Profile() {
 
       alert("Cadastrado");
 
-      history.push("/rooms");
+      history.push("/admin/rooms");
     } catch (err) {
       alert("Erro no cadastro, tente novamente");
     }
