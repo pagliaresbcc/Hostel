@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 @RunWith(JUnitPlatform.class)
 public class ReservationTest {
@@ -19,6 +17,7 @@ public class ReservationTest {
 
 	@BeforeEach
 	public void init() throws InterruptedException {
+		// make login
 		driver.get("http://localhost:3000/");
 		driver.manage().window().maximize();
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/input[1]")).sendKeys("admin@email.com");
@@ -27,6 +26,8 @@ public class ReservationTest {
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/button")).click();
 		Thread.sleep(3000);
+		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a[1]")).click();
+		Thread.sleep(3000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/header/a")).click();
 		Thread.sleep(3000);
 	}
@@ -34,9 +35,9 @@ public class ReservationTest {
 	@Test
 	public void registerANonExistentGuest() throws InterruptedException {
 
-		driver.findElement(By.xpath("//*[@id=\"check-in\"]")).sendKeys("24102020");
+		driver.findElement(By.xpath("//*[@id=\"check-in\"]")).sendKeys("24102025");
 		Thread.sleep(1000);
-		driver.findElement(By.xpath("//*[@id=\"check-out\"]")).sendKeys("26102020");
+		driver.findElement(By.xpath("//*[@id=\"check-out\"]")).sendKeys("26102025");
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"numberOfGuests\"]")).sendKeys("3");
 		Thread.sleep(1000);
@@ -46,31 +47,28 @@ public class ReservationTest {
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();
 		Thread.sleep(3000);
 
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/h1")).getText(), "Quartos Disponiveis");
+		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/h1")).getText(), "Quartos Disponiveis");
 
-		Thread.sleep(3000);
+		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/ul/li[1]/button")).click();
-		Thread.sleep(3000);
+		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/ul/li[2]/button")).click();
-		Thread.sleep(3000);
-		
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/header/a")).click();
-		Thread.sleep(3000);
-		
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/section/h1")).getText(), "Selecione a forma de pagamento");
-		
-		
-		WebElement pagamento = driver.findElement(By.xpath("//*[@id=\"payment\"]/div/div[1]/div[1]"));
+		Thread.sleep(1000);
 
-		pagamento.click();
-        
-        Thread.sleep(3000);
-        
-        pagamento.sendKeys(Keys.DOWN);
-		
+		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a")).click();
 		Thread.sleep(3000);
-		
-		
+
+		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/section/h1")).getText(),
+				"Selecione a forma de pagamento");
+
+		driver.findElement(By.xpath("//*[@id=\"payment\"]")).click();
+
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//*[@id=\"react-select-3-option-0\"]")).click();
+
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();
+		Thread.sleep(5000);
 		
 		driver.close();
 	}
