@@ -1,4 +1,4 @@
-package br.com.hostel.e2e;
+package br.com.hostel.e2e.admin;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import br.com.hostel.e2e.ChromeConnection;
 
 @RunWith(JUnitPlatform.class)
 public class RoomTest {

@@ -25,7 +25,7 @@ export default function Guest() {
   }, [token]);
 
   function handleUpdateGuest(id) {
-    sessionStorage.setItem("guest_id", id);
+    sessionStorage.setItem("guest_ID", id);
 
     history.push("/admin/guests/update-guest");
   }
