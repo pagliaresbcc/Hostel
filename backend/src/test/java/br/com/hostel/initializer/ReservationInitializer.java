@@ -34,7 +34,7 @@ public class ReservationInitializer {
 		LoginForm login = new LoginForm();
 
 		// setting login variables to autenticate
-		login.setEmail("admin@email.com");
+		login.setEmail("maria@email.com");
 		login.setPassword("123456");
 
 		// posting on /auth to get token
@@ -55,6 +55,8 @@ public class ReservationInitializer {
 		reservationForm.setCheckoutDate(LocalDate.of(2025, 04, 04));
 		reservationForm.setNumberOfGuests(2);
 		reservationForm.setGuest_ID(1L);
+		reservationForm.setGuestName("Maria");
+		
 
 		checkPayment.setAmount(3000);
 		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2025, 01, 25), LocalTime.of(21, 31)));

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -34,7 +33,6 @@ import br.com.hostel.initializer.ReservationInitializer;
 import br.com.hostel.model.CheckPayment;
 import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
-import br.com.hostel.model.Room;
 import br.com.hostel.repository.GuestRepository;
 import br.com.hostel.repository.PaymentRepository;
 import br.com.hostel.repository.ReservationRepository;
@@ -57,7 +55,6 @@ public class ListReservationsTest {
 	private static CheckPayment checkPayment = new CheckPayment();
 	private static ReservationForm reservationForm = new ReservationForm();
 	private static Guest guest = new Guest();
-	private static List<Room> reservation2RoomsList;
 	private static List<Long> rooms_ID = new ArrayList<>();
 	private static Set<Reservation> reservationsList = new HashSet<>();
 	
@@ -86,8 +83,6 @@ public class ListReservationsTest {
 		guest = guestRepository.findById(reservationForm.getGuest_ID()).get();
 		guest.setReservations(reservationsList);
 		guestRepository.save(guest);   
-		
-		reservation2RoomsList = reservation2.getRooms().stream().collect(Collectors.toList());
 	}
 	
 	@Test
@@ -128,7 +123,7 @@ public class ListReservationsTest {
 	@Test
 	public void shouldReturnNotFoundStatusWithNonExistentReservationsId() throws Exception {
 
-		mockMvc.perform(get(uri  + "0")
+		mockMvc.perform(get(uri  + String.valueOf(Long.MAX_VALUE))
 				.headers(headers))
 				.andDo(print())
 				.andExpect(status().isNotFound())
@@ -140,7 +135,7 @@ public class ListReservationsTest {
 
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("name", "admin")
+						.param("guestId", guest.getId().toString())
 						.headers(headers))
 						.andDo(print())
 						.andReturn();
@@ -149,12 +144,9 @@ public class ListReservationsTest {
 
 		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
 
-		assertEquals(reservation1.getCheckinDate(), reservationObjResponse[0].getCheckinDate());
-		assertEquals(reservation2.getCheckoutDate(), reservationObjResponse[1].getCheckoutDate());
-		assertEquals(reservation2RoomsList.get(0).getNumber(), reservationObjResponse[1].getRooms().stream()
-																						.collect(Collectors.toList())
-																						.get(0).getNumber());
-		assertEquals(2, reservationObjResponse.length);
+		assertEquals(reservationsList.size(), reservationObjResponse.length);
+		assertEquals(reservation1.getGuestName(), guest.getName());
+		assertEquals(reservation2.getGuestName(), guest.getName());
 	}
 
 	@Test
@@ -162,7 +154,7 @@ public class ListReservationsTest {
 
 		MvcResult result = 
 				mockMvc.perform(get(uri)
-						.param("name", "admin333")
+						.param("guestId", String.valueOf(Long.MAX_VALUE))
 						.headers(headers))
 						.andDo(print())
 						.andReturn();

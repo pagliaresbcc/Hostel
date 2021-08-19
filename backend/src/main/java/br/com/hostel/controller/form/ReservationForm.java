@@ -40,6 +40,10 @@ public class ReservationForm {
 		return guestName;
 	}
 
+	public void setGuestName(String guestName) {
+		this.guestName = guestName;
+	}
+	
 	public void setGuest_ID(Long guest_ID) {
 		this.guest_ID = guest_ID;
 	}
