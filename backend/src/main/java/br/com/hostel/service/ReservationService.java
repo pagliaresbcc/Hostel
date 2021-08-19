@@ -58,6 +58,8 @@ public class ReservationService {
 
 		Guest guest = guestOp.get();
 
+		reservation.setGuestName(guest.getName());
+		
 		paymentRepository.save(reservation.getPayment());
 		reservationRepository.save(reservation);
 
@@ -67,18 +69,18 @@ public class ReservationService {
 		return reservation;
 	}
 
-	public List<Reservation> listAllReservations(String name, Pageable pagination) {
+	public List<Reservation> listAllReservations(Long guestId, Pageable pagination) {
 
 		List<Reservation> response = new ArrayList<>();
 
-		if (name == null)
+		if (guestId == null)
 			response = reservationRepository.findAll();
 		else {
-			List<Guest> guestList = guestRepository.findByName(name);
+			Optional<Guest> guest = guestRepository.findById(guestId);
 
-			if (guestList.size() > 0) {
+			if (guest.isPresent()) {
 
-				response = guestList.get(0).getReservations().stream().collect(Collectors.toList());
+				response = guest.get().getReservations().stream().collect(Collectors.toList());
 			}
 		}
 

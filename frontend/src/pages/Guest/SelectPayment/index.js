@@ -28,6 +28,7 @@ export default function NewReservation() {
   const history = useHistory();
 
   const guest_ID = sessionStorage.getItem("guest_ID");
+  const guestName = sessionStorage.getItem("guestName");
   const checkinDate = sessionStorage.getItem("checkinDate");
   const checkoutDate = sessionStorage.getItem("checkoutDate");
   const numberOfGuests = sessionStorage.getItem("numberOfGuests");
@@ -87,7 +88,8 @@ export default function NewReservation() {
       }
 
       data = {
-        guest_ID: guest_ID,
+        guest_ID,
+        guestName,
         checkinDate,
         checkoutDate,
         numberOfGuests,

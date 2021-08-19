@@ -20,11 +20,13 @@ public class ReservationForm {
 	@NotNull
 	private Long guest_ID;
 	@NotNull
-    int numberOfGuests;
+	private String guestName;
 	@NotNull
-	LocalDate checkinDate;
+    private int numberOfGuests;
 	@NotNull
-	LocalDate checkoutDate;
+	private LocalDate checkinDate;
+	@NotNull
+	private LocalDate checkoutDate;
 	@NotNull
 	private List<Long> rooms_ID = new ArrayList<>();
 	@NotNull
@@ -32,6 +34,10 @@ public class ReservationForm {
 
 	public Long getGuest_ID() {
 		return guest_ID;
+	}
+	
+	public String getGuestName() {
+		return guestName;
 	}
 
 	public void setGuest_ID(Long guest_ID) {
@@ -87,7 +93,7 @@ public class ReservationForm {
 
 		rooms_ID.forEach(id -> roomsList.add(roomRepository.findById(id).get()));
 
-		return new Reservation(guest_ID, numberOfGuests, LocalDate.now(), checkinDate, checkoutDate, 
+		return new Reservation(guest_ID, guestName, numberOfGuests, LocalDate.now(), checkinDate, checkoutDate, 
 				roomsList, payment);
 	}
 

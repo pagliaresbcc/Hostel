@@ -29,7 +29,7 @@ export default function GuestProfile() {
 
   useEffect(() => {
     api
-      .get(`api/guests/${guest_ID}/reservations`, {
+      .get(`api/reservations?guestId=${guest_ID}`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
@@ -74,6 +74,7 @@ export default function GuestProfile() {
             className="button"
             onClick={() => {
               sessionStorage.setItem("guest_ID", guest_ID);
+              sessionStorage.setItem("guestName", guest.name);
             }}
             to="/guest/update"
           >
