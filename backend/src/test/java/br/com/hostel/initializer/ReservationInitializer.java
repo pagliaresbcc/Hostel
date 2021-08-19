@@ -61,7 +61,7 @@ public class ReservationInitializer {
 		checkPayment.setAmount(3000);
 		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2025, 01, 25), LocalTime.of(21, 31)));
 		checkPayment.setBankId("01");
-		checkPayment.setBankName("Banco do Brasil");
+		checkPayment.setBankName("Itau");
 		checkPayment.setBranchNumber("1234-5");
 
 		reservationForm.setPayment(checkPayment);

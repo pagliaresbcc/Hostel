@@ -1,6 +1,5 @@
 package br.com.hostel.tests.integration.reservation;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -75,14 +74,53 @@ public class ListReservationsTest {
 
 		reservationForm.setCheckinDate(LocalDate.of(2025, 05, 01));
 		reservationForm.setCheckoutDate(LocalDate.of(2025, 05, 04));
+		
 		rooms_ID.remove(2L);
 		rooms_ID.add(3L);
+		
 		reservation2 = reservationRepository.save(reservationForm.returnReservation(paymentRepository, roomRepository));
 		reservationsList.add(reservation2);
 		
 		guest = guestRepository.findById(reservationForm.getGuest_ID()).get();
+		
 		guest.setReservations(reservationsList);
 		guestRepository.save(guest);   
+	}
+	
+	@Test
+	public void shouldReturnAllReservationsWithoutParam() throws Exception {
+
+		MvcResult result = 
+				mockMvc.perform(get(uri)
+						.headers(headers))
+						.andDo(print())
+						.andExpect(status().isOk())
+						.andReturn();
+
+		String contentAsString = result.getResponse().getContentAsString();
+
+		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
+
+		assertEquals(reservationsList.size(), reservationObjResponse.length);
+	}
+	
+	@Test
+	public void shouldReturnAllReservationsByGuestId() throws Exception {
+
+		MvcResult result = 
+				mockMvc.perform(get(uri)
+						.param("guestId", guest.getId().toString())
+						.headers(headers))
+						.andDo(print())
+						.andReturn();
+
+		String contentAsString = result.getResponse().getContentAsString();
+
+		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
+
+		assertEquals(reservationsList.size(), reservationObjResponse.length);
+		assertEquals(reservation1.getGuestName(), guest.getName());
+		assertEquals(reservation2.getGuestName(), guest.getName());
 	}
 	
 	@Test
@@ -104,23 +142,6 @@ public class ListReservationsTest {
 	}
 	
 	@Test
-	public void shouldReturnAllReservationsWithoutParam() throws Exception {
-
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.headers(headers))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andReturn();
-
-		String contentAsString = result.getResponse().getContentAsString();
-
-		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
-
-		assertTrue(reservationObjResponse.length > 1);
-	}
-	
-	@Test
 	public void shouldReturnNotFoundStatusWithNonExistentReservationsId() throws Exception {
 
 		mockMvc.perform(get(uri  + String.valueOf(Long.MAX_VALUE))
@@ -130,25 +151,6 @@ public class ListReservationsTest {
 				.andReturn();
 	}
 	
-	@Test
-	public void shouldReturnAllReservationsByGuestName() throws Exception {
-
-		MvcResult result = 
-				mockMvc.perform(get(uri)
-						.param("guestId", guest.getId().toString())
-						.headers(headers))
-						.andDo(print())
-						.andReturn();
-
-		String contentAsString = result.getResponse().getContentAsString();
-
-		ReservationDto[] reservationObjResponse = objectMapper.readValue(contentAsString, ReservationDto[].class);
-
-		assertEquals(reservationsList.size(), reservationObjResponse.length);
-		assertEquals(reservation1.getGuestName(), guest.getName());
-		assertEquals(reservation2.getGuestName(), guest.getName());
-	}
-
 	@Test
 	public void shouldReturnNotFoundStatusAndNullBodyByUsingWrongParam() throws Exception {
 
