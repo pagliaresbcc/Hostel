@@ -74,7 +74,6 @@ export default function GuestProfile() {
             className="button"
             onClick={() => {
               sessionStorage.setItem("guest_ID", guest_ID);
-              sessionStorage.setItem("guestName", guest.name);
             }}
             to="/guest/update"
           >
@@ -94,7 +93,11 @@ export default function GuestProfile() {
         {reservations.length === 0 ? (
           <div className="welcome-reservations-grid">
             <h1>Você ainda não cadastrou nenhuma reserva!</h1>
-            <Link className="button" to="/reservations/newReservation">
+            <Link
+              className="button"
+              to="/reservations/newReservation"
+              onClick={sessionStorage.setItem("guestName", guest.name)}
+            >
               Cadastrar nova reserva
             </Link>
           </div>
