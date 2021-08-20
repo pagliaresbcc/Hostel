@@ -72,10 +72,11 @@ export default function Reservations() {
         <ul>
           {reservations.map(
             (
-              { id, guest_ID, rooms, checkinDate, checkoutDate, payment },
+              { id, guestName, guest_ID, rooms, checkinDate, checkoutDate, payment },
               i
             ) => (
               <li key={id}>
+                <strong>HÓSPEDE: {guestName}</strong>
                 <strong>QUARTO(S) RESERVADO(S):</strong>
                 {rooms.map((room, j) => (
                   <div>

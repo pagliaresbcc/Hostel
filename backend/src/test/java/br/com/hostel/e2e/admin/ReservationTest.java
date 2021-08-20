@@ -49,8 +49,6 @@ public class ReservationTest {
 		driver.findElement(By.xpath("//*[@id=\"check-out\"]")).sendKeys("26102025");
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"numberOfGuests\"]")).sendKeys("3");
-		Thread.sleep(1000);
-		driver.findElement(By.xpath("//*[@id=\"maxDailyRate\"]")).sendKeys("300");
 		Thread.sleep(4000);
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();

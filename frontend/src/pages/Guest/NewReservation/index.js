@@ -47,6 +47,9 @@ export default function NewReservation() {
         sessionStorage.setItem("checkoutDate", checkoutDate);
         sessionStorage.setItem("numberOfGuests", numberOfGuests);
 
+        sessionStorage.setItem("minDailyRate", minDailyRate);
+        sessionStorage.setItem("maxDailyRate", maxDailyRate);
+
         history.push("/reservations/select-available-rooms");
       })
       .catch(function (err) {
