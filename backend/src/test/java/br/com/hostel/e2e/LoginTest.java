@@ -22,7 +22,7 @@ public class LoginTest {
 
 	@BeforeEach
 	public void init() {
-		existentGuest = new Guest("admin@email.com", "123456");
+		existentGuest = new Guest("maria@email.com", "123456");
 		nonExistentGuest = new Guest("random@gmail.com", "123456");
 		
 		driver.get("http://localhost:3000/");

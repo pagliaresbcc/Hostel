@@ -23,7 +23,7 @@ public class RoomTest {
 		// make login
 		driver.get("http://localhost:3000/");
 		driver.manage().window().maximize();
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/input[1]")).sendKeys("admin@email.com");
+		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/input[1]")).sendKeys("maria@email.com");
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/input[2]")).sendKeys("123456");
 		Thread.sleep(1000);

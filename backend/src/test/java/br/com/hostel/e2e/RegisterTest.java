@@ -28,8 +28,8 @@ public class RegisterTest {
 		newGuest = new Guest("Dr.", "Sócrates", "Oliveira", LocalDate.of(1954, 2, 19), newAddress,
 				"socratesccp@gmail.com", "123456", Role.ROLE_ADMIN);
 		Address existentAddress = new Address("Rua 2", "13900-000", "Amparo", "SP", "Brasil");
-		existentGuest = new Guest("Mrs.", "Admin", "Hostel", LocalDate.of(2000, 9, 1), existentAddress,
-				"admin@email.com", "123456", Role.ROLE_ADMIN);
+		existentGuest = new Guest("Mrs.", "Maria", "Silva", LocalDate.of(2000, 9, 1), existentAddress,
+				"maria@email.com", "123456", Role.ROLE_ADMIN);
 		
 		driver.get("http://localhost:3000/");
 		driver.manage().window().maximize();
