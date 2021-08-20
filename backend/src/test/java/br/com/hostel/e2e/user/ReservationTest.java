@@ -40,15 +40,15 @@ public class ReservationTest {
 	@Order(1)
 	public void registerANewReservation() throws InterruptedException {
 
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/header/a")).click();
+		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a")).click();
 		Thread.sleep(3000);
-		driver.findElement(By.xpath("//*[@id=\"check-in\"]")).sendKeys("24102025");
+		driver.findElement(By.xpath("//*[@id=\"check-in\"]")).sendKeys("16022027");
 		Thread.sleep(1000);
-		driver.findElement(By.xpath("//*[@id=\"check-out\"]")).sendKeys("26102025");
+		driver.findElement(By.xpath("//*[@id=\"check-out\"]")).sendKeys("19022027");
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"numberOfGuests\"]")).sendKeys("3");
 		Thread.sleep(1000);
-		driver.findElement(By.xpath("//*[@id=\"maxDailyRate\"]")).sendKeys("300");
+		driver.findElement(By.xpath("//*[@id=\"maxDailyRate\"]")).sendKeys("900");
 		Thread.sleep(4000);
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();
@@ -110,10 +110,12 @@ public class ReservationTest {
 		driver.findElement(By.xpath("//*[@id=\"payment\"]")).click();
 		Thread.sleep(3000);
 		
-		driver.findElement(By.xpath("//*[@id=\"react-select-3-option-1\"]")).click();
+		driver.findElement(By.xpath("//*[@id=\"react-select-3-option-0\"]")).click();
 		Thread.sleep(3000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();
 		Thread.sleep(3000);
+
+		driver.close();
 	}
 
 	@Test
@@ -125,9 +127,8 @@ public class ReservationTest {
 		Alert firstAlert = driver.switchTo().alert();
 		firstAlert.accept();
 		Thread.sleep(3000);
-		Alert secondAlert = driver.switchTo().alert();
-		secondAlert.accept();
-		Thread.sleep(3000);
+
+		driver.close();
 	}
 
 }
