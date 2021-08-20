@@ -75,7 +75,7 @@ public class CreateReservationsTest {
 	@Test
 	public void shouldReturnNotFoundStatusWithNonExistentGuestID() throws Exception {
 		
-		reservationForm.setGuest_ID(33L);
+		reservationForm.setGuest_ID(Long.MAX_VALUE);
 		
 		mockMvc.perform(post(uri)
 				.headers(headers)
@@ -87,7 +87,7 @@ public class CreateReservationsTest {
 	@Test
 	public void shouldReturnBadRequestStatusWithReservationCheckinDateOlderActualDate() throws Exception {
 		
-		reservationForm.setCheckinDate(LocalDate.of(2019, 04, 01));
+		reservationForm.setCheckinDate(LocalDate.of(1900, 10, 10));
 		
 		mockMvc.perform(post(uri)
 				.headers(headers)
@@ -99,8 +99,8 @@ public class CreateReservationsTest {
 	@Test
 	public void shouldReturnBadRequestStatusWithReservationCheckoutDateOlderThanCheckinDate() throws Exception {
 		
-		reservationForm.setCheckinDate(LocalDate.of(2025, 04, 01));
-		reservationForm.setCheckoutDate(LocalDate.of(2025, 03, 01));
+		reservationForm.setCheckinDate(LocalDate.of(1900, 10, 10));
+		reservationForm.setCheckoutDate(LocalDate.of(1800, 10, 10));
 		
 		mockMvc.perform(post(uri)
 				.headers(headers)
@@ -139,9 +139,9 @@ public class CreateReservationsTest {
 		
 		CheckPayment checkObjResponse = (CheckPayment) reservationObjResponse.getPayment();
 
-		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2025, 04, 01));
-		assertEquals(reservationObjResponse.getPayment().getAmount(), 3000);
-		assertEquals(checkObjResponse.getBankName(), "Banco do Brasil");
+		assertEquals(reservationForm.getCheckinDate(), reservationObjResponse.getCheckinDate());
+		assertEquals(checkPayment.getAmount(), reservationObjResponse.getPayment().getAmount());
+		assertEquals(checkPayment.getBankName(), checkObjResponse.getBankName());
 	}
 	
 	@Test
@@ -170,9 +170,8 @@ public class CreateReservationsTest {
 		
 		CashPayment cashObjResponse = (CashPayment) reservationObjResponse.getPayment();
 
-		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2025, 04, 01));
-		assertEquals(reservationObjResponse.getPayment().getAmount(), 4000);
-		assertEquals(cashObjResponse.getAmountTendered(), 10000);
+		assertEquals(reservationForm.getCheckinDate(), reservationObjResponse.getCheckinDate());
+		assertEquals(cashPayment.getAmount(), cashObjResponse.getAmount());
 	}
 	
 	@Test
@@ -206,8 +205,8 @@ public class CreateReservationsTest {
 		
 		CreditCardPayment creditCardObjResponse = (CreditCardPayment) reservationObjResponse.getPayment();
 		
-		assertEquals(reservationObjResponse.getCheckinDate(), LocalDate.of(2025, 04, 01));
-		assertEquals(reservationObjResponse.getPayment().getAmount(), 5000);
-		assertEquals(creditCardObjResponse.getNameOnCard(), "WASHINGTON A SILVA");
+		assertEquals(reservationForm.getCheckinDate(), reservationObjResponse.getCheckinDate());
+		assertEquals(creditCardPayment.getAmount(), creditCardObjResponse.getAmount());
+		assertEquals("WASHINGTON A SILVA", creditCardObjResponse.getNameOnCard());
 	}
 }

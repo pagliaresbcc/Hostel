@@ -24,12 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.dto.GuestDto;
-import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.GuestForm;
 import br.com.hostel.controller.form.GuestUpdateForm;
 import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Guest;
-import br.com.hostel.model.Reservation;
 import br.com.hostel.service.GuestService;
 
 @RestController
@@ -75,18 +73,6 @@ public class GuestController {
 			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
 		}
 
-	}
-
-	@GetMapping("/{id}/reservations")
-	public ResponseEntity<?> listGuestReservations(@PathVariable Long id) {
-
-		try {
-			List<Reservation> reservations = guestService.listGuestReservations(id);
-
-			return ResponseEntity.ok(ReservationDto.convert(reservations));
-		} catch (BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
 	}
 
 	@PutMapping("/{id}")

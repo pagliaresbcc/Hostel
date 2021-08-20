@@ -52,10 +52,10 @@ public class ReservationController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<ReservationDto>> listAllReservations(@RequestParam(required = false) String name,
+	public ResponseEntity<List<ReservationDto>> listAllReservations(@RequestParam(required = false) Long guestId,
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pagination) {
 
-		List<Reservation> reservationsList = reservationService.listAllReservations(name, pagination);
+		List<Reservation> reservationsList = reservationService.listAllReservations(guestId, pagination);
 		
 		return ResponseEntity.ok(ReservationDto.convert(reservationsList));
 		

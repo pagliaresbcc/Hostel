@@ -31,7 +31,7 @@ public class GuestsInitializer {
 		LoginForm login = new LoginForm();
 
 		//setting login variables to autenticate
-		login.setEmail("admin@email.com");
+		login.setEmail("maria@email.com");
 		login.setPassword("123456");
 
 		//posting on /auth to get token

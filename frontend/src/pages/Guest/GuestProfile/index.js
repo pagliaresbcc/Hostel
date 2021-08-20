@@ -29,7 +29,7 @@ export default function GuestProfile() {
 
   useEffect(() => {
     api
-      .get(`api/guests/${guest_ID}/reservations`, {
+      .get(`api/reservations?guestId=${guest_ID}`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then((response) => {
@@ -93,7 +93,11 @@ export default function GuestProfile() {
         {reservations.length === 0 ? (
           <div className="welcome-reservations-grid">
             <h1>Você ainda não cadastrou nenhuma reserva!</h1>
-            <Link className="button" to="/reservations/newReservation">
+            <Link
+              className="button"
+              to="/reservations/newReservation"
+              onClick={sessionStorage.setItem("guestName", guest.name)}
+            >
               Cadastrar nova reserva
             </Link>
           </div>

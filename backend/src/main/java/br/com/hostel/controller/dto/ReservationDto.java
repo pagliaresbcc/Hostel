@@ -13,6 +13,7 @@ import br.com.hostel.model.Room;
 public class ReservationDto {
 
 	private Long id;
+	private String guestName;
 	private LocalDate reservationDate;
 	private LocalDate checkinDate;
 	private LocalDate checkoutDate;
@@ -26,6 +27,7 @@ public class ReservationDto {
 	
 	public ReservationDto(Reservation reservation) {
 		this.id = reservation.getId();
+		this.guestName = reservation.getGuestName();
 		this.reservationDate = reservation.getReservationDate();
 		this.checkinDate =  reservation.getCheckinDate();
 		this.checkoutDate = reservation.getCheckoutDate();
@@ -36,6 +38,10 @@ public class ReservationDto {
 
 	public Long getId() {
 		return id;
+	}
+
+	public String getGuestName() {
+		return guestName;
 	}
 
 	public LocalDate getReservationDate() {
