@@ -32,9 +32,6 @@ import br.com.hostel.initializer.ReservationInitializer;
 import br.com.hostel.model.CashPayment;
 import br.com.hostel.model.CheckPayment;
 import br.com.hostel.model.CreditCardPayment;
-import br.com.hostel.repository.PaymentRepository;
-import br.com.hostel.repository.ReservationRepository;
-import br.com.hostel.repository.RoomRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -42,19 +39,10 @@ import br.com.hostel.repository.RoomRepository;
 public class CreateReservationsTest {
 
 	@Autowired
-	ReservationRepository reservationRepository;
-	
-	@Autowired
-	PaymentRepository paymentRepository;
-	
-	@Autowired
-	RoomRepository roomRepository;
-	
-	@Autowired
 	private MockMvc mockMvc;
 	
 	@Autowired
-	ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 	
 	private URI uri;
 	private HttpHeaders headers = new HttpHeaders();
@@ -99,8 +87,8 @@ public class CreateReservationsTest {
 	@Test
 	public void shouldReturnBadRequestStatusWithReservationCheckoutDateOlderThanCheckinDate() throws Exception {
 		
-		reservationForm.setCheckinDate(LocalDate.of(1900, 10, 10));
-		reservationForm.setCheckoutDate(LocalDate.of(1800, 10, 10));
+		reservationForm.setCheckinDate(LocalDate.of(2022, 10, 10));
+		reservationForm.setCheckoutDate(LocalDate.of(2022, 10, 9));
 		
 		mockMvc.perform(post(uri)
 				.headers(headers)
@@ -179,7 +167,7 @@ public class CreateReservationsTest {
 		creditCardPayment.setAmount(5000);
 		creditCardPayment.setDate(LocalDateTime.of(LocalDate.of(2025,01,25), LocalTime.of(21, 33)));
 		creditCardPayment.setIssuer("VISA");
-		creditCardPayment.setNameOnCard("WASHINGTON A SILVA");
+		creditCardPayment.setNameOnCard("MARIA A SILVA");
 		creditCardPayment.setCardNumber("1234 5678 9101 1121");
 		creditCardPayment.setExpirationDate(LocalDate.of(2048, 05, 01));
 		creditCardPayment.setSecurityCode("123");
@@ -207,6 +195,6 @@ public class CreateReservationsTest {
 		
 		assertEquals(reservationForm.getCheckinDate(), reservationObjResponse.getCheckinDate());
 		assertEquals(creditCardPayment.getAmount(), creditCardObjResponse.getAmount());
-		assertEquals("WASHINGTON A SILVA", creditCardObjResponse.getNameOnCard());
+		assertEquals(creditCardPayment.getNameOnCard(), creditCardObjResponse.getNameOnCard());
 	}
 }

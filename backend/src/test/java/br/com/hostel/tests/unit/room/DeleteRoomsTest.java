@@ -27,32 +27,22 @@ import br.com.hostel.service.RoomService;
 public class DeleteRoomsTest {
 	
 	@MockBean
-	RoomRepository roomRepository;
+	private RoomRepository roomRepository;
 	
 	@MockBean
-	DailyRateRepository dailyRepository;
+	private DailyRateRepository dailyRepository;
 	
 	@MockBean
-	ReservationRepository reservationRepository;
+	private ReservationRepository reservationRepository;
 
 	@MockBean
-	Room room;
+	private Room room;
 
 	@Autowired
-	RoomService service;
+	private RoomService service;
 
 	@Test
-	public void shouldReturnTrueWhenDeletingARoomWithExistentID() throws Exception {
-
-		Optional<Room> opRoom = Optional.of(room);
-
-		when(roomRepository.findById(any())).thenReturn(opRoom);
-
-		service.deleteRoom(room.getId());
-	}
-
-	@Test
-	public void shouldReturnFalseWhenDeletingARoomWithNonExistentID() throws Exception {
+	public void shouldReturnNotFoundStatusAfterDeletingARoomWithNonExistentID() throws Exception {
 
 		Optional<Room> nonexistentRoom = Optional.empty();
 
@@ -63,6 +53,24 @@ public class DeleteRoomsTest {
 					() -> service.deleteRoom(room.getId()),
 					"It was expected that deleteRoom() thrown an exception, " +
 					"due to a nonexistent ID");
+
+		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
+	}
+	
+	@Test
+	public void shouldReturnNotFoundStatusAfterTryingToDeleteARoomWithExistentID() throws Exception {
+
+		Optional<Room> opRoom = Optional.of(room);
+
+		when(roomRepository.findById(any())).thenReturn(opRoom).thenReturn(Optional.empty());
+
+		service.deleteRoom(room.getId());
+		
+		BaseException thrown = 
+				assertThrows(BaseException.class, 
+					() -> service.deleteRoom(room.getId()),
+					"It was expected that deleteRoom() thrown an exception, " +
+					"due to trying to find the room that have been deleted");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}

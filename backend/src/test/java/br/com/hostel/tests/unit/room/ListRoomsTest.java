@@ -35,16 +35,16 @@ import br.com.hostel.service.RoomService;
 public class ListRoomsTest {
 
 	@MockBean
-	RoomRepository roomRepository;
+	private RoomRepository roomRepository;
 
 	@MockBean
-	DailyRateRepository dailyRepository;
+	private DailyRateRepository dailyRepository;
 
 	@MockBean
-	ReservationRepository reservationRepository;
+	private ReservationRepository reservationRepository;
 
 	@Autowired
-	RoomService service;
+	private RoomService service;
 
 	private static Reservation firstReservation = new Reservation();
 	private static Reservation secondReservation = new Reservation();

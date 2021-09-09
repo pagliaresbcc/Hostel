@@ -19,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.initializer.RoomInitializer;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
@@ -31,37 +32,30 @@ import br.com.hostel.service.RoomService;
 public class CreateRoomsTest {
 
 	@MockBean
-	RoomRepository roomRepository;
+	private RoomRepository roomRepository;
 	
 	@MockBean
-	DailyRateRepository dailyRepository;
+	private DailyRateRepository dailyRepository;
 	
 	@MockBean
-	ReservationRepository reservationRepository;
+	private ReservationRepository reservationRepository;
 
 	@MockBean
-	RoomForm form;
+	private RoomForm form;
 
 	@MockBean
-	UriComponentsBuilder uriBuilder;
+	private UriComponentsBuilder uriBuilder;
 
 	@Autowired
-	RoomService service;
+	private RoomService service;
 
 	private static Room room = new Room();
 	private static DailyRate dailyRate = new DailyRate();
 
 	@BeforeAll
-	public static void beforeAll() {
-		// setting daily rate to put into the room parameters
-		dailyRate.setPrice(400);
+	public static void beforeAll() throws Exception {
 
-		// setting room
-		room.setDailyRate(dailyRate);
-		room.setDescription("Room test");
-		room.setDimension(230.0);
-		room.setMaxNumberOfGuests(4);
-		room.setNumber(666);
+		RoomInitializer.initialize(room, dailyRate);
 	}
 
 	@Test

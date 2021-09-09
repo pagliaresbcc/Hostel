@@ -34,19 +34,19 @@ import br.com.hostel.repository.RoomRepository;
 public class DeleteReservationsTest {
 
 	@Autowired
-	ReservationRepository reservationRepository;
+	private ReservationRepository reservationRepository;
 	
 	@Autowired
-	PaymentRepository paymentRepository;
+	private PaymentRepository paymentRepository;
 	
 	@Autowired
-	RoomRepository roomRepository;
+	private RoomRepository roomRepository;
 	
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@Autowired
-	ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 	
 	private URI uri;
 	private HttpHeaders headers = new HttpHeaders();

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -20,9 +19,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.form.GuestForm;
 import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.initializer.GuestsInitializer;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
-import br.com.hostel.model.helper.Role;
 import br.com.hostel.repository.AddressRepository;
 import br.com.hostel.repository.GuestRepository;
 import br.com.hostel.service.GuestService;
@@ -32,43 +31,27 @@ import br.com.hostel.service.GuestService;
 public class CreateGuestsTest {
 
 	@MockBean
-	GuestRepository guestRepository;
+	private GuestRepository guestRepository;
 	
 	@MockBean
-	AddressRepository addressRepository;
+	private AddressRepository addressRepository;
 	
 	@MockBean
-	GuestForm guestForm;
+	private GuestForm guestForm;
 	
 	@MockBean
-	UriComponentsBuilder uriBuilder;
+	private UriComponentsBuilder uriBuilder;
 	
 	@Autowired
-	GuestService guestService;
+	private GuestService guestService;
 	
 	private static Address address = new Address();
 	private static Guest guest = new Guest();
 
 	@BeforeAll
-	public static void beforeAll() {
+	public static void beforeAll() throws Exception {
 		
-		// setting address to put into the guest paramseters
-		address.setAddressName("rua x");
-		address.setCity("Amparo");
-		address.setCountry("Brasil");
-		address.setState("SP");
-		address.setZipCode("13900-000");
-		
-		// setting guest
-		guest.setAddress(address);
-		guest.setId(13L);
-		guest.setBirthday(LocalDate.of(1900, 12, 12));
-		guest.setEmail("washington2@orkut.com");
-		guest.setName("Washington");
-		guest.setLastName("Ferrolho");
-		guest.setTitle("MR.");
-		guest.setPassword("1234567");
-		guest.setRole(Role.ROLE_USER);
+		GuestsInitializer.initialize(address, guest);
 	}
 
 	@Test

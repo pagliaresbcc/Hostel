@@ -29,7 +29,7 @@ public class AuthenticationTest {
 	private MockMvc mockMvc;
 	
 	@Autowired
-	ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 
 	private LoginForm login = new LoginForm();
 	

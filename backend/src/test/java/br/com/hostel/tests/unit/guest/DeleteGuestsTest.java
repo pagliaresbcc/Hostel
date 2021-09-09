@@ -26,19 +26,19 @@ import br.com.hostel.service.GuestService;
 public class DeleteGuestsTest {
 
 	@MockBean
-	GuestRepository guestRepository;
+	private GuestRepository guestRepository;
 
 	@MockBean
-	AddressRepository addressRepository;
+	private AddressRepository addressRepository;
 
 	@MockBean
-	Guest guest;
+	private Guest guest;
 
 	@Autowired
-	GuestService guestService;
+	private GuestService guestService;
 
 	@Test
-	public void shouldReturnFalseWhenDeletingAGuestWithNonExistentID() throws Exception {
+	public void shouldReturnNotFoundStatusAfterTryingToDeleteAGuestWithNonExistentID() throws Exception {
 
 		Optional<Guest> nonexistentGuest = Optional.empty();
 
@@ -54,13 +54,21 @@ public class DeleteGuestsTest {
 	}
 
 	@Test
-	public void shouldReturnTrueWhenDeletingAGuestWithExistentID() throws Exception {
+	public void shouldReturnNotFoundStatusAfterDeletingAGuestWithExistentID() throws Exception {
 
 		Optional<Guest> opGuest = Optional.of(guest);
 
-		when(guestRepository.findById(any())).thenReturn(opGuest);
-
+		when(guestRepository.findById(any())).thenReturn(opGuest).thenReturn(Optional.empty());
+		
 		guestService.deleteGuest(guest.getId());
+		
+		BaseException thrown = 
+				assertThrows(BaseException.class, 
+					() -> guestService.deleteGuest(guest.getId()),
+					"It was expected that deleteGuest() thrown an exception, "+
+					"due to trying to find the guest that have been deleted");
+		
+		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
 	}
 
 }
