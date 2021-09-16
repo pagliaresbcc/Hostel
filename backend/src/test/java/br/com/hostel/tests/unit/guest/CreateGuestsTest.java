@@ -55,7 +55,7 @@ public class CreateGuestsTest {
 	}
 
 	@Test
-	public void shouldCreateAGuestAndReturn() throws Exception {
+	public void shouldCreateOneGuestSuccessfully() throws Exception {
 		
 		Optional<Guest> nonexistentGuest = Optional.empty();
 
