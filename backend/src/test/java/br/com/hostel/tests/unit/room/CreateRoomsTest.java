@@ -59,7 +59,7 @@ public class CreateRoomsTest {
 	}
 
 	@Test
-	public void shouldCreateOneRoomAndReturnStatusCreated() throws BaseException {
+	public void shouldCreateOneRoomSuccessfully() throws BaseException {
 
 		Optional<Room> nonexistentRoom = Optional.empty();
 		
