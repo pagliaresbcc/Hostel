@@ -25,7 +25,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.hostel.controller.dto.ReservationDto;
 import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.controller.form.ReservationUpdateForm;
-import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.service.ReservationService;
 
@@ -40,15 +39,11 @@ public class ReservationController {
 	public ResponseEntity<?> registerReservation(@RequestBody @Valid ReservationForm form,
 			UriComponentsBuilder uriBuilder) {
 
-		try {
-			Reservation reservation = reservationService.registerReservation(form, uriBuilder);
-			
-			URI uri = uriBuilder.path("/reservations/{id}").buildAndExpand(form.getGuest_ID()).toUri();
-	
-			return ResponseEntity.created(uri).body(new ReservationDto(reservation));
-		} catch(BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		Reservation reservation = reservationService.registerReservation(form, uriBuilder);
+		
+		URI uri = uriBuilder.path("/reservations/{id}").buildAndExpand(form.getGuest_ID()).toUri();
+
+		return ResponseEntity.created(uri).body(new ReservationDto(reservation));
 	}
 
 	@GetMapping
@@ -64,13 +59,9 @@ public class ReservationController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> listOneReservation(@PathVariable Long id) {
 
-		try {
-			Reservation reservation = reservationService.listOneReservation(id);
-			
-			return ResponseEntity.ok(new ReservationDto(reservation));
-		} catch(BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		Reservation reservation = reservationService.listOneReservation(id);
+		
+		return ResponseEntity.ok(new ReservationDto(reservation));
 	}
 
 	@PutMapping("/{id}")
@@ -78,25 +69,17 @@ public class ReservationController {
 	public ResponseEntity<?> updateReservation(@PathVariable Long id,
 			@RequestBody @Valid ReservationUpdateForm form, UriComponentsBuilder uriBuilder) {
 
-		try {
-			Reservation reservation = reservationService.updateReservation(id, form);
-			
-			return ResponseEntity.ok(new ReservationDto(reservation));
-		} catch(BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		Reservation reservation = reservationService.updateReservation(id, form);
+		
+		return ResponseEntity.ok(new ReservationDto(reservation));
 	}
 	
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
 
-		try {
-			reservationService.deleteReservation(id);
-			
-			return ResponseEntity.ok().build();
-		} catch(BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		reservationService.deleteReservation(id);
+		
+		return ResponseEntity.ok().build();
 	}
 }

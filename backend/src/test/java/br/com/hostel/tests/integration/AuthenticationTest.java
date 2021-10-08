@@ -59,8 +59,8 @@ public class AuthenticationTest {
 		
 		mockMvc
 			.perform(post("/auth")
-					.content(objectMapper.writeValueAsString(login))
-					.contentType("application/json"))
+			.content(objectMapper.writeValueAsString(login))
+			.contentType("application/json"))
 			.andExpect(status().isBadRequest())
 			.andReturn();	
 	}
@@ -72,8 +72,8 @@ public class AuthenticationTest {
 		
 		mockMvc
 			.perform(post("/auth")
-					.content(objectMapper.writeValueAsString(login))
-					.contentType("application/json"))
+			.content(objectMapper.writeValueAsString(login))
+			.contentType("application/json"))
 			.andExpect(status().isBadRequest())
 			.andReturn();	
 	}

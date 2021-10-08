@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.exceptions.guest.GuestException;
 import br.com.hostel.model.Guest;
 import br.com.hostel.repository.AddressRepository;
 import br.com.hostel.repository.GuestRepository;
@@ -44,8 +44,8 @@ public class DeleteGuestsTest {
 
 		when(guestRepository.findById(any())).thenReturn(nonexistentGuest);
 
-		BaseException thrown = 
-				assertThrows(BaseException.class, 
+		GuestException thrown = 
+				assertThrows(GuestException.class, 
 					() -> guestService.deleteGuest(guest.getId()),
 					"It was expected that deleteGuest() thrown an exception, "+
 					"due to trying to delete a guest with an nonexistent ID");
@@ -62,8 +62,8 @@ public class DeleteGuestsTest {
 		
 		guestService.deleteGuest(guest.getId());
 		
-		BaseException thrown = 
-				assertThrows(BaseException.class, 
+		GuestException thrown = 
+				assertThrows(GuestException.class, 
 					() -> guestService.deleteGuest(guest.getId()),
 					"It was expected that deleteGuest() thrown an exception, "+
 					"due to trying to find the guest that have been deleted");

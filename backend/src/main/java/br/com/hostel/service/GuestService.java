@@ -13,7 +13,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.form.GuestForm;
 import br.com.hostel.controller.form.GuestUpdateForm;
-import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.exceptions.guest.GuestException;
+import br.com.hostel.exceptions.room.RoomException;
 import br.com.hostel.model.Guest;
 import br.com.hostel.repository.AddressRepository;
 import br.com.hostel.repository.GuestRepository;
@@ -27,11 +28,11 @@ public class GuestService {
 	@Autowired
 	private AddressRepository addressRepository;
 
-	public Guest createGuest(GuestForm form, UriComponentsBuilder uriBuilder) throws BaseException {
+	public Guest createGuest(GuestForm form, UriComponentsBuilder uriBuilder) throws RoomException {
 		Optional<Guest> guestEmail = guestRepository.findByEmail(form.getEmail());
 
 		if (guestEmail.isPresent())
-			throw new BaseException("There is already a guest with e-mail = " + form.getEmail(),
+			throw new GuestException("There is already a guest with e-mail = " + form.getEmail(),
 					HttpStatus.BAD_REQUEST);
 
 		Guest guest = form.returnGuest(addressRepository);
@@ -48,21 +49,21 @@ public class GuestService {
 		return guestRepository.findByName(name);
 	}
 
-	public Guest listOneGuest(Long id) throws BaseException {
+	public Guest listOneGuest(Long id) throws RoomException {
 
 		Optional<Guest> guest = guestRepository.findById(id);
 
 		if (!guest.isPresent())
-			throw new BaseException("There isn't a guest with id = " + id, HttpStatus.NOT_FOUND);
+			throw new GuestException("There isn't a guest with id = " + id, HttpStatus.NOT_FOUND);
 
 		return guest.get();
 	}
 
-	public Guest updateGuest(Long id, @Valid GuestUpdateForm form) throws BaseException {
+	public Guest updateGuest(Long id, @Valid GuestUpdateForm form) throws RoomException {
 		Optional<Guest> guestOp = guestRepository.findById(id);
 
 		if (!guestOp.isPresent())
-			throw new BaseException("There isn't a guest with id = " + id, HttpStatus.NOT_FOUND);
+			throw new GuestException("There isn't a guest with id = " + id, HttpStatus.NOT_FOUND);
 
 		Guest guest = form.updateGuestForm(id, guestOp.get(), guestRepository);
 		addressRepository.save(guest.getAddress());
@@ -70,12 +71,12 @@ public class GuestService {
 		return guest;
 	}
 
-	public void deleteGuest(Long id) throws BaseException {
+	public void deleteGuest(Long id) throws RoomException {
 
 		Optional<Guest> guest = guestRepository.findById(id);
 
 		if (!guest.isPresent())
-			throw new BaseException("There isn't a guest with id = " + id, HttpStatus.NOT_FOUND);
+			throw new GuestException("There isn't a guest with id = " + id, HttpStatus.NOT_FOUND);
 
 		guestRepository.deleteById(id);
 	}

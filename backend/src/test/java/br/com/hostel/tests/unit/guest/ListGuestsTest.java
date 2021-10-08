@@ -18,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.exceptions.guest.GuestException;
 import br.com.hostel.initializer.GuestsInitializer;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
@@ -118,8 +118,8 @@ public class ListGuestsTest {
 		
 		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
 
-		BaseException thrown = 
-				assertThrows(BaseException.class, 
+		GuestException thrown = 
+				assertThrows(GuestException.class, 
 					() -> guestService.listOneGuest(guest.getId()),
 					"It was expected that listOneGuest() thrown an exception, " +
 					"due to trying to find a guest with an nonexistent ID");

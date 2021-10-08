@@ -26,7 +26,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.hostel.controller.dto.GuestDto;
 import br.com.hostel.controller.form.GuestForm;
 import br.com.hostel.controller.form.GuestUpdateForm;
-import br.com.hostel.exceptions.BaseException;
 import br.com.hostel.model.Guest;
 import br.com.hostel.service.GuestService;
 
@@ -40,15 +39,11 @@ public class GuestController {
 	@PostMapping
 	public ResponseEntity<?> createGuest(@RequestBody @Valid GuestForm form, UriComponentsBuilder uriBuilder) {
 
-		try {
-			Guest guest = guestService.createGuest(form, uriBuilder);
+		Guest guest = guestService.createGuest(form, uriBuilder);
 
-			URI uri = uriBuilder.path("/guests/{id}").buildAndExpand(guest.getId()).toUri();
+		URI uri = uriBuilder.path("/guests/{id}").buildAndExpand(guest.getId()).toUri();
 
-			return ResponseEntity.created(uri).body(new GuestDto(guest));
-		} catch (BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		return ResponseEntity.created(uri).body(new GuestDto(guest));
 	}
 
 	@GetMapping
@@ -65,14 +60,9 @@ public class GuestController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> listOneGuest(@PathVariable Long id) {
 
-		try {
-			Guest guest = guestService.listOneGuest(id);
+		Guest guest = guestService.listOneGuest(id);
 
-			return ResponseEntity.ok(new GuestDto(guest));
-		} catch (BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
-
+		return ResponseEntity.ok(new GuestDto(guest));
 	}
 
 	@PutMapping("/{id}")
@@ -80,25 +70,17 @@ public class GuestController {
 	public ResponseEntity<?> updateGuest(@PathVariable Long id, @RequestBody @Valid GuestUpdateForm form,
 			UriComponentsBuilder uriBuilder) {
 
-		try {
-			Guest guest = guestService.updateGuest(id, form);
+		Guest guest = guestService.updateGuest(id, form);
 
-			return ResponseEntity.ok(new GuestDto(guest));
-		} catch (BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		return ResponseEntity.ok(new GuestDto(guest));
 	}
 
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> deleteGuest(@PathVariable Long id) {
 
-		try {
-			guestService.deleteGuest(id);
+		guestService.deleteGuest(id);
 
-			return ResponseEntity.ok().build();
-		} catch (BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		return ResponseEntity.ok().build();
 	}
 }

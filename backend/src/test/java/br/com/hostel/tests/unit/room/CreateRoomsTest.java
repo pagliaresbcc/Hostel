@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.form.RoomForm;
-import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.exceptions.room.RoomException;
 import br.com.hostel.initializer.RoomInitializer;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
@@ -59,7 +59,7 @@ public class CreateRoomsTest {
 	}
 
 	@Test
-	public void shouldCreateOneRoomSuccessfully() throws BaseException {
+	public void shouldCreateOneRoomSuccessfully() throws RoomException {
 
 		Optional<Room> nonexistentRoom = Optional.empty();
 		
@@ -75,15 +75,15 @@ public class CreateRoomsTest {
 	}
 	
 	@Test
-	public void shouldReturnNullWithExistentRoomNumber() throws BaseException {
+	public void shouldReturnNullWithExistentRoomNumber() throws RoomException {
 		
 		Optional<Room> opRoom = Optional.of(room);
 
 		when(form.returnRoom(any())).thenReturn(room);
 		when(roomRepository.findByNumber(any())).thenReturn(opRoom);
 		
-		BaseException thrown = 
-				assertThrows(BaseException.class, 
+		RoomException thrown = 
+				assertThrows(RoomException.class, 
 					() -> service.registerRoom(form, uriBuilder),
 					"It was expected that registerRoom() thrown an exception, " +
 					"due to trying to create a room with an existing number");

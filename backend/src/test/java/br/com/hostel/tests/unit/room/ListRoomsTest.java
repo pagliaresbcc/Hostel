@@ -21,7 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import br.com.hostel.controller.helper.RoomFilter;
-import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.exceptions.room.RoomException;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
@@ -196,7 +196,7 @@ public class ListRoomsTest {
 
 		when(roomRepository.findById(firstRoom.getId())).thenReturn(opRoom);
 
-		BaseException thrown = assertThrows(BaseException.class, 
+		RoomException thrown = assertThrows(RoomException.class, 
 				() -> service.listOneRoom(firstRoom.getId()),
 				"It was expected that listOneRoom() thrown an exception, " + 
 				"due to a nonexistent ID");

@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.form.GuestForm;
-import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.exceptions.guest.GuestException;
 import br.com.hostel.initializer.GuestsInitializer;
 import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
@@ -76,8 +76,8 @@ public class CreateGuestsTest {
 		
 		when(guestRepository.findByEmail(any())).thenReturn(opGuest);
 		
-		BaseException thrown = 
-				assertThrows(BaseException.class, 
+		GuestException thrown = 
+				assertThrows(GuestException.class, 
 					() -> guestService.createGuest(guestForm, uriBuilder),
 					"It was expected that createGuest() thrown an exception, " +
 					"due to trying to create a guest with an existent email");

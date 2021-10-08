@@ -17,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.hostel.controller.form.RoomUpdateForm;
-import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.exceptions.room.RoomException;
 import br.com.hostel.initializer.RoomInitializer;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
@@ -82,8 +82,8 @@ public class UpdateRoomsTest {
 		
 		when(roomRepository.findById(room.getId())).thenReturn(nonexistentRoom);
 		
-		BaseException thrown = 
-				assertThrows(BaseException.class, 
+		RoomException thrown = 
+				assertThrows(RoomException.class, 
 					() -> service.updateRoom(room.getId(), form, uriBuilder),
 					"It was expected that updateRoom() thrown an exception, " +
 					"due to trying to update a room with an nonexistent number");

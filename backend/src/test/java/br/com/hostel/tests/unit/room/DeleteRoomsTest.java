@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.exceptions.room.RoomException;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
 import br.com.hostel.repository.ReservationRepository;
@@ -48,8 +48,8 @@ public class DeleteRoomsTest {
 
 		when(roomRepository.findById(any())).thenReturn(nonexistentRoom);
 
-		BaseException thrown = 
-				assertThrows(BaseException.class, 
+		RoomException thrown = 
+				assertThrows(RoomException.class, 
 					() -> service.deleteRoom(room.getId()),
 					"It was expected that deleteRoom() thrown an exception, " +
 					"due to a nonexistent ID");
@@ -66,8 +66,8 @@ public class DeleteRoomsTest {
 
 		service.deleteRoom(room.getId());
 		
-		BaseException thrown = 
-				assertThrows(BaseException.class, 
+		RoomException thrown = 
+				assertThrows(RoomException.class, 
 					() -> service.deleteRoom(room.getId()),
 					"It was expected that deleteRoom() thrown an exception, " +
 					"due to trying to find the room that have been deleted");

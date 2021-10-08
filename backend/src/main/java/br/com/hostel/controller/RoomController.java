@@ -26,7 +26,7 @@ import br.com.hostel.controller.dto.RoomDto;
 import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.controller.form.RoomUpdateForm;
 import br.com.hostel.controller.helper.RoomFilter;
-import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.exceptions.room.RoomException;
 import br.com.hostel.model.Room;
 import br.com.hostel.service.RoomService;
 
@@ -39,18 +39,13 @@ public class RoomController {
 
 	@PostMapping
 	public ResponseEntity<?> registerRoom(@RequestBody @Valid RoomForm form, UriComponentsBuilder uriBuilder)
-			throws BaseException {
+			throws RoomException {
 
-		try {
-			Room room = roomService.registerRoom(form, uriBuilder);
+		Room room = roomService.registerRoom(form, uriBuilder);
 
-			URI uri = uriBuilder.path("/rooms/{id}").buildAndExpand(room.getId()).toUri();
+		URI uri = uriBuilder.path("/rooms/{id}").buildAndExpand(room.getId()).toUri();
 
-			return ResponseEntity.created(uri).body(new RoomDto(room));
-
-		} catch (BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		return ResponseEntity.created(uri).body(new RoomDto(room));
 	}
 
 	@GetMapping
@@ -67,40 +62,28 @@ public class RoomController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> listOneRoom(@PathVariable Long id) throws BaseException {
+	public ResponseEntity<?> listOneRoom(@PathVariable Long id) throws RoomException {
 
-		try {
-			Room room = this.roomService.listOneRoom(id);
+		Room room = roomService.listOneRoom(id);
 
-			return ResponseEntity.ok(new RoomDto(room));
-		} catch (BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		return ResponseEntity.ok(new RoomDto(room));
 	}
 
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
-			UriComponentsBuilder uriBuilder) throws BaseException {
+			UriComponentsBuilder uriBuilder) throws RoomException {
 
-		try {
-			Room room = this.roomService.updateRoom(id, form, uriBuilder);
+		Room room = roomService.updateRoom(id, form, uriBuilder);
 
-			return ResponseEntity.ok(new RoomDto(room));
-		} catch (BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		return ResponseEntity.ok(new RoomDto(room));
 	}
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> deleteRoom(@PathVariable Long id) throws BaseException {
-		try {
-			this.roomService.deleteRoom(id);
+	public ResponseEntity<?> deleteRoom(@PathVariable Long id) throws RoomException {
+		roomService.deleteRoom(id);
 
-			return ResponseEntity.ok().build();
-		} catch (BaseException be) {
-			return ResponseEntity.status(be.getHttpStatus()).body(be.getMessage());
-		}
+		return ResponseEntity.ok().build();
 	}
 }

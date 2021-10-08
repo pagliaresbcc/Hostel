@@ -21,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.controller.form.RoomUpdateForm;
 import br.com.hostel.controller.helper.RoomFilter;
-import br.com.hostel.exceptions.BaseException;
+import br.com.hostel.exceptions.room.RoomException;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.DailyRateRepository;
@@ -40,14 +40,14 @@ public class RoomService {
 	@Autowired
 	private ReservationRepository reservationRepository;
 
-	public Room registerRoom(RoomForm form, UriComponentsBuilder uriBuilder) throws BaseException {
+	public Room registerRoom(RoomForm form, UriComponentsBuilder uriBuilder) throws RoomException {
 
 		Room room = form.returnRoom(dailyRateRepository);
 		Optional<Room> roomOp = roomRepository.findByNumber(room.getNumber());
 
 		if (roomOp.isPresent()) {
 			throw new 
-			BaseException("There is already a room with number = " + room.getNumber(),
+			RoomException("There is already a room with number = " + room.getNumber(),
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -79,24 +79,24 @@ public class RoomService {
 		return availableRooms;
 	}
 
-	public Room listOneRoom(Long id) throws BaseException {
+	public Room listOneRoom(Long id) throws RoomException {
 
 		Optional<Room> room = roomRepository.findById(id);
 
 		if (!room.isPresent())
-			throw new BaseException("Room ID haven't found", HttpStatus.NOT_FOUND);
+			throw new RoomException("Room ID haven't found", HttpStatus.NOT_FOUND);
 
 		return room.get();
 
 	}
 
 	public Room updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
-			UriComponentsBuilder uriBuilder) throws BaseException {
+			UriComponentsBuilder uriBuilder) throws RoomException {
 
 		Optional<Room> roomOp = roomRepository.findById(id);
 
 		if (!roomOp.isPresent())
-			throw new BaseException("Room ID haven't found", HttpStatus.NOT_FOUND);
+			throw new RoomException("Room ID haven't found", HttpStatus.NOT_FOUND);
 
 		Room room = form.updateRoomForm(id, roomOp.get(), roomRepository);
 
@@ -107,12 +107,12 @@ public class RoomService {
 		return room;
 	}
 
-	public void deleteRoom(Long id) throws BaseException {
+	public void deleteRoom(Long id) throws RoomException {
 
 		Optional<Room> room = roomRepository.findById(id);
 
 		if (!room.isPresent())
-			throw new BaseException("Room ID haven't found", HttpStatus.NOT_FOUND);
+			throw new RoomException("Room ID haven't found", HttpStatus.NOT_FOUND);
 
 		roomRepository.deleteById(id);
 	}
