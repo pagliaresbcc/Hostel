@@ -8,6 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @DiscriminatorValue("3")
 public class CreditCardPayment extends Payment {
@@ -22,62 +27,6 @@ public class CreditCardPayment extends Payment {
 	private String nameOnCard;
 	private LocalDate expirationDate;
 	private String securityCode;
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public double getAmount() {
-		return amount;
-	}
-	
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-	
-	public String getIssuer() {
-		return issuer;
-	}
-	
-	public void setIssuer(String issuer) {
-		this.issuer = issuer;
-	}
-	
-	public String getCardNumber() {
-		return cardNumber;
-	}
-	
-	public void setCardNumber(String cardNumber) {
-		this.cardNumber = cardNumber;
-	}
-	
-	public String getNameOnCard() {
-		return nameOnCard;
-	}
-	
-	public void setNameOnCard(String nameOnCard) {
-		this.nameOnCard = nameOnCard;
-	}
-	
-	public LocalDate getExpirationDate() {
-		return expirationDate;
-	}
-	
-	public void setExpirationDate(LocalDate expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-	
-	public String getSecurityCode() {
-		return securityCode;
-	}
-	
-	public void setSecurityCode(String securityCode) {
-		this.securityCode = securityCode;
-	}
 	
 	public boolean authorize() {
 		System.out.println("Requesting authorization to " + issuer);

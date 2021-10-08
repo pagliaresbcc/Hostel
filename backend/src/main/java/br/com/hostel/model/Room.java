@@ -9,6 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class Room {
 
@@ -29,64 +36,12 @@ public class Room {
 	@JoinColumn(name = "dailyRate_ID", nullable = false)
 	private DailyRate dailyRate;
 
-	public Room() {
-
-	}
-
 	public Room(String description, Integer number, Double dimension, Integer maxNumberOfGuests, DailyRate dailyRate) {
 		this.description = description;
 		this.number = number;
 		this.dimension = dimension;
 		this.maxNumberOfGuests = maxNumberOfGuests;
 		this.dailyRate = dailyRate;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Integer getNumber() {
-		return number;
-	}
-
-	public void setNumber(Integer number) {
-		this.number = number;
-	}
-
-	public Double getDimension() {
-		return dimension;
-	}
-
-	public void setDimension(Double dimension) {
-		this.dimension = dimension;
-	}
-
-	public DailyRate getDailyRate() {
-		return dailyRate;
-	}
-
-	public void setDailyRate(DailyRate dailyRate) {
-		this.dailyRate = dailyRate;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Integer getMaxNumberOfGuests() {
-		return maxNumberOfGuests;
-	}
-
-	public void setMaxNumberOfGuests(Integer maxNumberOfGuests) {
-		this.maxNumberOfGuests = maxNumberOfGuests;
 	}
 
 	public String toString() {

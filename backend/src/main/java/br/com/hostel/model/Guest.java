@@ -1,6 +1,5 @@
 package br.com.hostel.model;
 
-import java.lang.String;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,13 +7,30 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.hostel.model.helper.Role;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 //UserDetails serve para dizer ao Sring qual será a classe de usuário
 //para autenticação no sistema
@@ -53,10 +69,6 @@ public class Guest implements UserDetails {
 	@Column(name = "reservations")
 	private Set<Reservation> reservations = new HashSet<>();
 
-	public Guest() {
-
-	}
-
 	public Guest(String email, String password) {
 		this.email = email;
 		this.password = password;
@@ -72,6 +84,10 @@ public class Guest implements UserDetails {
 		this.email = email;
 		this.password = password;
 		this.role = role;
+	}
+	
+	public void addReservation(Reservation reservation) {
+		this.reservations.add(reservation);
 	}
 
 	@Override
@@ -99,94 +115,9 @@ public class Guest implements UserDetails {
 		return true;
 	}
 
-	public Long getId() {
-		return this.id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return this.title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getLastName() {
-		return this.lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public LocalDate getBirthday() {
-		return this.birthday;
-	}
-
-	public void setBirthday(LocalDate birthday) {
-		this.birthday = birthday;
-	}
-
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Set<Reservation> getReservations() {
-		return this.reservations;
-	}
-
-	public void setReservations(Set<Reservation> reservations) {
-		this.reservations = reservations;
-	}
-
-	public void addReservation(Reservation reservation) {
-		this.reservations.add(reservation);
-	}
-	
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.perfis;
-	}
-
-	@Override
-	public String getPassword() {
-		return this.password;
 	}
 
 	@Override

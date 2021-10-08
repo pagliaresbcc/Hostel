@@ -1,9 +1,9 @@
 package br.com.hostel.suite;
 
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
 import org.junit.platform.suite.api.SelectPackages;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.junit.runner.RunWith;
 
-@ExtendWith(SpringExtension.class)
+@RunWith(JUnitPlatform.class)
 @SelectPackages("br.com.hostel.tests")
 public class DataApplicationTests {}

@@ -12,6 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 public class Hostel {
 
@@ -43,57 +48,5 @@ public class Hostel {
 		this.id = id;
 		this.name = name;
 		this.phone = phone;
-	}
-	
-	public Long getId(){
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public Set<Reservation> getReservations() {
-		return reservations;
-	}
-
-	public void setReservations(Set<Reservation> reservations) {
-		this.reservations = reservations;
-	}
-
-	public Set<Guest> getGuests() {
-		return guests;
-	}
-
-	public void setGuests(Set<Guest> guests) {
-		this.guests = guests;
-	}
-
-	public Set<Room> getRooms() {
-		return rooms;
-	}
-
-	public void setRooms(Set<Room> rooms) {
-		this.rooms = rooms;
 	}
 }

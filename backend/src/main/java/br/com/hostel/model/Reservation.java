@@ -14,6 +14,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class Reservation implements Comparable<Reservation>{
 	
@@ -51,85 +58,6 @@ public class Reservation implements Comparable<Reservation>{
 		this.checkoutDate = checkoutDate;
 		this.rooms = rooms;
 		this.payment = payment;
-	}
-
-	public Reservation() {
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public LocalDate getReservationDate() {
-		return reservationDate;
-	}
-
-	public void setReservationDate(LocalDate reservationDate) {
-		this.reservationDate = reservationDate;
-	}
-
-	public LocalDate getCheckinDate() {
-		return checkinDate;
-	}
-
-	public void setCheckinDate(LocalDate checkinDate) {
-		this.checkinDate = checkinDate;
-	}
-
-	public LocalDate getCheckoutDate() {
-		return checkoutDate;
-	}
-
-	public void setCheckoutDate(LocalDate checkoutDate) {
-		this.checkoutDate = checkoutDate;
-	}
-
-	public void addRoom(Room room) {
-		this.rooms.add(room);
-	}
-
-	public Set<Room> getRooms() {
-		return rooms;
-	}
-
-	public int getNumberOfGuests() {
-		return numberOfGuests;
-	}
-
-	public void setNumberOfGuests(int numberOfGuests) {
-		this.numberOfGuests = numberOfGuests;
-	}
-
-	public Payment getPayment() {
-		return payment;
-	}
-
-	public void setPayment(Payment payment) {
-		this.payment = payment;
-	}
-
-	public void setRooms(Set<Room> rooms) {
-		this.rooms = rooms;
-	}
-
-	public Long getGuest_ID() {
-		return guest_ID;
-	}
-
-	public void setGuest_ID(Long guest_ID) {
-		this.guest_ID = guest_ID;
-	}
-
-	public String getGuestName() {
-		return guestName;
-	}
-
-	public void setGuestName(String guestName) {
-		this.guestName = guestName;
 	}
 
 	@Override

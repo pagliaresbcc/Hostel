@@ -16,6 +16,11 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="payment_type", 
@@ -32,25 +37,6 @@ public abstract class Payment {
 	@NotNull
 	private double amount;
 	@NotNull
-	private LocalDateTime dateTime;
-	
-	public Long getId() {
-	    return id;
-	}
-	
-	public double getAmount() {
-		return amount;
-	}
-	
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-	
-	public LocalDateTime getDate() {
-		return dateTime;
-	}
-	
-	public void setDate(LocalDateTime date) {
-		this.dateTime = date;
-	}
+	private LocalDateTime date;
+
 }

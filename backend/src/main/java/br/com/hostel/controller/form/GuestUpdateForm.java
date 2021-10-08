@@ -6,7 +6,11 @@ import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
 import br.com.hostel.model.helper.Role;
 import br.com.hostel.repository.GuestRepository;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class GuestUpdateForm {
 	
 	private String title;
@@ -16,58 +20,6 @@ public class GuestUpdateForm {
 	private Address address;
 	private Role role;
 	
-	public String getTitle() {
-		return title;
-	}
-	
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-	
-	public void setLastName(String lastname) {
-		this.lastname = lastname;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-	
-	public LocalDate getBirthday() {
-		return birthday;
-	}
-	
-	public void setBirthday(LocalDate birthday) {
-		this.birthday = birthday;
-	}
-	
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
 	public Guest updateGuestForm(Long id, Guest guest, GuestRepository guestRepository) {
 		setParamIfIsNotNull(guest);
 		return guestRepository.save(guest);
