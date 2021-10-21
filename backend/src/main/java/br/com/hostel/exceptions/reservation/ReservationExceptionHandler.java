@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ReservationExceptionHandler {
 
 	@ExceptionHandler(ReservationException.class)
-	protected ResponseEntity<Object> handlerBaseException(ReservationException ex) {
+	protected ResponseEntity<Object> handleBaseException(ReservationException ex) {
 		return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
 	}
 }
