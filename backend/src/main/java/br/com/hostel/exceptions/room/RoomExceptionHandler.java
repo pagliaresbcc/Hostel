@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class RoomExceptionHandler {
 
 	@ExceptionHandler(RoomException.class)
-	protected ResponseEntity<Object> handlerBaseException(RoomException ex) {
+	protected ResponseEntity<Object> handleBaseException(RoomException ex) {
 		return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
 	}
 }
