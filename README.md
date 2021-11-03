@@ -19,7 +19,7 @@
     download dependencies, etc) and run the application.
   
 ### Frontend directory
-    You need to execute `npm install` to install all of dependencies and then execute `npm start`.
+    You need to execute `npm install` in order to install all of dependencies and then execute `npm start`.
  
  ## Some frontend screens
  
