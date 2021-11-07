@@ -19,7 +19,7 @@
     download dependencies, etc) and run the application.
   
 ### Frontend directory
-    You need to execute `npm install` to install all of dependencies and then execute `npm start`.
+    You need to execute `npm install` in order to install all of dependencies and then execute `npm start`.
  
  ## Some frontend screens
  
@@ -33,7 +33,7 @@
  ![guest-without-reservations](https://user-images.githubusercontent.com/33725123/122142743-6eec6f80-ce26-11eb-8ba0-380ba84476ca.png)
 
  
- ### Guest create reservation
+ ### Guest reservation creation
  
  ![create1](https://user-images.githubusercontent.com/33725123/122142980-daced800-ce26-11eb-93d3-d2f382b55231.png)
 
