@@ -1,7 +1,6 @@
 package br.com.hostel.tests.unit.guest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -63,9 +62,14 @@ public class DeleteGuestsTest {
 		
 		guestService.deleteGuest(guest.getId());
 		
-		Optional<Guest> findByIdResponse = guestRepository.findById(guest.getId());
+		GuestException thrown = 
+				assertThrows(GuestException.class,
+					() -> guestService.listOneGuest(guest.getId()),
+					"It was expected that deleteGuest() thrown an exception, "+
+					"due to trying to delete a guest with an nonexistent ID");
 		
-		assertFalse(findByIdResponse.isPresent());
+		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());
+		assertEquals("There isn't a guest with id = " + guest.getId(), thrown.getMessage());
 	}
 
 }
