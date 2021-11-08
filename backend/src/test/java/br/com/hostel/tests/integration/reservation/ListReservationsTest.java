@@ -124,7 +124,7 @@ public class ListReservationsTest {
 	}
 	
 	@Test
-	public void shouldReturnOneReservationsById() throws Exception {
+	public void shouldReturnOneReservationById() throws Exception {
 
 		MvcResult result = 
 				mockMvc.perform(get(uri  + "1")

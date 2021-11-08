@@ -6,4 +6,4 @@ import org.junit.runner.RunWith;
 
 @RunWith(JUnitPlatform.class)
 @SelectPackages("br.com.hostel.tests")
-public class DataApplicationTests {}
+public class IntegrationAndUnityTestsSuite {}
