@@ -114,6 +114,8 @@ public class ReservationTest {
 		Thread.sleep(3000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();
 		Thread.sleep(3000);
+
+		driver.close();
 	}
 
 	@Test
@@ -128,6 +130,8 @@ public class ReservationTest {
 		Alert secondAlert = driver.switchTo().alert();
 		secondAlert.accept();
 		Thread.sleep(3000);
+
+		driver.close();
 	}
 
 }

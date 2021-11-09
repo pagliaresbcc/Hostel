@@ -59,6 +59,8 @@ public class RoomTest {
 		Alert alert = driver.switchTo().alert();
         alert.accept();
         Thread.sleep(3000);
+
+		driver.close();
 	}
 
 	@Test
@@ -72,6 +74,8 @@ public class RoomTest {
 		Alert secondAlert = driver.switchTo().alert();
 		secondAlert.accept();
         Thread.sleep(3000);
+
+		driver.close();
 	}
 }
 

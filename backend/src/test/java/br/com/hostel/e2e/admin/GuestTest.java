@@ -127,7 +127,7 @@ public class GuestTest {
 	@Order(3)
 	public void deleteGuest() throws InterruptedException {
 		
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/ul/li[2]/button[1]")).click();
+		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/ul/li[3]/button[1]")).click();
 		Thread.sleep(3000);
 
 		assertEquals(driver.switchTo().alert().getText(), "Tem certeza que deseja deletar este usuário?");

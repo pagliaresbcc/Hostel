@@ -60,7 +60,7 @@ public class LoginTest {
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/button")).click();
 		Thread.sleep(3000);
 
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/header/span")).getText(), "Olá Hóspede, bem-vindo ao Hostel!");
+		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/header/span")).getText(), "Olá Administrador, bem-vindo ao Hostel!");
 		Thread.sleep(3000);
 
 		driver.close();
