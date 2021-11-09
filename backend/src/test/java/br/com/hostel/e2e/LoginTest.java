@@ -41,7 +41,7 @@ public class LoginTest {
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/button")).click();
 		Thread.sleep(3000);
 
-		assertEquals("Falha no Login, tente novamente", driver.switchTo().alert().getText(), );
+		assertEquals("Falha no Login, tente novamente", driver.switchTo().alert().getText());
 		driver.switchTo().alert().accept();
 
 		Thread.sleep(3000);
