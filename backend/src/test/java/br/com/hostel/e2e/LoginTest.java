@@ -41,7 +41,7 @@ public class LoginTest {
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/button")).click();
 		Thread.sleep(3000);
 
-		assertEquals(driver.switchTo().alert().getText(), "Falha no Login, tente novamente");
+		assertEquals("Falha no Login, tente novamente", driver.switchTo().alert().getText(), );
 		driver.switchTo().alert().accept();
 
 		Thread.sleep(3000);
@@ -60,7 +60,7 @@ public class LoginTest {
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/section/form/button")).click();
 		Thread.sleep(3000);
 
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/header/span")).getText(), "Olá Administrador, bem-vindo ao Hostel!");
+		assertEquals("Olá Administrador, bem-vindo ao Hostel!", driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/header/span")).getText());
 		Thread.sleep(3000);
 
 		driver.close();

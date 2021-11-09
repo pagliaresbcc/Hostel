@@ -39,8 +39,8 @@ public class RoomTest {
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/header/a")).click();
 		Thread.sleep(3000);
 
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/section/h1")).getText(),
-				"Cadastrar novo quarto");
+		assertEquals("Cadastrar novo quarto",
+				driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/section/h1")).getText());
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/input[1]")).sendKeys("299");
 		Thread.sleep(3000);

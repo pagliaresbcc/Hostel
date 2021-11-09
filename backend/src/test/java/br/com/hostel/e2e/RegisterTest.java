@@ -72,7 +72,7 @@ public class RegisterTest {
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();
 		Thread.sleep(3000);
-		assertEquals(driver.switchTo().alert().getText(), "Cadastrado");
+		assertEquals("Cadastrado", driver.switchTo().alert().getText());
 
 		driver.switchTo().alert().accept();
 
@@ -121,7 +121,7 @@ public class RegisterTest {
 
 		Thread.sleep(3000);
 
-		assertEquals(driver.switchTo().alert().getText(), "Erro no cadastro, tente novamente");
+		assertEquals("Erro no cadastro, tente novamente", driver.switchTo().alert().getText());
 		driver.switchTo().alert().accept();
 		Thread.sleep(3000);
 

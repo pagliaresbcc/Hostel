@@ -38,9 +38,9 @@ public class Functionalities {
 
 	@Test
 	public void checkFunctionalities() throws InterruptedException {
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a[1]")).getText(), "Gerenciar reservas");
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a[2]")).getText(), "Gerenciar quartos");
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a[3]")).getText(), "Gerenciar hóspedes");
+		assertEquals("Gerenciar reservas", driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a[1]")).getText());
+		assertEquals("Gerenciar quartos", driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a[2]")).getText());
+		assertEquals("Gerenciar hóspedes", driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a[3]")).getText());
 
 		Thread.sleep(3000);
 		driver.close();

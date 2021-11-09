@@ -88,7 +88,7 @@ public class GuestTest {
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();
 		Thread.sleep(3000);
-		assertEquals(driver.switchTo().alert().getText(), "Cadastrado");
+		assertEquals("Cadastrado", driver.switchTo().alert().getText());
 
 		driver.switchTo().alert().accept();
 
@@ -130,11 +130,11 @@ public class GuestTest {
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/ul/li[3]/button[1]")).click();
 		Thread.sleep(3000);
 
-		assertEquals(driver.switchTo().alert().getText(), "Tem certeza que deseja deletar este usuário?");
+		assertEquals("Tem certeza que deseja deletar este usuário?", driver.switchTo().alert().getText());
 		driver.switchTo().alert().accept();
 		Thread.sleep(3000);
 
-		assertEquals(driver.switchTo().alert().getText(), "Usuário deletado com sucesso!");
+		assertEquals("Usuário deletado com sucesso!", driver.switchTo().alert().getText());
 		driver.switchTo().alert().accept();
 		Thread.sleep(3000);
 		

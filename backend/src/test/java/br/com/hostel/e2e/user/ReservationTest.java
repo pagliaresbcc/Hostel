@@ -54,7 +54,7 @@ public class ReservationTest {
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/form/button")).click();
 		Thread.sleep(3000);
 
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/h1")).getText(), "Quartos Disponiveis");
+		assertEquals("Quartos Disponiveis", driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/h1")).getText());
 
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/ul/li[1]/button")).click();
@@ -65,8 +65,8 @@ public class ReservationTest {
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a")).click();
 		Thread.sleep(3000);
 
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/section/h1")).getText(),
-				"Selecione a forma de pagamento");
+		assertEquals("Selecione a forma de pagamento",
+				driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/section/h1")).getText());
 
 		driver.findElement(By.xpath("//*[@id=\"payment\"]")).click();
 
@@ -86,8 +86,9 @@ public class ReservationTest {
 
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/ul/li/button[2]")).click();
 		Thread.sleep(3000);
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/section/h1")).getText(),
-				"Atualizar reserva");
+		
+		assertEquals("Atualizar reserva",
+				driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/section/h1")).getText());
 
 		driver.findElement(By.xpath("//*[@id=\"check-in\"]")).sendKeys("1122029");
 		Thread.sleep(1000);
@@ -104,8 +105,8 @@ public class ReservationTest {
 		Thread.sleep(1000);
 		driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/a")).click();
 
-		assertEquals(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/section/h1")).getText(),
-				"Selecione a forma de pagamento");
+		assertEquals("Selecione a forma de pagamento",
+				driver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/section/h1")).getText());
 
 		driver.findElement(By.xpath("//*[@id=\"payment\"]")).click();
 		Thread.sleep(3000);
