@@ -57,7 +57,7 @@ You just need to right click on the project and run as JUnit Test. <br>
 You can also run either e2e suite class or integration and unity suite class present in 
 /backend/src/test/java/br/com/hostel/suite/ in order to run the tests separately.
  
- **obs: to run e2e tests is needed to being running both backend and frontend applications**
+ **obs: to run e2e tests is needed to be running both backend and frontend applications**
  
  ## Some frontend screens
  
