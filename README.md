@@ -17,7 +17,7 @@ To perform the tests was used JUnit for unity and integration tests and Selenium
 - MySQL 5.7 https://dev.mysql.com/downloads/windows/installer/5.7.html;
 - Lombok https://projectlombok.org/download
 
-- Eclise https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2021-09/R/eclipse-jee-2021-09-R-win32-x86_64.zip
+- Eclipse https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2021-09/R/eclipse-jee-2021-09-R-win32-x86_64.zip
 - Visual Studio Code https://code.visualstudio.com/download
 
 
@@ -30,7 +30,7 @@ You need to have in Windows environment Variables the folder path of java, mysql
 
 ### Install lombok in your IDE
 For Eclipse, you just need to open the lombok.jar folder where you have downloaded and execute `java -jar lombok.jar`.<br>
-A window will be shown and in order to selecting eclipse folder and install.
+A window will be shown to select eclipse folder and install.
 
 ### Backend directory
 You need to open your IDE (Eclipse in the example case used above) and importing Hostel `backend` folder
