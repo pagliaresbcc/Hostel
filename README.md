@@ -9,6 +9,17 @@
     - Node 15+;
     - Java 11+;
     - MySQL 5.7+;
+    - Lombok;
+     
+## Links utilizados (opcional):
+    - Node 15 https://nodejs.org/en/download/
+    - Java 11 https://www.oracle.com/br/java/technologies/javase/jdk11-archive-downloads.html
+    - MySQL 5.7 https://dev.mysql.com/downloads/windows/installer/5.7.html;
+    - Lombok https://projectlombok.org/download
+    
+    - Eclise https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2021-09/R/eclipse-jee-2021-09-R-win32-x86_64.zip
+    - Visual Studio Code https://code.visualstudio.com/download
+
 
 ## Execution steps
 
