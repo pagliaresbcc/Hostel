@@ -11,7 +11,7 @@
     - MySQL 5.7+;
     - Lombok;
      
-## Links utilizados (opcional):
+## Links (optional):
     - Node 15 https://nodejs.org/en/download/
     - Java 11 https://www.oracle.com/br/java/technologies/javase/jdk11-archive-downloads.html
     - MySQL 5.7 https://dev.mysql.com/downloads/windows/installer/5.7.html;
@@ -24,13 +24,26 @@
 ## Execution steps
 
   To run both frontend and backend you need to execute the following steps:
+  
+### Set Environment Variables
+    You need to add the path of the files you downloaded: java, mysql and node
 
 ### Backend directory
-    You just need to open and configure the backend directory on your IDE (open as maven project,
-    download dependencies, etc) and run the application.
+    You need to open your IDE (in my case eclipse) and import maven project: select folder "backend" in repository.
+    After, in Hostel\backend\src\main\resources\application you set informations about your user mysql admin
+    
+    spring.datasource.username=`username`
+    spring.datasource.password=`password`
+    
+    Finally, run as Java Application the class HostelSpringBootApplication
+    
   
 ### Frontend directory
-    You need to execute `npm install` in order to install all of dependencies and then execute `npm start`.
+    You need to open your IDE (in my case Visual Studio Code) and open folder: select folder "frontend" in repository.
+    After, open powershell terminal and excute `npm install` in order to install all of dependencies and then execute `npm start`.
+    
+### Run Tests
+    You just need to right click on the class / package and run as JUnit Test
  
  ## Some frontend screens
  
