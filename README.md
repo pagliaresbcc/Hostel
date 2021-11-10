@@ -29,7 +29,7 @@
     You need to add the path of the files you downloaded: java, mysql and node
 
 ### Backend directory
-    You need to open your IDE (in my case eclipse) and import maven project: select folder "backend" in repository.
+    You need to open your IDE (in my case eclipse) and import maven project: select folder `backend` of the repository.
     After, in Hostel\backend\src\main\resources\application you set informations about your user mysql admin
     
     spring.datasource.username=`username`
@@ -39,7 +39,7 @@
     
   
 ### Frontend directory
-    You need to open your IDE (in my case Visual Studio Code) and open folder: select folder "frontend" in repository.
+    You need to open your IDE (in my case Visual Studio Code) and open folder: select folder `frontend` of the repository.
     After, open powershell terminal and excute `npm install` in order to install all of dependencies and then execute `npm start`.
     
 ### Run Tests
