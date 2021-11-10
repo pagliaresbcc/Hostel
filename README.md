@@ -47,7 +47,7 @@ Finally, run as Java Application the main class HostelSpringBootApplication.clas
 ### Frontend directory
 You need to open your IDE (Visual Studio Code in the example case used above) and open the Hostel `frontend` folder.<br>
 Then, open the IDE terminal and excute `npm install` in order to install all of dependencies and then execute `npm start`.<br>
-To log into the application there is two users pre-registered:
+To log into the application there are two users pre-registered:
 - **ADMIN**: user: maria@email.com  password: 123456
 - **GUEST**: user: daniel@email.com password: 123456
     
