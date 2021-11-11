@@ -29,7 +29,7 @@ To run both frontend and backend you need to execute the following steps:
 You need to have in Windows environment Variables the folder path of java, mysql and node.
 
 ### Install lombok in your IDE
-For Eclipse, you just need to open the lombok.jar folder where you have downloaded and execute `java -jar lombok.jar`.<br>
+For Eclipse, you just need to open the cmd in the folder where you have downloaded the lombok jar and execute `java -jar lombok.jar`.<br>
 A window will be shown to select eclipse folder and install.
 
 ### Backend directory
