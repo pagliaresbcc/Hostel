@@ -9,7 +9,7 @@ To perform the tests was used JUnit for unity and integration tests and Selenium
 - Node 15+
 - Java 11+
 - MySQL 5.7+
-- Lombok
+- Lombok jar
      
 ## Links (optional):
 - Node 15 https://nodejs.org/en/download/
