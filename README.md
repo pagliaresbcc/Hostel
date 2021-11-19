@@ -52,7 +52,7 @@ To log into the application there are two users pre-registered:
 - **GUEST**: user: daniel@email.com password: 123456
     
     
-## Tests Running
+## Tests Execution Steps
 You just need to right click on the project and run as JUnit Test. <br>
 You can also run either e2e suite class or integration and unity suite class present in 
 `/backend/src/test/java/br/com/hostel/suite/` in order to run the tests separately.
