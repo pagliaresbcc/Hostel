@@ -99,7 +99,7 @@ public class UpdateReservationsTest {
 	}
 	
 	@Test
-	public void shouldReturnNotFoundStatusWhenUpdatingAReservationWithNonExistentID() throws Exception {
+	public void shouldReturnNotFoundStatusWhenUpdateWithNonExistentID() throws Exception {
 		
 		ReservationUpdateForm rsvToUpdate = new ReservationUpdateForm();
 		rsvToUpdate.setNumberOfGuests(3);
