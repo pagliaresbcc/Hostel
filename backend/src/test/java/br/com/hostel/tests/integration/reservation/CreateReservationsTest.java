@@ -85,7 +85,7 @@ public class CreateReservationsTest {
 	}
 	
 	@Test
-	public void shouldReturnBadRequestStatusWithReservationCheckoutDateOlderThanCheckinDate() throws Exception {
+	public void shouldReturnBadRequestWhenCheckoutDateIsOlderThanCheckinDate() throws Exception {
 		
 		reservationForm.setCheckinDate(LocalDate.of(2022, 10, 10));
 		reservationForm.setCheckoutDate(LocalDate.of(2022, 10, 9));
@@ -110,7 +110,7 @@ public class CreateReservationsTest {
 	}
 	
 	@Test
-	public void shouldAutenticateAndCreateOneReservationUsingCheckPaymentAndReturnStatusCreated() throws Exception {
+	public void shouldCreateOneReservationUsingCheckPaymentSuccessfully() throws Exception {
 
 		MvcResult result = 
 				mockMvc
@@ -133,7 +133,7 @@ public class CreateReservationsTest {
 	}
 	
 	@Test
-	public void shouldAutenticateAndCreateOneReservationUsingCashPaymentAndReturnStatusCreated() throws Exception {
+	public void shouldCreateOneReservationUsingCashPaymentSuccessfully() throws Exception {
 		cashPayment.setAmount(4000);
 		cashPayment.setAmountTendered(10000);
 		cashPayment.setDate(LocalDateTime.of(LocalDate.of(2025,01,25), LocalTime.of(21, 32)));
@@ -163,7 +163,7 @@ public class CreateReservationsTest {
 	}
 	
 	@Test
-	public void shouldAutenticateAndCreateOneReservationUsingCreditCardPaymentAndReturnStatusCreated() throws Exception {
+	public void shouldCreateOneReservationUsingCreditCardPaymentSuccessfully() throws Exception {
 		creditCardPayment.setAmount(5000);
 		creditCardPayment.setDate(LocalDateTime.of(LocalDate.of(2025,01,25), LocalTime.of(21, 33)));
 		creditCardPayment.setIssuer("VISA");
