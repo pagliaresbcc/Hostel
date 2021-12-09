@@ -1,13 +1,12 @@
 package br.com.hostel.tests.integration.reservation.delete;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.hostel.controller.form.ReservationForm;
+import br.com.hostel.initializer.ReservationInitializer;
+import br.com.hostel.model.CheckPayment;
+import br.com.hostel.repository.PaymentRepository;
+import br.com.hostel.repository.ReservationRepository;
+import br.com.hostel.repository.RoomRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,15 +17,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
-import br.com.hostel.controller.form.ReservationForm;
-import br.com.hostel.initializer.ReservationInitializer;
-import br.com.hostel.model.CheckPayment;
-import br.com.hostel.repository.PaymentRepository;
-import br.com.hostel.repository.ReservationRepository;
-import br.com.hostel.repository.RoomRepository;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -55,7 +52,7 @@ public class DeleteReservationsTest {
 	private List<Long> rooms_ID = new ArrayList<>();
 	
 	@BeforeEach
-	public void init() throws JsonProcessingException, Exception {
+	public void init() throws Exception {
 		
 		uri = new URI("/api/reservations/");
 		
@@ -66,7 +63,7 @@ public class DeleteReservationsTest {
 	public void shouldReturnNotFoundStatusWhenDeletingAReservationWithNonExistentID() throws Exception {
 
 		paymentRepository.save(reservationForm.getPayment());
-		reservationRepository.save(reservationForm.returnReservation(paymentRepository, roomRepository));
+		reservationRepository.save(reservationForm.returnReservation(roomRepository));
 
 		mockMvc
 			.perform(delete(uri + "0")
@@ -76,10 +73,10 @@ public class DeleteReservationsTest {
 	}
 	
 	@Test
-	public void shouldAutenticateAndDeleteOneReservationWithId1() throws Exception {
+	public void shouldAuthenticateAndDeleteOneReservationWithId1() throws Exception {
 
 		paymentRepository.save(reservationForm.getPayment());
-		reservationRepository.save(reservationForm.returnReservation(paymentRepository, roomRepository));
+		reservationRepository.save(reservationForm.returnReservation(roomRepository));
 
 		mockMvc
 			.perform(delete(uri + "1")

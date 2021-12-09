@@ -9,7 +9,13 @@ import java.util.Set;
 import br.com.hostel.model.Payment;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.Room;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class ReservationDto {
 
 	private Long id;
@@ -20,11 +26,7 @@ public class ReservationDto {
 	private int numberOfGuests;
 	private Payment payment;
 	private Set<Room> rooms;
-	
-	public ReservationDto() {
-		
-	}
-	
+
 	public ReservationDto(Reservation reservation) {
 		this.id = reservation.getId();
 		this.guestName = reservation.getGuestName();
@@ -36,38 +38,6 @@ public class ReservationDto {
 		this.numberOfGuests = reservation.getNumberOfGuests();
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public String getGuestName() {
-		return guestName;
-	}
-
-	public LocalDate getReservationDate() {
-		return reservationDate;
-	}
-
-	public LocalDate getCheckinDate() {
-		return checkinDate;
-	}
-
-	public LocalDate getCheckoutDate() {
-		return checkoutDate;
-	}
-	
-	public Payment getPayment() {
-		return payment;
-	}
-	
-	public Set<Room> getRooms() {
-		return rooms;
-	}
-	
-	public int getNumberOfGuests() {
-		return numberOfGuests;
-	}
-	
 	public static List<ReservationDto> convert(List<Reservation> reservationsList) {
 	
 		List<ReservationDto> reservationDtoList = new ArrayList<>();

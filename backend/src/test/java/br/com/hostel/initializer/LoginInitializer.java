@@ -25,7 +25,7 @@ public class LoginInitializer {
 		
 		LoginForm login = new LoginForm();
 
-		//setting login variables to autenticate
+		//setting login variables to authenticate
 		login.setEmail("maria@email.com");
 		login.setPassword("123456");
 
@@ -39,7 +39,7 @@ public class LoginInitializer {
 
 		LoginDto loginObjResponse = objectMapper.readValue(contentAsString, LoginDto.class);
 		
-		// seting header to put on post and delete request parameters
+		// setting header to put on post and delete request parameters
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Bearer " + loginObjResponse.getToken());
 	}

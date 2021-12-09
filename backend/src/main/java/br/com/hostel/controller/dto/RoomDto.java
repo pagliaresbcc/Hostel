@@ -5,7 +5,11 @@ import java.util.List;
 
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class RoomDto {
 
 	private Long id;
@@ -15,10 +19,6 @@ public class RoomDto {
 	private Integer maxNumberOfGuests;
 	private DailyRate dailyRate;
 
-	public RoomDto() {
-		
-	}
-
 	public RoomDto(Room room) {
 		this.id = room.getId();
 		this.description = room.getDescription();
@@ -26,34 +26,6 @@ public class RoomDto {
 		this.dimension = room.getDimension();
 		this.maxNumberOfGuests = room.getMaxNumberOfGuests();
 		this.dailyRate = room.getDailyRate();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Integer getNumber() {
-		return number;
-	}
-
-	public Double getDimension() {
-		return dimension;
-	}
-
-	public DailyRate getDailyRate() {
-		return dailyRate;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public Integer getMaxNumberOfGuests() {
-		return maxNumberOfGuests;
 	}
 
 	public static List<RoomDto> convert(List<Room> roomsList) {

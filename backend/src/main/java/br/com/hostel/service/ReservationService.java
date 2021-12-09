@@ -1,21 +1,5 @@
 package br.com.hostel.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import br.com.hostel.controller.form.ReservationForm;
 import br.com.hostel.controller.form.ReservationUpdateForm;
 import br.com.hostel.exceptions.reservation.ReservationException;
@@ -26,6 +10,17 @@ import br.com.hostel.repository.GuestRepository;
 import br.com.hostel.repository.PaymentRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -42,12 +37,12 @@ public class ReservationService {
 	@Autowired
 	private GuestRepository guestRepository;
 
-	public Reservation registerReservation(ReservationForm form, UriComponentsBuilder uriBuilder) throws RoomException {
+	public Reservation registerReservation(ReservationForm form) throws RoomException {
 
-		Reservation reservation = form.returnReservation(paymentRepository, roomRepository);
+		Reservation reservation = form.returnReservation(roomRepository);
 		Optional<Guest> guestOp = guestRepository.findById(reservation.getGuest_ID());
 
-		if (!guestOp.isPresent())
+		if (guestOp.isEmpty())
 			throw new ReservationException("Guest ID haven't found", HttpStatus.NOT_FOUND);
 
 		if (reservation.getRooms().isEmpty())
@@ -70,7 +65,7 @@ public class ReservationService {
 		return reservation;
 	}
 
-	public List<Reservation> listAllReservations(Long guestId, Pageable pagination) {
+	public List<Reservation> listAllReservations(Long guestId) {
 
 		List<Reservation> response = new ArrayList<>();
 
@@ -81,7 +76,7 @@ public class ReservationService {
 
 			if (guest.isPresent()) {
 
-				response = guest.get().getReservations().stream().collect(Collectors.toList());
+				response = new ArrayList<>(guest.get().getReservations());
 			}
 		}
 
@@ -92,7 +87,7 @@ public class ReservationService {
 
 		Optional<Reservation> reservation = reservationRepository.findById(id);
 
-		if (!reservation.isPresent())
+		if (reservation.isEmpty())
 			throw new ReservationException("There isn't a reservation with id = " + id, HttpStatus.NOT_FOUND);
 
 		return reservation.get();
@@ -104,16 +99,15 @@ public class ReservationService {
 
 		Optional<Reservation> reservationOp = reservationRepository.findById(id);
 
-		if (!reservationOp.isPresent())
+		if (reservationOp.isEmpty())
 			throw new ReservationException("There isn't a reservation with id = " + id, HttpStatus.NOT_FOUND);
 
-		Reservation reservation = form.updateReservationForm(id, reservationOp.get(), paymentRepository,
-				roomRepository);
+		Reservation reservation = form.updateReservationForm(reservationOp.get(), roomRepository);
 
 		if (reservation.getRooms().isEmpty())
 			throw new ReservationException("Reservation rooms list cannot be empty", HttpStatus.BAD_REQUEST);
 
-		reservation.getRooms().forEach(room -> roomRepository.save(room));
+		roomRepository.saveAll(reservation.getRooms());
 
 		paymentRepository.save(reservation.getPayment());
 
@@ -124,7 +118,7 @@ public class ReservationService {
 
 		Optional<Reservation> reservation = reservationRepository.findById(id);
 
-		if (!reservation.isPresent())
+		if (reservation.isEmpty())
 			throw new ReservationException("There isn't a reservation with id = " + id, HttpStatus.NOT_FOUND);
 			
 		reservationRepository.deleteById(id);

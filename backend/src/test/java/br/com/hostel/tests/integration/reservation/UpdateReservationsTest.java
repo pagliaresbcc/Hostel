@@ -1,14 +1,15 @@
 package br.com.hostel.tests.integration.reservation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.hostel.controller.dto.ReservationDto;
+import br.com.hostel.controller.form.ReservationForm;
+import br.com.hostel.controller.form.ReservationUpdateForm;
+import br.com.hostel.initializer.ReservationInitializer;
+import br.com.hostel.model.CheckPayment;
+import br.com.hostel.model.Reservation;
+import br.com.hostel.repository.PaymentRepository;
+import br.com.hostel.repository.ReservationRepository;
+import br.com.hostel.repository.RoomRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,18 +21,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
-import br.com.hostel.controller.dto.ReservationDto;
-import br.com.hostel.controller.form.ReservationForm;
-import br.com.hostel.controller.form.ReservationUpdateForm;
-import br.com.hostel.initializer.ReservationInitializer;
-import br.com.hostel.model.CheckPayment;
-import br.com.hostel.model.Reservation;
-import br.com.hostel.repository.PaymentRepository;
-import br.com.hostel.repository.ReservationRepository;
-import br.com.hostel.repository.RoomRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -61,18 +58,18 @@ public class UpdateReservationsTest {
 	private Reservation reservation;
 	
 	@BeforeEach
-	public void init() throws JsonProcessingException, Exception {
+	public void init() throws Exception {
 		
 		uri = new URI("/api/reservations/");
 		
 		ReservationInitializer.initialize(headers, reservationForm, checkPayment, rooms_ID, mockMvc, objectMapper);
 		
 		paymentRepository.save(checkPayment);
-		reservation = reservationRepository.save(reservationForm.returnReservation(paymentRepository, roomRepository));
+		reservation = reservationRepository.save(reservationForm.returnReservation(roomRepository));
 	}
 	
 	@Test
-	public void shouldAutenticateAndUpdateReservationInformations() throws Exception {
+	public void shouldAuthenticateAndUpdateReservationInformation() throws Exception {
 
 		ReservationUpdateForm rsvToUpdate = new ReservationUpdateForm();
 		rsvToUpdate.setNumberOfGuests(3);

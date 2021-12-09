@@ -18,7 +18,7 @@ public class GuestsInitializer {
 	
 	public static void initialize(Address address, Guest guest) throws Exception {
 		
-		// setting address to put into the guest paramseters
+		// setting address to put into the guest parameters
 		address.setAddressName("Rua Governador Valadares");
 		address.setCity("Amparo");
 		address.setCountry("Brasil");

@@ -5,7 +5,11 @@ import java.util.Optional;
 import br.com.hostel.model.DailyRate;
 import br.com.hostel.model.Room;
 import br.com.hostel.repository.RoomRepository;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class RoomUpdateForm {
 	
 	private String description;
@@ -13,39 +17,7 @@ public class RoomUpdateForm {
 	private double dimension;
 	private DailyRate dailyRate;
 	
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
-	}
-
-	public double getDimension() {
-		return dimension;
-	}
-
-	public void setDimension(double dimension) {
-		this.dimension = dimension;
-	}
-
-	public DailyRate getDailyRate() {
-		return dailyRate;
-	}
-
-	public void setDailyRate(DailyRate dailyRate) {
-		this.dailyRate = dailyRate;
-	}
-	
-	public Room updateRoomForm(Long id, Room room, RoomRepository roomRepository) {
+	public Room updateRoomForm(Room room, RoomRepository roomRepository) {
 		setParamIfIsNotNull(room, roomRepository);
 		
 		return room;
@@ -59,7 +31,7 @@ public class RoomUpdateForm {
 		if (number != 0) {
 			Optional<Room> roomOp = roomRepository.findByNumber(number);
 
-			if (!roomOp.isPresent()) {
+			if (roomOp.isEmpty()) {
 				room.setNumber(number);
 			}
 		}

@@ -1,16 +1,13 @@
 package br.com.hostel.tests.unit.room;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
+import br.com.hostel.controller.helper.RoomFilter;
+import br.com.hostel.exceptions.room.RoomException;
+import br.com.hostel.model.DailyRate;
+import br.com.hostel.model.Reservation;
+import br.com.hostel.model.Room;
+import br.com.hostel.repository.ReservationRepository;
+import br.com.hostel.repository.RoomRepository;
+import br.com.hostel.service.RoomService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,15 +17,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import br.com.hostel.controller.helper.RoomFilter;
-import br.com.hostel.exceptions.room.RoomException;
-import br.com.hostel.model.DailyRate;
-import br.com.hostel.model.Reservation;
-import br.com.hostel.model.Room;
-import br.com.hostel.repository.DailyRateRepository;
-import br.com.hostel.repository.ReservationRepository;
-import br.com.hostel.repository.RoomRepository;
-import br.com.hostel.service.RoomService;
+import java.time.LocalDate;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -36,9 +30,6 @@ public class ListRoomsTest {
 
 	@MockBean
 	private RoomRepository roomRepository;
-
-	@MockBean
-	private DailyRateRepository dailyRepository;
 
 	@MockBean
 	private ReservationRepository reservationRepository;
@@ -113,7 +104,7 @@ public class ListRoomsTest {
 		rooms.add(thirdRoom);
 		
 		// setting first reservation
-		firstReservation.setCheckinDate(LocalDate.of(2020, 10, 07));
+		firstReservation.setCheckinDate(LocalDate.of(2020, 10, 7));
 		firstReservation.setCheckoutDate(LocalDate.of(2020, 10, 10));
 		firstReservation.setNumberOfGuests(4);
 		firstReservation.setRooms(rooms);
@@ -134,18 +125,18 @@ public class ListRoomsTest {
 	}
 
 	@Test
-	public void shouldReturnAllRoomsWithoutParamAndStatusOk() throws Exception {
+	public void shouldReturnAllRoomsWithoutParamAndStatusOk() {
 
 		when(roomRepository.findAll()).thenReturn(roomsList);
 		when(reservationRepository.findAll()).thenReturn(reservationsList);
 		
-		List<Room> listAllRooms = service.listAllRooms(filter, null);
+		List<Room> listAllRooms = service.listAllRooms(filter);
 
 		assertEquals(roomsList.size(), listAllRooms.size());
 	}
 
 	@Test
-	public void shouldReturnOneRoomAndStatusOkByParam() throws Exception {
+	public void shouldReturnOneRoomAndStatusOkByParam() {
 
 		List<Room> rooms = new ArrayList<>();
 		rooms.add(firstRoom);
@@ -154,16 +145,14 @@ public class ListRoomsTest {
 
 		when(roomRepository.findAll()).thenReturn(rooms);
 
-		List<Room> justOneRoomList = service.listAllRooms(filter, null);
+		List<Room> justOneRoomList = service.listAllRooms(filter);
 
 		assertEquals(1, justOneRoomList.size());
 		assertEquals(secondRoom.getNumber(), justOneRoomList.get(0).getNumber());
 	}
 
 	@Test
-	public void shouldReturnEmptyListByUsingFilterByNumberOfGuests() throws Exception {
-
-		List<Room> emptyList = new ArrayList<>();
+	public void shouldReturnEmptyListByUsingFilterByNumberOfGuests() {
 
 		when(roomRepository.findAll()).thenReturn(roomsList);
 
@@ -171,13 +160,13 @@ public class ListRoomsTest {
 
 		newFilter.setNumberOfGuests(10);
 
-		List<Room> reqEmptyList = service.listAllRooms(newFilter, null);
+		List<Room> reqEmptyList = service.listAllRooms(newFilter);
 
-		assertEquals(emptyList.size(), reqEmptyList.size());
+		assertEquals(0, reqEmptyList.size());
 	}
 
 	@Test
-	public void shouldReturnOneRoomAndStatusOkByID() throws Exception {
+	public void shouldReturnOneRoomAndStatusOkByID() {
 
 		Optional<Room> opRoom = Optional.of(firstRoom);
 
@@ -190,15 +179,15 @@ public class ListRoomsTest {
 	}
 
 	@Test
-	public void shouldThrowExceptionByFindARoomWithNonexistentID() throws Exception {
+	public void shouldThrowExceptionByFindARoomWithNonexistentID() {
 
 		Optional<Room> opRoom = Optional.empty();
 
 		when(roomRepository.findById(firstRoom.getId())).thenReturn(opRoom);
 
-		RoomException thrown = assertThrows(RoomException.class, 
+		RoomException thrown = assertThrows(RoomException.class,
 				() -> service.listOneRoom(firstRoom.getId()),
-				"It was expected that listOneRoom() thrown an exception, " + 
+				"It was expected that listOneRoom() thrown an exception, " +
 				"due to a nonexistent ID");
 
 		assertEquals(HttpStatus.NOT_FOUND, thrown.getHttpStatus());

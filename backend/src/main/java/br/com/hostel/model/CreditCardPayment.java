@@ -28,19 +28,13 @@ public class CreditCardPayment extends Payment {
 	private LocalDate expirationDate;
 	private String securityCode;
 	
-	public boolean authorize() {
-		System.out.println("Requesting authorization to " + issuer);
-		return true;
-	}
-	
 	public String toString() {
-		String result = "Payment with credit card...: " +  "\n" +  
-						super.toString() + "\n" +
-						"Issuer...: "+ this.issuer + "\n" +
-		                "Credit card number...: " + this.cardNumber + "\n" +
-		                "Name on card...: " + this.nameOnCard + "\n" +
-		                "Expiration date...: " + this.expirationDate + "\n" +
-		                "Security code...: " + this.securityCode;
-		return result;
+		return "Payment with credit card...: " +  "\n" +
+				super.toString() + "\n" +
+				"Issuer...: "+ this.issuer + "\n" +
+				"Credit card number...: " + this.cardNumber + "\n" +
+				"Name on card...: " + this.nameOnCard + "\n" +
+				"Expiration date...: " + this.expirationDate + "\n" +
+				"Security code...: " + this.securityCode;
 	}
 }

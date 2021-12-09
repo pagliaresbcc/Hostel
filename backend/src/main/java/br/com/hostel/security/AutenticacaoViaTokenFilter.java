@@ -53,10 +53,10 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 		
 		String token = request.getHeader("Authorization");
 		
-		if (token == null || token.isEmpty() || !token.startsWith("Bearer "))
+		if (token == null || !token.startsWith("Bearer "))
 			return null;
 		else
-			return token.substring(7, token.length());
+			return token.substring(7);
 	}
 
 }

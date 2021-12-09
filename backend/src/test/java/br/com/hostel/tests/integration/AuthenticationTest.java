@@ -1,10 +1,8 @@
 package br.com.hostel.tests.integration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import br.com.hostel.controller.dto.LoginDto;
+import br.com.hostel.controller.form.LoginForm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +12,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.hostel.controller.dto.LoginDto;
-import br.com.hostel.controller.form.LoginForm;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -34,7 +31,7 @@ public class AuthenticationTest {
 	private LoginForm login = new LoginForm();
 	
 	@Test
-	public void shouldAutenticateAndReturnStatusOK() throws JsonProcessingException, Exception {
+	public void shouldAuthenticateAndReturnStatusOK() throws Exception {
 		login.setEmail("maria@email.com");
 		login.setPassword("123456");
 
@@ -49,11 +46,11 @@ public class AuthenticationTest {
 		LoginDto loginObjResponse = objectMapper.readValue(contentAsString, LoginDto.class);
 
 		assertNotNull(loginObjResponse);
-		assertEquals(loginObjResponse.getType(), "Bearer");
+		assertEquals("Bearer", loginObjResponse.getType());
 	}
 	
 	@Test
-	public void shouldNotAutenticateByWrongPasswordAndReturnStatusBadRequest() throws JsonProcessingException, Exception {
+	public void shouldNotAuthenticateByWrongPasswordAndReturnStatusBadRequest() throws Exception {
 		login.setEmail("maria@email.com");
 		login.setPassword("wrong password");
 		
@@ -66,7 +63,7 @@ public class AuthenticationTest {
 	}
 	
 	@Test
-	public void shouldNotAutenticateByNonexistentUserAndReturnStatusBadRequest() throws JsonProcessingException, Exception {
+	public void shouldNotAuthenticateByNonexistentUserAndReturnStatusBadRequest() throws Exception {
 		login.setEmail("nonexistent@email.com");
 		login.setPassword("wrong password");
 		

@@ -50,7 +50,7 @@ public class UpdateGuestsTest {
 	}
 
 	@Test
-	public void shouldUpdateGuestNameAndLastName() throws Exception {
+	public void shouldUpdateGuestNameAndLastName() {
 
 		Optional<Guest> opGuest = Optional.of(guest);
 		
@@ -58,7 +58,7 @@ public class UpdateGuestsTest {
 		opGuest.get().setLastName("Neto");
 
 		when(guestRepository.findById(guest.getId())).thenReturn(opGuest);
-		when(guestUpdateForm.updateGuestForm(guest.getId(), guest, guestRepository)).thenReturn(guest);
+		when(guestUpdateForm.updateGuestForm(guest, guestRepository)).thenReturn(guest);
 		when(addressRepository.save(guest.getAddress())).thenReturn(address);
 		
 		Guest reqGuest = guestService.updateGuest(guest.getId(), guestUpdateForm);
@@ -68,7 +68,7 @@ public class UpdateGuestsTest {
 	}
 	
 	@Test
-	public void shouldNotUpdateGuestWithNonexistenteID() throws Exception {
+	public void shouldNotUpdateGuestWithNonexistentID() {
 		
 		Optional<Guest> nonexistentGuest = Optional.empty();
 		

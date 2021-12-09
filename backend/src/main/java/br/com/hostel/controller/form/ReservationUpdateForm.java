@@ -1,5 +1,12 @@
 package br.com.hostel.controller.form;
 
+import br.com.hostel.model.Payment;
+import br.com.hostel.model.Reservation;
+import br.com.hostel.model.Room;
+import br.com.hostel.repository.RoomRepository;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -7,12 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import br.com.hostel.model.Payment;
-import br.com.hostel.model.Reservation;
-import br.com.hostel.model.Room;
-import br.com.hostel.repository.PaymentRepository;
-import br.com.hostel.repository.RoomRepository;
-
+@Getter
+@Setter
 public class ReservationUpdateForm {
 	
 	private int numberOfGuests;
@@ -24,56 +27,7 @@ public class ReservationUpdateForm {
 	
 	private Payment payment;
 	
-	public int getNumberOfGuests() {
-		return numberOfGuests;
-	}
-
-	public void setNumberOfGuests(int numberOfGuests) {
-		this.numberOfGuests = numberOfGuests;
-	}
-
-	public LocalDate getReservationDate() {
-		return reservationDate;
-	}
-
-	public void setReservationDate(LocalDate reservationDate) {
-		this.reservationDate = reservationDate;
-	}
-
-	public LocalDate getCheckinDate() {
-		return checkinDate;
-	}
-
-	public void setCheckinDate(LocalDate checkinDate) {
-		this.checkinDate = checkinDate;
-	}
-
-	public LocalDate getCheckoutDate() {
-		return checkoutDate;
-	}
-
-	public void setCheckoutDate(LocalDate checkoutDate) {
-		this.checkoutDate = checkoutDate;
-	}
-
-	public List<Long> getRooms_ID() {
-		return rooms_ID;
-	}
-
-	public void setRooms_ID(List<Long> rooms_ID) {
-		this.rooms_ID = rooms_ID;
-	}
-
-	public Payment getPayment() {
-		return payment;
-	}
-
-	public void setPayment(Payment payment) {
-		this.payment = payment;
-	}
-
-	public Reservation updateReservationForm(Long id, Reservation reservation, 
-			PaymentRepository paymentRepository, RoomRepository roomRepository) {
+	public Reservation updateReservationForm(Reservation reservation, RoomRepository roomRepository) {
 		setParamIfIsNotNull(reservation, roomRepository);
 		
 		return reservation;

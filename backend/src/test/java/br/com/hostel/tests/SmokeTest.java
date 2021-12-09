@@ -23,7 +23,7 @@ public class SmokeTest {
 	private RoomController roomController;
 
 	@Test
-	public void contexLoads() throws Exception {
+	public void contextLoads() {
 		assertThat(guestController).isNotNull();
 		assertThat(reservationController).isNotNull();
 		assertThat(roomController).isNotNull();

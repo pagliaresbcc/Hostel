@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.hostel.model.Address;
@@ -11,6 +13,8 @@ import br.com.hostel.model.Guest;
 import br.com.hostel.model.helper.Role;
 import br.com.hostel.repository.AddressRepository;
 
+@Getter
+@Setter
 public class GuestForm {
 	
 	@NotNull 
@@ -30,70 +34,6 @@ public class GuestForm {
 	@NotNull
 	private Role role;
 	
-	public String getTitle() {
-		return title;
-	}
-	
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getLastName() {
-		return lastname;
-	}
-	
-	public void setLastName(String lastname) {
-		this.lastname = lastname;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-	
-	public LocalDate getBirthday() {
-		return birthday;
-	}
-	
-	public void setBirthday(LocalDate birthday) {
-		this.birthday = birthday;
-	}
-	
-	public String getEmail() {
-		return email;
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	public String getPassword() {
-		return password;
-	}
-	
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
 	public Guest returnGuest(AddressRepository addressRepository) {
 		addressRepository.save(address);
 		

@@ -28,15 +28,15 @@ public class ReservationInitializer {
 		LoginInitializer.login(headers, mockMvc, objectMapper);
 
 		// setting reservation object
-		reservationForm.setCheckinDate(LocalDate.of(2025, 04, 01));
-		reservationForm.setCheckoutDate(LocalDate.of(2025, 04, 04));
+		reservationForm.setCheckinDate(LocalDate.of(2025, 4, 1));
+		reservationForm.setCheckoutDate(LocalDate.of(2025, 4, 4));
 		reservationForm.setNumberOfGuests(2);
 		reservationForm.setGuest_ID(1L);
 		reservationForm.setGuestName("Maria");
 		
 
 		checkPayment.setAmount(3000);
-		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2025, 01, 25), LocalTime.of(21, 31)));
+		checkPayment.setDate(LocalDateTime.of(LocalDate.of(2025, 1, 25), LocalTime.of(21, 31)));
 		checkPayment.setBankId("01");
 		checkPayment.setBankName("Itau");
 		checkPayment.setBranchNumber("1234-5");

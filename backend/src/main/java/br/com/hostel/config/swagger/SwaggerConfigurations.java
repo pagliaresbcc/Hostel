@@ -1,11 +1,8 @@
 package br.com.hostel.config.swagger;
 
-import java.util.Arrays;
-
+import br.com.hostel.model.Guest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import br.com.hostel.model.Guest;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -13,6 +10,8 @@ import springfox.documentation.schema.ModelRef;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.List;
 
 @EnableSwagger2
 @Configuration
@@ -27,15 +26,15 @@ public class SwaggerConfigurations {
                 .build()
                 .ignoredParameterTypes(Guest.class)
                 .globalOperationParameters(
-                		Arrays.asList(
+                        List.of(
                                 new ParameterBuilder()
-                                    .name("Authorization")
-                                    .description("Header para Token JWT")
-                                    .modelRef(new ModelRef("string"))
-                                    .parameterType("header")
-                                    .required(false)
-                                    .build()
-                				)
+                                        .name("Authorization")
+                                        .description("Header para Token JWT")
+                                        .modelRef(new ModelRef("string"))
+                                        .parameterType("header")
+                                        .required(false)
+                                        .build()
+                        )
                 );
     }
 }

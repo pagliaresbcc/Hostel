@@ -12,7 +12,6 @@ import br.com.hostel.model.Guest;
 import br.com.hostel.repository.GuestRepository;
 
 @Service
-//UserDetailsService serve para indicar ao spring q essa classe possui a logica de utenticação
 public class AutenticationService implements UserDetailsService {
 
 	@Autowired

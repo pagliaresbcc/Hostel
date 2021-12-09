@@ -32,8 +32,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-//UserDetails serve para dizer ao Sring qual será a classe de usuário
-//para autenticação no sistema
 public class Guest implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -108,11 +106,8 @@ public class Guest implements UserDetails {
 			return false;
 		Guest other = (Guest) obj;
 		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+			return other.id == null;
+		} else return id.equals(other.id);
 	}
 
 	@Override

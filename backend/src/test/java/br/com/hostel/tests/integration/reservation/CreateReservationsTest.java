@@ -1,17 +1,12 @@
 package br.com.hostel.tests.integration.reservation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.net.URI;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.hostel.controller.dto.ReservationDto;
+import br.com.hostel.controller.form.ReservationForm;
+import br.com.hostel.initializer.ReservationInitializer;
+import br.com.hostel.model.CashPayment;
+import br.com.hostel.model.CheckPayment;
+import br.com.hostel.model.CreditCardPayment;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,15 +18,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import br.com.hostel.controller.dto.ReservationDto;
-import br.com.hostel.controller.form.ReservationForm;
-import br.com.hostel.initializer.ReservationInitializer;
-import br.com.hostel.model.CashPayment;
-import br.com.hostel.model.CheckPayment;
-import br.com.hostel.model.CreditCardPayment;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -53,7 +50,7 @@ public class CreateReservationsTest {
 	private List<Long> rooms_ID = new ArrayList<>();
 	
 	@BeforeEach
-	public void init() throws JsonProcessingException, Exception {
+	public void init() throws Exception {
 		
 		uri = new URI("/api/reservations/");
 		
@@ -136,7 +133,7 @@ public class CreateReservationsTest {
 	public void shouldCreateOneReservationUsingCashPaymentSuccessfully() throws Exception {
 		cashPayment.setAmount(4000);
 		cashPayment.setAmountTendered(10000);
-		cashPayment.setDate(LocalDateTime.of(LocalDate.of(2025,01,25), LocalTime.of(21, 32)));
+		cashPayment.setDate(LocalDateTime.of(LocalDate.of(2025,1,25), LocalTime.of(21, 32)));
 		
 		reservationForm.setPayment(cashPayment);
 		
@@ -165,11 +162,11 @@ public class CreateReservationsTest {
 	@Test
 	public void shouldCreateOneReservationUsingCreditCardPaymentSuccessfully() throws Exception {
 		creditCardPayment.setAmount(5000);
-		creditCardPayment.setDate(LocalDateTime.of(LocalDate.of(2025,01,25), LocalTime.of(21, 33)));
+		creditCardPayment.setDate(LocalDateTime.of(LocalDate.of(2025,1,25), LocalTime.of(21, 33)));
 		creditCardPayment.setIssuer("VISA");
 		creditCardPayment.setNameOnCard("MARIA A SILVA");
 		creditCardPayment.setCardNumber("1234 5678 9101 1121");
-		creditCardPayment.setExpirationDate(LocalDate.of(2048, 05, 01));
+		creditCardPayment.setExpirationDate(LocalDate.of(2048, 5, 1));
 		creditCardPayment.setSecurityCode("123");
 		
 		reservationForm.setPayment(creditCardPayment);

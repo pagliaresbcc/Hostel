@@ -1,12 +1,9 @@
 package br.com.hostel.tests.unit.guest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-
+import br.com.hostel.exceptions.guest.GuestException;
+import br.com.hostel.model.Guest;
+import br.com.hostel.repository.GuestRepository;
+import br.com.hostel.service.GuestService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +12,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import br.com.hostel.exceptions.guest.GuestException;
-import br.com.hostel.model.Guest;
-import br.com.hostel.repository.AddressRepository;
-import br.com.hostel.repository.GuestRepository;
-import br.com.hostel.service.GuestService;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -29,16 +27,13 @@ public class DeleteGuestsTest {
 	private GuestRepository guestRepository;
 
 	@MockBean
-	private AddressRepository addressRepository;
-
-	@MockBean
 	private Guest guest;
 
 	@Autowired
 	private GuestService guestService;
 
 	@Test
-	public void shouldReturnNotFoundStatusAfterTryingToDeleteAGuestWithNonExistentID() throws Exception {
+	public void shouldReturnNotFoundStatusAfterTryingToDeleteAGuestWithNonExistentID() {
 
 		Optional<Guest> nonexistentGuest = Optional.empty();
 
@@ -54,7 +49,7 @@ public class DeleteGuestsTest {
 	}
 
 	@Test
-	public void shouldAssertFalseAfterDeletingAGuestAndTryingToFindHim() throws Exception {
+	public void shouldAssertFalseAfterDeletingAGuestAndTryingToFindHim() {
 
 		Optional<Guest> opGuest = Optional.of(guest);
 

@@ -18,10 +18,6 @@ public class DailyRate {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private double price;
-	
-	public DailyRate(double price) {
-		 this.price = price;
-	}
 }

@@ -1,11 +1,13 @@
 package br.com.hostel.tests.unit.room;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-
+import br.com.hostel.controller.form.RoomUpdateForm;
+import br.com.hostel.exceptions.room.RoomException;
+import br.com.hostel.initializer.RoomInitializer;
+import br.com.hostel.model.DailyRate;
+import br.com.hostel.model.Room;
+import br.com.hostel.repository.DailyRateRepository;
+import br.com.hostel.repository.RoomRepository;
+import br.com.hostel.service.RoomService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,17 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.hostel.controller.form.RoomUpdateForm;
-import br.com.hostel.exceptions.room.RoomException;
-import br.com.hostel.initializer.RoomInitializer;
-import br.com.hostel.model.DailyRate;
-import br.com.hostel.model.Room;
-import br.com.hostel.repository.DailyRateRepository;
-import br.com.hostel.repository.ReservationRepository;
-import br.com.hostel.repository.RoomRepository;
-import br.com.hostel.service.RoomService;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -35,15 +32,9 @@ public class UpdateRoomsTest {
 	
 	@MockBean
 	private DailyRateRepository dailyRepository;
-	
-	@MockBean
-	private ReservationRepository reservationRepository;
 
 	@MockBean
 	private RoomUpdateForm form;
-
-	@MockBean
-	private UriComponentsBuilder uriBuilder;
 
 	@Autowired
 	private RoomService service;
@@ -58,7 +49,7 @@ public class UpdateRoomsTest {
 	}
 
 	@Test
-	public void shouldUpdateRoomNumberAndDescription() throws Exception {
+	public void shouldUpdateRoomNumberAndDescription() {
 
 		Optional<Room> opRoom = Optional.of(room);
 		
@@ -66,17 +57,17 @@ public class UpdateRoomsTest {
 		opRoom.get().setDescription("Room updated");
 
 		when(roomRepository.findById(room.getId())).thenReturn(opRoom);
-		when(form.updateRoomForm(room.getId(), room, roomRepository)).thenReturn(room);
+		when(form.updateRoomForm(room, roomRepository)).thenReturn(room);
 		when(dailyRepository.save(room.getDailyRate())).thenReturn(dailyRate);
 		
-		Room reqRoom = service.updateRoom(room.getId(), form, uriBuilder);
+		Room reqRoom = service.updateRoom(room.getId(), form);
 		
 		assertEquals(opRoom.get().getNumber(), reqRoom.getNumber());
 		assertEquals(opRoom.get().getDescription(), reqRoom.getDescription());
 	}
 	
 	@Test
-	public void shouldNotUpdateRoomWithNonexistenteID() throws Exception {
+	public void shouldNotUpdateRoomWithNonexistentID() {
 		
 		Optional<Room> nonexistentRoom = Optional.empty();
 		
@@ -84,7 +75,7 @@ public class UpdateRoomsTest {
 		
 		RoomException thrown = 
 				assertThrows(RoomException.class, 
-					() -> service.updateRoom(room.getId(), form, uriBuilder),
+					() -> service.updateRoom(room.getId(), form),
 					"It was expected that updateRoom() thrown an exception, " +
 					"due to trying to update a room with an nonexistent number");
 

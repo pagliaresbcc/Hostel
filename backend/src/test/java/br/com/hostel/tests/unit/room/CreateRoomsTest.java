@@ -1,22 +1,5 @@
 package br.com.hostel.tests.unit.room;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import br.com.hostel.controller.form.RoomForm;
 import br.com.hostel.exceptions.room.RoomException;
 import br.com.hostel.initializer.RoomInitializer;
@@ -26,6 +9,21 @@ import br.com.hostel.repository.DailyRateRepository;
 import br.com.hostel.repository.ReservationRepository;
 import br.com.hostel.repository.RoomRepository;
 import br.com.hostel.service.RoomService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = RoomService.class)
@@ -33,18 +31,15 @@ public class CreateRoomsTest {
 
 	@MockBean
 	private RoomRepository roomRepository;
-	
+
 	@MockBean
 	private DailyRateRepository dailyRepository;
-	
+
 	@MockBean
 	private ReservationRepository reservationRepository;
 
 	@MockBean
 	private RoomForm form;
-
-	@MockBean
-	private UriComponentsBuilder uriBuilder;
 
 	@Autowired
 	private RoomService service;
@@ -67,7 +62,7 @@ public class CreateRoomsTest {
 		when(roomRepository.findByNumber(any())).thenReturn(nonexistentRoom);
 		when(roomRepository.save(any())).thenReturn(room);
 
-		Room reqRoom = service.registerRoom(form, uriBuilder);
+		Room reqRoom = service.registerRoom(form);
 
 		assertEquals(room.getDescription(), reqRoom.getDescription());
 		assertEquals(room.getDimension(), reqRoom.getDimension());
@@ -84,7 +79,7 @@ public class CreateRoomsTest {
 		
 		RoomException thrown = 
 				assertThrows(RoomException.class, 
-					() -> service.registerRoom(form, uriBuilder),
+					() -> service.registerRoom(form),
 					"It was expected that registerRoom() thrown an exception, " +
 					"due to trying to create a room with an existing number");
 

@@ -20,7 +20,7 @@ public class GuestUpdateForm {
 	private Address address;
 	private Role role;
 	
-	public Guest updateGuestForm(Long id, Guest guest, GuestRepository guestRepository) {
+	public Guest updateGuestForm(Guest guest, GuestRepository guestRepository) {
 		setParamIfIsNotNull(guest);
 		return guestRepository.save(guest);
 	}

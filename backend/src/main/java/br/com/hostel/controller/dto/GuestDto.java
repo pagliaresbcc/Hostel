@@ -9,7 +9,11 @@ import br.com.hostel.model.Address;
 import br.com.hostel.model.Guest;
 import br.com.hostel.model.Reservation;
 import br.com.hostel.model.helper.Role;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class GuestDto {
 
 	private Long id;
@@ -22,10 +26,6 @@ public class GuestDto {
 	private String password;
 	private Role role;
 	private Set<Reservation> reservations;
-
-	public GuestDto() {
-		
-	}
 
 	public GuestDto(Guest guest) {
 		this.id = guest.getId();
@@ -40,46 +40,6 @@ public class GuestDto {
 		this.reservations = guest.getReservations();
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public LocalDate getBirthday() {
-		return birthday;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public Set<Reservation> getReservations() {
-		return reservations;
-	}
-	
-	public Role getRole() {
-		return role;
-	}
-	
 	public static List<GuestDto> converter(List<Guest> guestsList) {
 
 		List<GuestDto> guestsDtoList = new ArrayList<>();

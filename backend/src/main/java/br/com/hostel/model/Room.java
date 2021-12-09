@@ -45,8 +45,7 @@ public class Room {
 	}
 
 	public String toString() {
-		String resultado = "Room number...: " + this.number + "\n" + "Room dimension (m2)...: " + this.dimension + "\n";
-		return resultado;
+		return "Room number...: " + this.number + "\n" + "Room dimension (m2)...: " + this.dimension + "\n";
 	}
 
 }

@@ -40,7 +40,7 @@ public class RoomService {
 	@Autowired
 	private ReservationRepository reservationRepository;
 
-	public Room registerRoom(RoomForm form, UriComponentsBuilder uriBuilder) throws RoomException {
+	public Room registerRoom(RoomForm form) throws RoomException {
 
 		Room room = form.returnRoom(dailyRateRepository);
 		Optional<Room> roomOp = roomRepository.findByNumber(room.getNumber());
@@ -54,7 +54,7 @@ public class RoomService {
 		return roomRepository.save(room);
 	}
 
-	public List<Room> listAllRooms(RoomFilter roomFilter, Pageable pagination) {
+	public List<Room> listAllRooms(RoomFilter roomFilter) {
 
 		List<Room> unavailableRooms = new ArrayList<>();
 		List<Room> availableRooms = roomRepository.findAll();
@@ -73,7 +73,7 @@ public class RoomService {
 
 			});
 
-			unavailableRooms.forEach(room -> availableRooms.remove(room));
+			unavailableRooms.forEach(availableRooms::remove);
 		}
 
 		return availableRooms;
@@ -83,22 +83,21 @@ public class RoomService {
 
 		Optional<Room> room = roomRepository.findById(id);
 
-		if (!room.isPresent())
+		if (room.isEmpty())
 			throw new RoomException("Room ID haven't found", HttpStatus.NOT_FOUND);
 
 		return room.get();
 
 	}
 
-	public Room updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form,
-			UriComponentsBuilder uriBuilder) throws RoomException {
+	public Room updateRoom(@PathVariable Long id, @RequestBody @Valid RoomUpdateForm form) throws RoomException {
 
 		Optional<Room> roomOp = roomRepository.findById(id);
 
-		if (!roomOp.isPresent())
+		if (roomOp.isEmpty())
 			throw new RoomException("Room ID haven't found", HttpStatus.NOT_FOUND);
 
-		Room room = form.updateRoomForm(id, roomOp.get(), roomRepository);
+		Room room = form.updateRoomForm(roomOp.get(), roomRepository);
 
 		dailyRateRepository.save(room.getDailyRate());
 
@@ -111,7 +110,7 @@ public class RoomService {
 
 		Optional<Room> room = roomRepository.findById(id);
 
-		if (!room.isPresent())
+		if (room.isEmpty())
 			throw new RoomException("Room ID haven't found", HttpStatus.NOT_FOUND);
 
 		roomRepository.deleteById(id);
@@ -127,7 +126,7 @@ public class RoomService {
 			});
 		}
 
-		unavailableRooms.forEach(room -> availableRooms.remove(room));
+		unavailableRooms.forEach(availableRooms::remove);
 
 		if (roomFilter.getMaxDailyRate() != null) {
 			availableRooms.forEach(room -> {
@@ -137,7 +136,7 @@ public class RoomService {
 			});
 		}
 
-		unavailableRooms.forEach(room -> availableRooms.remove(room));
+		unavailableRooms.forEach(availableRooms::remove);
 
 		if (roomFilter.getNumberOfGuests() != null) {
 			availableRooms.forEach(room -> {
@@ -147,7 +146,7 @@ public class RoomService {
 			});
 		}
 
-		unavailableRooms.forEach(room -> availableRooms.remove(room));
+		unavailableRooms.forEach(availableRooms::remove);
 	}
 
 	private void verifyValidRoomsWithinAPeriod(List<Room> unavailableRooms, LocalDate checkinDate,
