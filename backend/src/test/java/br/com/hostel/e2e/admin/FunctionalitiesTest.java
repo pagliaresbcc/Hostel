@@ -12,16 +12,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import br.com.hostel.e2e.ChromeConnection;
-import br.com.hostel.model.Guest;
 
 @RunWith(JUnitPlatform.class)
 @TestMethodOrder(OrderAnnotation.class)
-public class Functionalities {
+public class FunctionalitiesTest {
 
 	ChromeConnection chromeConnection = new ChromeConnection();
 	WebDriver driver = chromeConnection.Connection();
-
-	Guest newGuest, existentGuest;
 
 	@BeforeEach
 	public void init() throws InterruptedException {

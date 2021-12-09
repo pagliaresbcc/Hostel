@@ -27,7 +27,7 @@ public class GuestTest {
 	ChromeConnection chromeConnection = new ChromeConnection();
 	WebDriver driver = chromeConnection.Connection();
 
-	Guest newGuest, existentGuest;
+	Guest newGuest;
 	
 	@BeforeEach
 	public void init() throws InterruptedException {
