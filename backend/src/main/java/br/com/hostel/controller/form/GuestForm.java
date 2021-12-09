@@ -22,7 +22,7 @@ public class GuestForm {
 	@NotNull 
 	private String name;
 	@NotNull 
-	private String lastname;
+	private String lastName;
 	@NotNull 
 	private LocalDate birthday;
 	@NotNull 
@@ -37,7 +37,7 @@ public class GuestForm {
 	public Guest returnGuest(AddressRepository addressRepository) {
 		addressRepository.save(address);
 		
-		return new Guest(title, name, lastname, birthday, address, email, 
+		return new Guest(title, name, lastName, birthday, address, email,
 				new BCryptPasswordEncoder().encode(password), role);
 	}
 }
